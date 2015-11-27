@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="NewsDO">
+
+  <typeAlias alias="News" type="com.pg.dal.model.NewsDO"/>
+
+  <resultMap id="RM" class="News">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="type" column="type"/>
+    <result property="news" column="news"/>
+    <result property="top" column="top"/>
+  </resultMap>
+  
+  <insert id="insert" parameterClass="News">
+    <![CDATA[
+    insert into pg_news (
+      gmt_create,
+      gmt_modify,
+      type,
+      news,
+      top
+    ) values (
+      now(), now(),
+      #type#, #news#, #top#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="News">
+    update pg_news set 
+    <dynamic>
+      <isNotEmpty property="type">  
+         <![CDATA[   
+           type = #type#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="news">  
+         <![CDATA[   
+           news = #news#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="top">  
+         <![CDATA[   
+           top = #top#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <delete id="deleteById" parameterClass="java.lang.Long">
+    delete from pg_news where id = #id#
+  </delete>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_news  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_news where id = #id#  
+  </select>
+</sqlMap>

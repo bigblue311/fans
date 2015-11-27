@@ -1,0 +1,23 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+#set ($group = $form.login.defaultInstance)
+<h1>快消后台管理系统</h1>
+<form method="post" id="login_form">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="employeeAction"/>  
+	<input type="hidden" name="event_submit_do_login" value="true"/> 			
+	<div class="logininput">
+		<input type="text" name="$group.name.key" class="loginusername" value="" placeholder="$group.name.displayName" />
+		<br><br>
+		<input type="password" name="$group.password.key" class="loginuserpasswordt" value="" placeholder="$group.password.displayName" />
+	</div>
+	<br>
+	<div class="loginbtn">
+		#if (!$group.name.valid)
+       		<h3>$group.name.message</h3>
+   		#end
+   		#if (!$group.password.valid)
+       		<h3>$group.password.message</h3>
+   		#end
+		<div class="loginsubmit fl"><input type="submit" value="登录" class="btn" /></div>
+	</div>
+</form>

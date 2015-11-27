@@ -1,0 +1,115 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<div id="grid"></div>
+#set ($group = $form.brand.defaultInstance)
+<form method="post" id="actionFrom">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="brandAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_update" value="true"/>
+	<input type="hidden" id="id" name="$group.id.key" value=""/>
+	<input type="hidden" id="name" name="$group.name.key" value=""/>
+	<input type="hidden" id="parentId" name="$group.parentId.key" value="${parentId}"/>
+	<input type="hidden" id="enable" name="$group.enable.key" value="0"/>
+</form>
+<script type="text/javascript">
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      columns = [
+		{
+			title : 'ID',
+			elCls: 'center',
+			dataIndex : 'id',
+			width:'5%'
+		},{
+          title : '品牌',
+          elCls: 'left',
+          dataIndex :'name',
+          editor : {
+				xtype : 'text',
+				rules : {required : true}
+		  },
+          width:'55%'
+        },{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				var child = '';
+				if(obj!=null){
+					var parentId = obj.id;
+					child = '<span class="grid-command"><a href="$admin.setTarget("brand.vm")?parentId='+parentId+'">子品牌</a></span>';
+				}
+				var edit = '<span class="grid-command btn-edit">编辑</span>';
+				var del = '<span class="grid-command btn-del">删除</span>';
+				return child+edit+del;
+			},
+	        width:'40%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data,
+        listeners : {
+        	'update' : updateFunction
+        }
+      }),
+      editing = new Grid.Plugins.RowEditing({
+			triggerCls : 'btn-edit',
+			triggerSelected : false
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        bbar : {
+        	items : [
+			{
+				btnCls : 'button button-small',
+				text : '<i class="icon-plus"></i>添加',
+				listeners : {
+					'click' : addFunction
+				}
+			}
+			]
+        },
+        plugins : [editing],
+        store : store
+      });
+
+    grid.render();
+    
+    jQuery(".btn-del").click(function(){
+    	BUI.Message.Confirm("确定删除该品牌吗?", function() {
+    		var selections = grid.getSelection();
+        	var record = selections[0];
+        	deleteFunction(record);
+		}, 'question');
+    });
+    
+  	//添加记录
+	function addFunction() {
+		var newData = {};
+		store.addAt(newData, 0);
+		editing.edit(newData, "name"); //添加记录后，直接编辑
+	}
+    
+    function updateFunction(e){
+    	var id = e.record.id;
+    	var name = e.record.name;
+    	var event = "event_submit_do_update";
+    	jQuery("#id").val(id);
+    	jQuery("#name").val(name);
+    	jQuery("#event").attr("name",event);
+    	jQuery("#actionFrom").submit();
+    }
+    
+    function deleteFunction(record){
+    	var id = record.id;
+    	var name = record.name;
+    	var event = "event_submit_do_delete";
+    	jQuery("#id").val(id);
+    	jQuery("#name").val(name);
+    	jQuery("#event").attr("name",event);
+    	jQuery("#actionFrom").submit();
+    }
+</script>

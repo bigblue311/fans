@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:services="http://www.alibaba.com/schema/services"
+             xmlns:fm-conditions="http://www.alibaba.com/schema/services/form/conditions"
+             xmlns:fm-validators="http://www.alibaba.com/schema/services/form/validators"
+             xsi:schemaLocation="
+                 http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+                 http://www.alibaba.com/schema/services/form/conditions http://localhost:8080/schema/services-form-conditions.xsd
+                 http://www.alibaba.com/schema/services/form/validators http://localhost:8080/schema/services-form-validators.xsd
+                 http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+             ">
+
+    <services:form postOnlyByDefault="true">
+		<!-- - =============================================== - 用来检查csrf token。 
+			- =============================================== -->
+		<group name="csrfCheck">
+			<field name="csrfToken">
+				<fm-validators:csrf-validator>
+					<message>提交的数据已过期</message>
+				</fm-validators:csrf-validator>
+			</field>
+		</group>
+		
+		<group name="login" extends="csrfCheck">
+			<field name="name" displayName="用户名">
+				<fm-validators:required-validator>
+					<message>必须填写 ${displayName}</message>
+				</fm-validators:required-validator>
+			</field>
+			<field name="password" displayName="密码">
+				<fm-validators:required-validator>
+					<message>必须填写 ${displayName}</message>
+				</fm-validators:required-validator>
+			</field>
+		</group>
+		
+		<group name="changePwd" extends="csrfCheck">
+			<field name="id" displayName="用户ID" >
+				<fm-validators:required-validator>
+					<message>登录超时,请重新登录</message>
+				</fm-validators:required-validator>
+			</field>
+			<field name="password" displayName="新密码">
+				<fm-validators:required-validator>
+					<message>必须填写 ${displayName}</message>
+				</fm-validators:required-validator>
+			</field>
+		</group>
+		
+		<group name="employee" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="姓名" />
+			<field name="password" displayName="密码" />
+			<field name="phone" displayName="联系电话" />
+			<field name="roleId" displayName="角色" />
+			<field name="enable" displayName="是否有效" />
+		</group>
+		
+		<group name="brand" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="姓名" />
+			<field name="parentId" displayName="父节点ID" />
+			<field name="enable" displayName="是否有效" />
+		</group>
+		
+		<group name="category" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="姓名" />
+			<field name="parentId" displayName="父节点ID" />
+			<field name="enable" displayName="是否有效" />
+		</group>
+		
+		<group name="role" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="角色名称" />
+			<field name="description" displayName="角色描述" />
+			<field name="editable" displayName="是否可编辑" />
+		</group>
+		
+		<group name="resourceRole" extends="csrfCheck">
+			<field name="roleId" displayName="角色ID" />
+			<field name="resourceIds" displayName="资源ID" />
+		</group>
+		
+		<group name="systemConfig" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="configValue" displayName="值" />
+		</group>
+		
+		<group name="systemNews" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="news" displayName="系统通知" />
+			<field name="type" displayName="通知类型" />
+			<field name="top" displayName="置顶" />
+		</group>
+		
+		<group name="product" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="名称" />
+			<field name="title" displayName="标题" />
+			<field name="brandId" displayName="品牌ID" />
+			<field name="categoryId" displayName="品类ID" />
+			<field name="su" displayName="su" />
+			<field name="price3500" displayName="3500箱价格" />
+			<field name="price2000" displayName="2000箱价格" />
+			<field name="price800" displayName="800箱价格" />
+			<field name="price200NoTax" displayName="200箱不含税价格" />
+			<field name="price200" displayName="200箱价格" />
+			<field name="price100" displayName="100箱价格" />
+			<field name="priceSugg" displayName="建议零售" />
+			<field name="cubage" displayName="体积" />
+			<field name="weight" displayName="公斤/箱" />
+			<field name="volume" displayName="库存/箱" />
+			<field name="enable" displayName="是否有效" />
+		</group>
+		
+		<group name="package" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="名称" />
+			<field name="title" displayName="标题" />
+			<field name="description" displayName="描述" />
+			<field name="enable" displayName="是否有效" />
+		</group>
+		
+		<group name="prodpack" extends="csrfCheck">
+			<field name="packageId" displayName="包名称" />
+			<field name="productIds" displayName="产品名称" />
+		</group>
+		
+		<group name="customer" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="名称" />
+			<field name="mobile" displayName="电话" />
+			<field name="idCard" displayName="身份证号" />
+			<field name="employeeId" displayName="归属坐席" />
+			<field name="recommender" displayName="推荐人"/>
+		</group>
+		
+		<group name="warehouse" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="name" displayName="名称" />
+			<field name="address" displayName="地址" />
+			<field name="keeper" displayName="联系人" />
+			<field name="keeperIdCard" displayName="联系人身份证" />
+			<field name="mobile" displayName="手机" />
+			<field name="phone" displayName="电话" />
+			<field name="customerId" displayName="客户ID" />
+			<field name="comment" displayName="备注" />
+			<field name="province" displayName="省" />
+			<field name="city" displayName="市" />
+			<field name="town" displayName="区" />
+		</group>
+		
+		<group name="publish" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="discount" displayName="折扣" />
+			<field name="warehouseId" displayName="仓库ID" />
+			<field name="packageId" displayName="包ID" />
+			<field name="limitBuyQuantity" displayName="最小预定数量" />
+			<field name="limitBuyPrice" displayName="最小预定价格" />
+			<field name="gmtValidFrom" displayName="有效期开始" />
+			<field name="gmtValidTo" displayName="有效期结束" />
+			<field name="enable" displayName="是否有效" />
+			<field name="description" displayName="描述" />
+		</group>
+		
+		<group name="purchase" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="orderId" displayName="订单ID" />
+			<field name="name" displayName="产品包名称" />
+			<field name="title" displayName="产品包标题" />
+			<field name="publishId" displayName="商品ID" />
+			<field name="addressFrom" displayName="发货地址" />
+			<field name="addressTo" displayName="收货地址" />
+			<field name="keeper" displayName="联系人" />
+			<field name="keeperIdCard" displayName="联系人身份证" />
+			<field name="phone" displayName="联系电话" />
+			<field name="mobile" displayName="联系手机" />
+			<field name="transportFee" displayName="物流费" />
+			<field name="transportCode" displayName="物流编码" />
+			<field name="comment" displayName="备注" />
+			<field name="customerId" displayName="客户ID" />
+		</group>
+		
+		<group name="purchaseItem" extends="csrfCheck">
+			<field name="ids" displayName="ID" />
+			<field name="quantitys" displayName="数量" />
+			<field name="orderId" displayName="订单编号" />
+			<field name="purchaseId" displayName="购买编号" />
+			<field name="publishId" displayName="商品包编号" />
+		</group>
+		
+		<group name="order" extends="csrfCheck">
+			<field name="id" displayName="ID" />
+			<field name="customerId" displayName="客户ID" />
+			<field name="customerName" displayName="客户姓名" />
+			<field name="customerMobile" displayName="客户手机" />
+			<field name="customerIdCard" displayName="客户身份证" />
+			<field name="deposit" displayName="定金" />
+			<field name="totalPrice" displayName="总价格" />
+			<field name="transportFee" displayName="物流费" />
+			<field name="status" displayName="状态" />
+			<field name="comment" displayName="备注" />
+		</group>
+	</services:form>
+</beans:beans>

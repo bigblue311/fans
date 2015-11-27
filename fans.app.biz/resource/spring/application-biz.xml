@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+    	http://www.springframework.org/schema/beans 
+    	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    	http://www.springframework.org/schema/context
+    	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
+    
+    <bean id="brandManager" class="com.pg.biz.manager.impl.BrandManagerImpl" />
+    
+    <bean id="categoryManager" class="com.pg.biz.manager.impl.CategoryManagerImpl" />
+    
+    <bean id="customerManager" class="com.pg.biz.manager.impl.CustomerManagerImpl" />
+    
+    <bean id="employeeManager" class="com.pg.biz.manager.impl.EmployeeManagerImpl" />
+    
+    <bean id="productManager" class="com.pg.biz.manager.impl.ProductManagerImpl" />
+    
+    <bean id="securityManager" class="com.pg.biz.manager.impl.SecurityManagerImpl" />
+    
+    <bean id="transactionManager" class="com.pg.biz.manager.impl.TransactionManagerImpl" />
+    
+    <bean id="warehouseManager" class="com.pg.biz.manager.impl.WarehouseManagerImpl"/>
+    
+    <bean id="recycleTempFilesTask" class="com.pg.biz.scheduler.task.RecycleTempFilesTask"/>
+    
+    <bean id="orderStatisticTask" class="com.pg.biz.scheduler.task.OrderStatisticTask"/>
+    
+    <bean id="scheduler" class="com.pg.biz.scheduler.Scheduler" >
+		<property name="tasks">
+              <list>
+              	<ref bean="orderStatisticTask" />
+              </list>
+  		</property>
+    </bean>
+</beans>

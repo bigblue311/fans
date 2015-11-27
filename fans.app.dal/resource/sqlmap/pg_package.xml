@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PackageDO">
+
+  <typeAlias alias="Package" type="com.pg.dal.model.PackageDO"/>
+
+  <resultMap id="RM" class="Package">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="name" column="name"/>
+    <result property="title" column="title"/>
+    <result property="description" column="description"/>
+    <result property="enable" column="enable"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="Package">
+    <![CDATA[
+    insert into pg_package (
+      gmt_create,
+      gmt_modify,
+      name,
+      title,
+      description,
+      enable
+    ) values (
+      now(), now(),
+      #name#, #title#, 
+      #description#, #enable#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="Package">
+    update pg_package set 
+    <dynamic>
+      <isNotEmpty property="name">  
+         <![CDATA[   
+           name = #name#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="title">  
+         <![CDATA[   
+           title = #title#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="description">  
+         <![CDATA[   
+           description = #description#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="enable">  
+         <![CDATA[   
+           enable = #enable#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <update id="softDeleteById" parameterClass="java.lang.Long">
+  	update pg_package set enable = '1' where id = #id#
+  </update>
+  
+  <update id="recoverById" parameterClass="java.lang.Long">
+  	update pg_package set enable = '0' where id = #id#
+  </update>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_package  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_package where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="name" prepend="and">
+        	<![CDATA[ 
+        	name like concat('%',#name#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="title" prepend="and">
+        	<![CDATA[ 
+        	title like concat('%',#title#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="enable" prepend="and">
+        	<![CDATA[ 
+        	enable = #enable#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="name">
+  	<isNull property="title">
+  	<isNull property="enable">
+        <include refid="Common.validModify" />
+    </isNull>
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_package 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_package 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from pg_package
+	<include refid="where" />
+  </select>
+</sqlMap>

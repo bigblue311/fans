@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="RoleDO">
+
+  <typeAlias alias="Role" type="com.pg.dal.model.RoleDO"/>
+
+  <resultMap id="RM" class="Role">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="name" column="name"/>
+    <result property="description" column="description"/>
+    <result property="editable" column="editable"/>
+  </resultMap>
+  
+  <insert id="insert" parameterClass="Role">
+    <![CDATA[
+    insert into pg_role (
+      gmt_create,
+      gmt_modify,
+      name,
+      description,
+      editable
+    ) values (
+      now(), now(),
+      #name#, #description#, #editable#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="Role">
+    update pg_role set 
+    <dynamic>
+      <isNotEmpty property="name">  
+         <![CDATA[   
+           name = #name#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="description">  
+         <![CDATA[   
+           description = #description#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <update id="deleteById" parameterClass="java.lang.Long">
+  	delete from pg_role where id = #id#
+  </update>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_role  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_role where id = #id#  
+  </select>
+</sqlMap>

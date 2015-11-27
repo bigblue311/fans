@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ResourceRoleDO">
+
+  <typeAlias alias="ResourceRole" type="com.pg.dal.model.ResourceRoleDO"/>
+
+  <resultMap id="RM" class="ResourceRole">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="roleId" column="role_id"/>
+    <result property="resourceId" column="resource_id"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="ResourceRole">
+    <![CDATA[
+    insert into pg_resource_role (
+      gmt_create,
+      gmt_modify,
+      role_id,
+      resource_id
+    ) values (
+      now(), now(),
+      #roleId#, #resourceId#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="ResourceRole">
+    update pg_resource_role set 
+    <dynamic>
+      <isNotEmpty property="roleId">  
+         <![CDATA[   
+           role_id = #roleId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="resourceId">  
+         <![CDATA[   
+           resource_id = #resourceId#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <update id="deleteById" parameterClass="java.lang.Long">
+  	delete from pg_resource_role where id = #id#
+  </update>
+  
+  <update id="deleteByRoleId" parameterClass="java.lang.Long">
+  	delete from pg_resource_role where role_id = #id#
+  </update>
+  
+  <select id="getAll" resultMap="RM">
+    select * from pg_resource_role  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_resource_role where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="roleId" prepend="and">
+        	<![CDATA[ 
+        	role_id = #roleId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="resourceId" prepend="and">
+        	<![CDATA[ 
+        	resource_id = #resourceId#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="roleId">
+  	<isNull property="resourceId">
+        <include refid="Common.validModify" />
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_resource_role 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_resource_role 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from pg_resource_role
+	<include refid="where" />
+  </select>
+</sqlMap>

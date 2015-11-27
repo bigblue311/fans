@@ -1,0 +1,73 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<link href="/css/comboxList.css" rel="stylesheet">
+<link href="/css/numberInput.css" rel="stylesheet">
+<table>
+	<tr>
+		<td class="comboList">
+			<h2>可添加的商品
+				<span class="selectAll"><i class="icon-check"></i>全选</span>
+				<input type="text" placeholder="可输入名称来过滤" class="filter">
+			</h2>
+			<div id="box1" class="box">
+			#foreach($exclude in $excludeList)
+			<div class="item">
+				<label>${exclude.name} (库存 $!{exclude.volume} 箱)</label>
+				<input class="prod" type="hidden" value="${exclude.id}"/>
+			</div>
+			#end
+			</div>
+		</td>
+		<td>
+			&nbsp;<a class="linkBtn" id="btnDel">&lt;</a> <a class="linkBtn" id="btnAdd">&gt;</a>&nbsp;
+		</td>
+		<td class="comboList">
+			<h2>已添加的商品
+				<span class="selectAll"><i class="icon-check"></i>全选</span>
+				<input type="text" placeholder="可输入名称来过滤" class="filter">
+			</h2>
+			<div id="box2" class="box">
+			#foreach($include in $includeList)
+			<div class="item">
+				<label>${include.name} (库存 $!{include.volume} 箱)</label>
+				<input class="prod" type="hidden" value="${include.productId}"/>
+			</div>
+			#end
+			</div>
+		</td>
+	</tr>
+</table>
+#set ($group = $form.prodpack.defaultInstance)
+<form method="post" id="actionFrom">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="prodpackAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_create" value="true"/>
+	<input type="hidden" id="packageId" name="$group.packageId.key" value="$!{packageId}"/>
+	<input type="hidden" id="productIds" name="$group.productIds.key" value=""/>
+</form>
+<script type="text/javascript" src="/js/comboxList.js"></script>
+<script type="text/javascript" src="/js/numberInput.js"></script>
+<script type="text/javascript">
+    jQuery(function(){
+    	jQuery("#btnAdd").click(function(){
+    		var productIds = "";
+        	jQuery("#box1 .selected").each(function(){
+        		productIds += jQuery(this).find(".prod").val()+",";
+        	});
+        	var event = "event_submit_do_update";
+        	jQuery("#productIds").val(productIds);
+        	jQuery("#event").attr("name",event);
+        	jQuery("#actionFrom").submit();
+    	});
+    	
+    	jQuery("#btnDel").click(function(){
+    		var productIds = "";
+        	jQuery("#box2 .selected").each(function(){
+        		productIds += jQuery(this).find(".prod").val()+",";
+        	});
+        	var event = "event_submit_do_delete";
+        	jQuery("#productIds").val(productIds);
+        	jQuery("#event").attr("name",event);
+        	jQuery("#actionFrom").submit();
+    	});
+    });
+</script>

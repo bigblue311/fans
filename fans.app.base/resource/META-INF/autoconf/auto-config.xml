@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<group>
+		<property name="memcached.host" 		defaultValue="" description="主机"/>
+		<property name="memcached.port" 		defaultValue="" description="端口"/>
+		<property name="memcached.username" 	defaultValue="" description="用户名"/>
+		<property name="memcached.password" 	defaultValue="" description="密码"/>
+		<property name="memcached.auth" 		defaultValue="false" description="是否登录"/>
+		<property name="memcached.enable" 		defaultValue="false" description="是否启用缓存"/>
+		<property name="memcached.keyPrefix" 	defaultValue="" description="主键前缀"/>
+	</group>
+	<group>
+		<property name="alipay.partner" 		defaultValue="" description="合作身份者ID，以2088开头由16位纯数字组成的字符串"/>
+		<property name="alipay.key" 			defaultValue="" description="商户的私钥"/>
+		<property name="alipay.logPath" 		defaultValue="" description="调试用，创建TXT日志文件夹路径"/>
+		<property name="alipay.inputCharset" 	defaultValue="" description="字符编码格式 目前支持 gbk 或 utf-8"/>
+		<property name="alipay.signType" 		defaultValue="MD5" description="签名方式 不需修改"/>
+	</group>
+	<script>
+		<generate template="config/alipay.xml" destfile="spring/alipay.xml"/>
+		<generate template="config/memcached.xml" destfile="spring/memcached.xml"/>
+	</script>
+</config>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<group>
+		<property name="apache.root" defaultValue="/Users/victorhan/Downloads/pg/upload" description="阿帕奇根路径"/>
+	</group>
+	<script>
+		<generate template="config/fileUploader.xml" destfile="spring/fileUploader.xml"/>
+	</script>
+</config>

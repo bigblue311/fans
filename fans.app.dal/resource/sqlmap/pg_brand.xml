@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BrandDO">
+
+  <typeAlias alias="Brand" type="com.pg.dal.model.BrandDO"/>
+
+  <resultMap id="RM" class="Brand">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="name" column="name"/>
+    <result property="parentId" column="parent_id"/>
+    <result property="enable" column="enable"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="Brand">
+    <![CDATA[
+    insert into pg_brand (
+      gmt_create,
+      gmt_modify,
+      name,
+      parent_id,
+      enable
+    ) values (
+      now(), now(),
+      #name#, #parentId#, #enable#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="Brand">
+    update pg_brand set 
+    <dynamic>
+      <isNotEmpty property="name">  
+         <![CDATA[   
+           name = #name#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="parentId">  
+         <![CDATA[   
+           parent_id = #parentId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="enable">  
+         <![CDATA[   
+           enable = #enable#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <update id="softDeleteById" parameterClass="java.lang.Long">
+  	update pg_brand set enable = '1' where id = #id#
+  </update>
+  
+  <update id="recoverById" parameterClass="java.lang.Long">
+  	update pg_brand set enable = '0' where id = #id#
+  </update>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_brand  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_brand where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="name" prepend="and">
+        	<![CDATA[ 
+        	name like concat('%',#name#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="parentId" prepend="and">
+        	<![CDATA[ 
+        	parent_id = #parentId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="enable" prepend="and">
+        	<![CDATA[ 
+        	enable = #enable#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="name">
+  	<isNull property="parentId">
+  	<isNull property="enable">
+        <include refid="Common.validModify" />
+    </isNull>
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_brand 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_brand 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from pg_brand
+	<include refid="where" />
+  </select>
+</sqlMap>

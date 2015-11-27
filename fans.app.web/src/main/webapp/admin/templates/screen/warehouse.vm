@@ -1,0 +1,328 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<div class="doc-content">
+	<form action="$admin.setTarget('warehouse.vm')" class="form-horizontal well" id="queryForm">
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">仓库名称：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="name" value="$!query.name">
+					<input type="hidden" name="page" id="page" value="$!query.page">
+					<input type="hidden" name="customerId" value="$!query.customerId">
+				</div>
+				<label class="control-label">联系人：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="keeper" value="$!query.keeper">
+				</div>
+				<label class="control-label">联系手机：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="mobile" value="$!query.mobile">
+				</div>
+				<label class="control-label">联系电话：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="phone" value="$!query.phone">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">省市地区：</label>
+				<div class="controls">
+					<select id="q_province" name="province" style="width:112px;"></select>
+					<select id="q_city" name="city"></select>
+					<select id="q_town" name="town"></select>
+				</div>
+				<label class="control-label">地址：</label>
+				<div class="controls">
+					<input type="text" class="control-text input-large" name="address" value="$!query.address">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-actions offset3">
+				<button class="button button-primary"><i class="icon-search icon-white"></i>搜索</button>
+				<button type="reset" class="button"><i class="icon-repeat"></i>重置</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="grid"></div>
+$control.setTemplate("paging.vm")
+#set ($group = $form.warehouse.defaultInstance)
+<div id="editor" style="display:none">
+  <form method="post" id="actionFrom">
+  	$csrfToken.hiddenField
+  	<input type="hidden" id="action" name="action" value="warehouseAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_update" value="true"/>
+	<input type="hidden" id="id" name="$group.id.key" value=""/>
+	<input type="hidden" id="customerId" name="$group.customerId.key" value="$!query.customerId"/>
+    <div class="row">
+      <div class="control-group">
+        <label class="control-label"><s>*</s>名称：</label>
+        <div class="controls">
+          <input type="text" id="name" name="$group.name.key" data-rules="{required:true}" 
+          data-messages="{required:'请输入仓库名称'}" class="input-large control-text">
+        </div>
+	  </div>
+	</div>
+	<div class="row">
+      <div class="control-group">
+      	<label class="control-label">联系人：</label>
+		<div class="controls">
+			<input type="text" id="keeper" name="$group.keeper.key" class="input-normal control-text">
+		</div>
+        <label class="control-label">身份证：</label>
+        <div class="controls">
+			<input type="text" id="keeperIdCard" name="$group.keeperIdCard.key" class="input-normal control-text">
+		</div>
+      </div>
+    </div>
+	<div class="row">
+      <div class="control-group">
+		<label class="control-label">联系手机：</label>
+		<div class="controls">
+			<input type="text" id="mobile" name="$group.mobile.key" class="input-normal control-text" 
+			data-rules="{regexp:/^(1(([35][0-9])|(47)|[5][036789]|[8][012346789]))\d{8}$/}" data-messages="{regexp:'请输入正确的手机号码'}">
+		</div>
+		<label class="control-label">联系电话：</label>
+		<div class="controls">
+			<input type="text" id="phone" name="$group.phone.key" class="input-normal control-text">
+		</div>
+      </div>
+    </div>
+	<div class="row">
+      <div class="control-group">
+        <label class="control-label"><s>*</s>省市地区：</label>
+        <div class="controls">
+          <select id="province" name="$group.province.key" data-rules="{required:true}" 
+          data-messages="{required:'请选择仓库所在省'}" style="width:112px;"></select>
+          <select id="city" name="$group.city.key" data-rules="{required:true}"
+          data-messages="{required:'请选择仓库所在市'}"></select>
+          <select id="town" name="$group.town.key" data-rules="{required:true}" 
+          data-messages="{required:'请选择仓库所在地区'}"></select>
+        </div>
+      </div>
+    </div>
+	<div class="row">
+    <div class="control-group">
+        <label class="control-label"><s>*</s>地址：</label>
+		<div class="controls">
+			<input type="text" id="address" name="$group.address.key" data-rules="{required:true}" 
+			data-messages="{required:'请输入仓库所在地区'}" class="input-large control-text">
+		</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="control-group">
+        <label class="control-label">备注：</label>
+        <div class="controls control-row4">
+          <textarea id="comment" name="$group.comment.key" class="input-large"></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<script type="text/javascript" src="/js/Location/location.js"></script>
+<script type="text/javascript">
+	jQuery(function(){
+		showLocation('q_province','q_city','q_town','$!query.province','$!query.city','$!query.town');
+	});
+	
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      columns = [
+		{
+			title : 'ID',
+			elCls: 'center',
+			dataIndex : 'id',
+			width:'5%'
+		},{
+            title : '名称',
+            elCls: 'left',
+            dataIndex :'name',
+		    width:'10%'
+        },{
+            title : '联系人',
+            elCls: 'left',
+            dataIndex :'keeper',
+            width:'10%'
+        },{
+            title : '身份证',
+            elCls: 'left',
+            dataIndex :'keeperIdCard',
+            width:'15%'
+        },{
+            title : '联系手机',
+            elCls: 'left',
+            dataIndex :'mobile',
+            width:'10%'
+        },{
+            title : '联系电话',
+            elCls: 'left',
+            dataIndex :'phone',
+            width:'15%'
+        },{
+            title : '地址',
+            elCls: 'left',
+            width:'20%',
+            renderer : function(val,obj,index){
+            	if(obj != null){
+            		var location = new Location();
+            		var province = location.findProvince(obj.province);
+            		var city = location.findCity(obj.province,obj.city);
+            		var town = location.findTown(obj.province,obj.city,obj.town);
+            		var address = obj.address;
+            		return  province + " " + city + " " + town + " " + address;
+            	} else {
+            		return "";
+            	}
+            }
+        },{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				var customer = "";
+				if(obj != null){
+					var id = obj.customerId;
+					customer = '<span class="grid-command"><a href="$admin.setTarget("customer.vm")?id='+id+'">客户信息</a></span>';
+				}
+				var edit = '<span class="grid-command btn-edit" onclick="updateFunction('+index+')">编辑</span>';
+				var del = '<span class="grid-command btn-del" onclick="deleteFunction('+index+')">删除</span>';
+				return customer+edit+del;
+			},
+	        width:'15%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data
+      }),
+      cascade = new Grid.Plugins.Cascade({
+		    renderer : function(record){
+			    return '<div><p>&nbsp;备注：' + record.comment + '</p></div>';
+		    }
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        bbar : {
+        	#if($!query.customerId)
+        		items : 
+        		[{
+					btnCls : 'button button-small btn-add',
+					text : '<i class="icon-plus"></i>添加',
+					listeners : {
+						'click' : addFunction
+					}
+				},{
+					btnCls : 'button button-small',
+					text : '<i class="icon-print"></i>打印搜索结果',
+					listeners : {
+						'click' : exportFunction
+					}
+				}]
+        	#end
+        },
+        plugins : [cascade],
+        store : store
+      });
+
+    grid.render();
+    
+	//创建编辑器
+    var editor = new BUI.Editor.DialogEditor({ 
+        contentId:'editor',
+        width : 600,
+        mask : true,
+        title : '客户仓库',
+        form : {
+          srcNode : '#actionFrom'
+        },
+        success : function(){
+          this.accept();
+          jQuery("#actionFrom").submit();
+        }
+    });
+
+    editor.render();
+	
+	function addFunction(){
+		editor.show();
+		clearRecord('event_submit_do_update');
+	}
+	
+	function updateFunction(index){
+		editor.show();
+		bindRecord(index,'event_submit_do_update');
+	}
+	
+	function deleteFunction(index){
+		BUI.Message.Confirm("确定删除该仓库吗?", function() {
+			bindRecord(index,'event_submit_do_delete');
+			jQuery("#actionFrom").submit();
+		}, 'question');
+	}
+	
+	function bindRecord(index,event){
+		copyCsrf();
+		var record = grid.getItemAt(index);
+		
+    	var id = record.id;
+    	var name = record.name;
+    	var address = record.address;
+    	var keeper = record.keeper;
+    	var keeperIdCard = record.keeperIdCard;
+    	var mobile = record.mobile;
+    	var phone = record.phone;
+    	var customerId = record.customerId;
+    	var comment = record.comment;
+    	var province = record.province;
+    	var city = record.city;
+    	var town = record.town;
+
+    	jQuery("#id").val(id);
+    	jQuery("#action").val('warehouseAction');
+    	jQuery("#name").val(name);
+    	jQuery("#address").val(address);
+    	jQuery("#keeper").val(keeper);
+    	jQuery("#keeperIdCard").val(keeperIdCard);
+    	jQuery("#mobile").val(mobile);
+    	jQuery("#phone").val(phone);
+    	jQuery("#customerId").val(customerId);
+    	jQuery("#comment").val(comment);
+    	showLocation('province','city','town',province,city,town);
+    	jQuery("#event").attr("name",event);
+    	jQuery("#event").val(true);
+    }
+	
+	function clearRecord(event){
+		copyCsrf();
+    	jQuery("#id").val('');
+    	jQuery("#action").val('warehouseAction');
+    	jQuery("#name").val('');
+    	jQuery("#address").val('');
+    	jQuery("#keeper").val('');
+    	jQuery("#keeperIdCard").val('');
+    	jQuery("#mobile").val('');
+    	jQuery("#phone").val('');
+    	jQuery("#customerId").val('$!query.customerId');
+    	jQuery("#comment").val('');
+    	showLocation('province','city','town');
+    	jQuery("#event").attr("name",event);
+    	jQuery("#event").val(true);
+    }
+	
+	function copyCsrf(){
+		var csrf = jQuery("input[name='_csrf_token']").val();
+		jQuery("input[name='_csrf_token']").each(function(){
+			jQuery(this).val(csrf);
+		});
+	}
+	
+	function exportFunction(){
+    	jQuery("#queryForm").attr("action","$admin.setTarget('/export/warehouse.vm')");
+    	jQuery("#queryForm").submit();
+    }
+</script>

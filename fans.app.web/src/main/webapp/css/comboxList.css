@@ -1,0 +1,52 @@
+.comboList{
+	vertical-align: top;
+	padding:5px;
+}
+
+.comboList h2{
+	display:inline-block;
+	min-width:500px;
+}
+
+.comboList h2 .filter{
+	font-size: 12px;
+	position: relative;
+	top: 1px;
+	float: right;
+	height: 20px;
+	left: 1px;
+}
+
+.comboList h2 .selectAll{
+	float: right;
+	font-size: 12px;
+	border: 1px solid lightgrey;
+	position: relative;
+	top: 1px;
+	padding-left: 5px;
+	padding-right: 5px;
+	height: 22px;
+	cursor: pointer;
+	color: grey;
+}
+
+.comboList .box{
+	height:450px;
+	border:1px solid lightgrey;
+	overflow-y:auto;
+}
+
+.comboList .item{
+	padding:5px;
+	background:white;
+	cursor:pointer;
+}
+
+.comboList .item label{
+	display: inline-block;
+}
+
+.comboList .selected{
+	background: #414DA7;
+	color: white;
+}

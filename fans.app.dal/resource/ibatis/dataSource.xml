@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+	<settings useStatementNamespaces ="true" /> 
+
+	<transactionManager type="JDBC" commitRequired="false">
+		<dataSource type="SIMPLE">
+	     	<property name="JDBC.Driver" value="com.mysql.jdbc.Driver"/>
+	     	<property name="JDBC.ConnectionURL" value=""/>
+	     	<property name="JDBC.Username" value=""/>
+	     	<property name="JDBC.Password" value=""/>
+	     	<property name="Pool.MaximumIdleConnections" value="5"/>
+	     	<property name="Pool.MaximumWait" value="60000"/>
+	     	<property name="Pool.ValidationQuery" value="select now()"/>
+	     	<property name="Pool.LogAbandoned" value="false"/>
+	     	<property name="Pool.RemoveAbandoned" value="false"/>
+	     	<property name="Pool.RemoveAbandonedTimeout" value="50000"/>
+	   </dataSource>
+	 </transactionManager>
+  
+    <sqlMap resource="sqlmap/common.xml"/>
+  	<sqlMap resource="sqlmap/pg_brand.xml"/>
+  	<sqlMap resource="sqlmap/pg_category.xml"/>
+  	<sqlMap resource="sqlmap/pg_customer.xml"/>
+  	<sqlMap resource="sqlmap/pg_employee.xml"/>
+  	<sqlMap resource="sqlmap/pg_location.xml"/>
+  	<sqlMap resource="sqlmap/pg_news.xml"/>
+  	<sqlMap resource="sqlmap/pg_op_log.xml"/>
+  	<sqlMap resource="sqlmap/pg_order.xml"/>
+  	<sqlMap resource="sqlmap/pg_package.xml"/>
+  	<sqlMap resource="sqlmap/pg_prod_pack.xml"/>
+  	<sqlMap resource="sqlmap/pg_product.xml"/>
+  	<sqlMap resource="sqlmap/pg_publish.xml"/>
+  	<sqlMap resource="sqlmap/pg_purchase_item.xml"/>
+  	<sqlMap resource="sqlmap/pg_purchase.xml"/>
+  	<sqlMap resource="sqlmap/pg_resource_role.xml"/>
+  	<sqlMap resource="sqlmap/pg_role.xml"/>
+  	<sqlMap resource="sqlmap/pg_system_config.xml"/>
+  	<sqlMap resource="sqlmap/pg_warehouse.xml"/>
+</sqlMapConfig>

@@ -1,0 +1,351 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<script type="text/javascript" src="/js/Location/location.js"></script>
+<div class="doc-content">
+	<form action="$admin.setTarget('order.vm')" class="form-horizontal well" id="queryForm">
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">客户姓名：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="customerName" value="$!query.customerName">
+					<input type="hidden" name="page" id="page" value="$!query.page">
+					<input type="hidden" name="customerId" value="$!query.customerId">
+				</div>
+				<label class="control-label">客户手机：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="customerMobile" value="$!query.customerMobile">
+				</div>
+				<label class="control-label">交易日期：</label>
+				<div class="controls">
+					<input type="text" class="calendar" name="createStart" id="createStart" value="$!query.createStart">
+					至
+					<input type="text" class="calendar" name="createEnd" id="createEnd" value="$!query.createEnd">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-actions offset3">
+				<button class="button button-primary"><i class="icon-search icon-white"></i>搜索</button>
+				<button type="reset" class="button"><i class="icon-repeat"></i>重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript">
+	jQuery(function(){
+		var Calendar = BUI.Calendar;
+		
+		var createStart = new Calendar.DatePicker({
+		  trigger:'#createStart',
+		  selectedDate : new Date(),
+		  autoRender : true
+		});
+		
+		var createEnd = new Calendar.DatePicker({
+			  trigger:'#createEnd',
+			  selectedDate : new Date(),
+			  autoRender : true
+		});
+	});
+	</script>
+</div>
+<div id="grid"></div>
+$control.setTemplate("paging.vm")
+#set ($group = $form.order.defaultInstance)
+<div id="editor" style="display:none">
+<form method="post" id="actionFrom">
+	$csrfToken.hiddenField
+	<input type="hidden" id="action" name="action" value="orderAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_update" value="true"/>
+	<input type="hidden" id="id" name="$group.id.key" value=""/>
+	<input type="hidden" id="customerId" name="$group.customerId.key" value=""/>
+	<div class="row">
+      <div class="control-group">
+        <label class="control-label">订单状态：</label>
+        <div class="controls">
+          	<select id="status" name="$group.status.key">
+				#foreach($status in $statusEnum)
+				<option value="$!status.code">$!status.desc</option>
+				#end
+			</select>
+        </div>
+	  </div>
+	</div>
+	<div class="row">
+      <div class="control-group">
+        <label class="control-label">客户姓名：</label>
+		<div class="controls">
+			<input type="text" id="customerName" name="$group.customerName.key" class="input-normal control-text"
+			data-rules="{required:true}" data-messages="{required:'用户名必填'}">
+		</div>
+        <label class="control-label">客户手机：</label>
+        <div class="controls">
+          <input type="text" id="customerMobile" name="$group.customerMobile.key" class="input-normal control-text"
+          data-rules="{regexp:/^(1(([35][0-9])|(47)|[5][036789]|[8][012346789]))\d{8}$/}" data-messages="{regexp:'请输入正确的手机号码'}">
+        </div>
+        <label class="control-label">身份证：</label>
+		<div class="controls">
+			<input type="text" id="customerIdCard" name="$group.customerIdCard.key" class="input-normal control-text">
+		</div>
+	  </div>
+	</div>
+	<div class="row">
+      <div class="control-group">
+        <label class="control-label">定金：</label>
+		<div class="controls">
+			<input type="text" id="deposit" name="$group.deposit.key" class="input-normal control-text"
+			data-rules="{regexp:/^[1-9]\d*|0$/}" data-messages="{regexp:'必须为非负整数'}">
+		</div>
+        <label class="control-label">交易金额：</label>
+        <div class="controls">
+          <input type="text" id="totalPrice" name="$group.totalPrice.key" class="input-normal control-text"
+          data-rules="{regexp:/^[1-9]\d*|0$/}" data-messages="{regexp:'必须为非负整数'}">
+        </div>
+        <label class="control-label">物流费合计：</label>
+		<div class="controls">
+			<input type="text" id="transportFee" name="$group.transportFee.key" class="input-normal control-text"
+			data-rules="{regexp:/^[1-9]\d*|0$/}" data-messages="{regexp:'必须为非负整数'}">
+		</div>
+	  </div>
+	</div>
+	<div class="row">
+      <div class="control-group">
+        <label class="control-label">备注：</label>
+        <div class="controls control-row4">
+          <textarea id="comment" name="$group.comment.key" class="input-large"></textarea>
+        </div>
+      </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      statusObj = {
+   	   		#foreach($status in $statusEnum)
+   			"$!status.code": "$!status.desc"
+   				#if(${velocityCount} != $statusEnum.size())
+   					,
+   				#end
+   			#end
+   	  },
+      columns = [
+		{
+			title : 'ID',
+			elCls: 'center',
+			dataIndex : 'id',
+			summary : false,
+			width:'5%'
+		},{
+			title : '客户名称',
+			elCls: 'left',
+			dataIndex : 'customer',
+			renderer : function(val,obj,index){
+				if(obj != null){
+					return obj.customerName + "("+obj.customerMobile+")";
+				}
+				return "";
+			},
+			summary : false,
+			width:'10%'
+		},{
+			title : '身份证',
+			elCls: 'left',
+			dataIndex : 'customerIdCard',
+			summary : false,
+			width:'15%'
+		},{
+            title : '交易时间',
+            elCls: 'left',
+            dataIndex :'gmtCreate',
+            renderer:BUI.Grid.Format.datetimeRenderer,
+            summary : false,
+            width:'10%'
+        },{
+            title : '定金',
+            elCls: 'left',
+            dataIndex :'deposit',
+            summary : true,
+		    width:'5%'
+        },{
+        	title : '交易金额',
+            elCls: 'left',
+            dataIndex :'totalPrice',
+            summary : true,
+		    width:'5%'
+        },{
+        	title : '物流费',
+            elCls: 'left',
+            dataIndex :'transportFee',
+            summary : true,
+		    width:'5%'
+        },{
+            title : '状态',
+            elCls: 'left',
+            dataIndex :'status',
+            renderer : Grid.Format.enumRenderer(statusObj),
+            summary : false,
+            width:'10%'
+        },{
+            title : '总价',
+            elCls: 'left',
+            dataIndex :'total',
+            renderer: function(val,obj,index){
+            	if(obj!=null){
+            		var result = 0;
+            		var totalPrice = obj.totalPrice;
+            		var transportFee = obj.transportFee;
+            		if(typeof(totalPrice) != 'undifined'){
+            			result += totalPrice;
+            		}
+            		if(typeof(transportFee) != 'undifined'){
+            			result += transportFee;
+            		}
+            		return result;
+            	}
+            	return 0;
+            }, 
+            summary : true,
+            width:'10%'
+        },{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				var detail = "";
+				if(obj != null){
+					var id = obj.id;
+					detail = '<span class="grid-command"><a href="$admin.setTarget("orderdetail.vm")?id='+id+'">详情</a></span>';
+				}
+				var edit = '<span class="grid-command btn-edit" onclick="updateFunction('+index+')">编辑</span>';
+				return detail+edit;
+			},
+			width:'15%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data
+      }),
+      cascade = new Grid.Plugins.Cascade({
+		    renderer : function(record){
+			    var row = '<div><p>&nbsp;备注：' + record.comment + '</p></div>';
+			    return row;
+		    }
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        bbar : {
+        	#if($!query.customerId)
+        		items : 
+        		[{
+					btnCls : 'button button-small btn-add',
+					text : '<i class="icon-plus"></i>添加',
+					listeners : {
+						'click' : addFunction
+					}
+				},{
+					btnCls : 'button button-small',
+					text : '<i class="icon-print"></i>打印搜索结果',
+					listeners : {
+						'click' : exportFunction
+					}
+				}]
+        	#end
+        },
+        plugins : [cascade,Grid.Plugins.Summary],
+        store : store
+      });
+
+    grid.render();
+    
+  	//创建编辑器
+    var editor = new BUI.Editor.DialogEditor({ 
+        contentId:'editor',
+        width : 600,
+        mask : true,
+        title : '订单修改',
+        form : {
+          srcNode : '#actionFrom'
+        },
+        success : function(){
+          this.accept();
+          jQuery("#actionFrom").submit();
+        }
+      });
+
+    editor.render();
+    
+    function addFunction(){
+    	editor.show();
+		clearRecord('event_submit_do_update');
+	}
+    
+    function updateFunction(index){
+		editor.show();
+		bindRecord(index,'event_submit_do_update');
+	}
+    
+    function bindRecord(index,event){
+    	copyCsrf();
+    	var record = grid.getItemAt(index);
+    	
+    	var id = record.id;
+    	var customerName = record.customerName;
+    	var customerMobile = record.customerMobile;
+    	var customerIdCard = record.customerIdCard;
+    	var deposit = record.deposit;
+    	var totalPrice = record.totalPrice;
+    	var transportFee = record.transportFee;
+    	var status = record.status;
+    	var comment = record.comment;
+    	var customerId = record.customerId;
+    	
+    	jQuery("#id").val(id);
+    	jQuery("#action").val('orderAction');
+    	jQuery("#customerName").val(customerName);
+    	jQuery("#customerMobile").val(customerMobile);
+    	jQuery("#customerIdCard").val(customerIdCard);
+    	jQuery("#deposit").val(deposit);
+    	jQuery("#totalPrice").val(totalPrice);
+    	jQuery("#transportFee").val(transportFee);
+    	jQuery("#status").val(status);
+    	jQuery("#comment").val(comment);
+		jQuery("#customerId").val(customerId);
+		#if($!query.customerId)
+			jQuery("#customerId").val('$!query.customerId');
+		#end
+    	
+    	jQuery("#event").attr("name",event);
+		jQuery("#event").val(true);
+    }
+    
+    function clearRecord(event){
+		copyCsrf();
+
+		jQuery("#customerName").val('$!{customerName}');
+		jQuery("#customerMobile").val('$!{customerMobile}');
+		jQuery("#customerIdCard").val('$!{customerIdCard}');
+		
+		jQuery("#status").hide();
+    	jQuery("#action").val('orderAction');
+    	jQuery("#event").attr("name",event);
+    	jQuery("#event").val(true);
+    	#if($!query.customerId)
+			jQuery("#customerId").val('$!query.customerId');
+		#end
+    }
+    
+    function copyCsrf(){
+		var csrf = jQuery("input[name='_csrf_token']").val();
+		jQuery("input[name='_csrf_token']").each(function(){
+			jQuery(this).val(csrf);
+		});
+	}
+    
+    function exportFunction(){
+    	jQuery("#queryForm").attr("action","$admin.setTarget('/export/order.vm')");
+    	jQuery("#queryForm").submit();
+    }
+</script>

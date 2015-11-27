@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="WarehouseDO">
+
+  <typeAlias alias="Warehouse" type="com.pg.dal.model.WarehouseDO"/>
+
+  <resultMap id="RM" class="Warehouse">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="name" column="name"/>
+    <result property="address" column="address"/>
+    <result property="keeper" column="keeper"/>
+    <result property="keeperIdCard" column="keeper_id_card"/>
+    <result property="mobile" column="mobile"/>
+    <result property="phone" column="phone"/>
+    <result property="customerId" column="customer_id"/>
+    <result property="comment" column="comment"/>
+    <result property="province" column="province"/>
+    <result property="city" column="city"/>
+    <result property="town" column="town"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="Warehouse">
+    <![CDATA[
+    insert into pg_warehouse (
+      gmt_create,
+      gmt_modify,
+      address,
+      keeper,
+      keeper_id_card,
+      mobile,
+      phone,
+      customer_id,
+      comment,
+      name,
+      province,
+      city,
+      town
+    ) values (
+      now(), now(),
+      #address#, #keeper#, #keeperIdCard#, #mobile#, #phone#, #customerId#,
+      #comment#, #name#, #province#, #city#, #town#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="Warehouse">
+    update pg_warehouse set 
+    <dynamic>
+      <isNotEmpty property="address">  
+         <![CDATA[   
+           address = #address#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="keeper">  
+         <![CDATA[   
+           keeper = #keeper#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="keeperIdCard">  
+         <![CDATA[   
+           keeper_id_card = #keeperIdCard#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="mobile">  
+         <![CDATA[   
+           mobile = #mobile#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="phone">  
+         <![CDATA[   
+           phone = #phone#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="customerId">  
+         <![CDATA[   
+           customer_id = #customerId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="comment">  
+         <![CDATA[   
+           comment = #comment#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="name">  
+         <![CDATA[   
+           name = #name#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="province">  
+         <![CDATA[   
+           province = #province#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="city">  
+         <![CDATA[   
+           city = #city#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="town">  
+         <![CDATA[   
+           town = #town#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <delete id="deleteById" parameterClass="java.lang.Long">
+    delete from pg_warehouse where id = #id#
+  </delete>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_warehouse  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_warehouse where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+  		<isNotEmpty property="name" prepend="and">
+        	<![CDATA[ 
+        	name like concat('%',#name#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="address" prepend="and">
+        	<![CDATA[ 
+        	address like concat('%',#address#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="keeper" prepend="and">
+        	<![CDATA[ 
+        	keeper like concat('%',#keeper#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="mobile" prepend="and">
+        	<![CDATA[ 
+        	mobile like concat('%',#mobile#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="phone" prepend="and">
+        	<![CDATA[ 
+        	phone like concat('%',#phone#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="customerId" prepend="and">
+        	<![CDATA[ 
+        	customer_id = #customerId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="province" prepend="and">
+        	<![CDATA[ 
+        	province = #province#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="city" prepend="and">
+        	<![CDATA[ 
+        	city = #city#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="town" prepend="and">
+        	<![CDATA[ 
+        	town = #town#
+        	]]>
+	    </isNotEmpty>
+	    <isNotNull property="system">
+	    	<isEqual property="system" compareValue="true" prepend="and">
+	    		<![CDATA[ 
+	        	customer_id = 0
+	        	]]>
+	    	</isEqual>
+	    	<isEqual property="system" compareValue="false" prepend="and">
+	    		<![CDATA[ 
+	        	customer_id != 0
+	        	]]>
+	    	</isEqual>
+	    </isNotNull>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="name">
+  	<isNull property="address">
+  	<isNull property="keeper">
+  	<isNull property="mobile">
+  	<isNull property="phone">
+  	<isNull property="customerId">
+  	<isNull property="province">
+  	<isNull property="city">
+  	<isNull property="town">
+  	<isNull property="system">
+        <include refid="Common.validModify" />
+    </isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_warehouse 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_warehouse 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from pg_warehouse
+	<include refid="where" />
+  </select>
+</sqlMap>

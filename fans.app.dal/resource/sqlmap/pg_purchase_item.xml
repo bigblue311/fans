@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PurchaseItemDO">
+
+  <typeAlias alias="PurchaseItem" type="com.pg.dal.model.PurchaseItemDO"/>
+
+  <resultMap id="RM" class="PurchaseItem">
+    <result property="id" 			column="id"/>
+    <result property="gmtCreate" 	column="gmt_create"/>
+    <result property="gmtModify" 	column="gmt_modify"/>
+    <result property="name" 		column="name"/>
+    <result property="title" 		column="title"/>
+    <result property="brandId" 		column="brand_id"/>
+    <result property="categoryId" 	column="category_id"/>
+    <result property="msu" 			column="msu"/>
+    <result property="price" 		column="price"/>
+    <result property="quantity" 	column="quantity"/>
+    <result property="mcubage" 		column="mcubage"/>
+    <result property="mweight" 		column="mweight"/>
+    <result property="purchaseId" 	column="purchase_id"/>
+    <result property="productId" 	column="product_id"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="PurchaseItem">
+    <![CDATA[
+    insert into pg_purchase_item (
+      gmt_create,
+      gmt_modify,
+      name,
+      title,
+      brand_id,
+      category_id,
+      msu,
+      price,
+      quantity,
+      mcubage,
+      mweight,
+      purchase_id,
+      product_id
+    ) values (
+      now(), now(), #name#, #title#,#brandId#, #categoryId#,
+      #msu#, #price#, #quantity#, #mcubage#, #mweight#, 
+      #purchaseId#, #productId#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="PurchaseItem">
+    update pg_purchase_item set 
+    <dynamic>
+      <isNotEmpty property="name">  
+         <![CDATA[   
+           name = #name#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="title">  
+         <![CDATA[   
+           title = #title#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="brandId">  
+         <![CDATA[   
+           brand_id = #brandId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="categoryId">  
+         <![CDATA[   
+           category_id = #categoryId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="msu">  
+         <![CDATA[   
+           msu = #msu#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="price">  
+         <![CDATA[   
+           price = #price#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="quantity">  
+         <![CDATA[   
+           quantity = #quantity#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="mcubage">  
+         <![CDATA[   
+           mcubage = #mcubage#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="mweight">  
+         <![CDATA[   
+           mweight = #mweight#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="purchaseId">  
+         <![CDATA[   
+           purchase_id = #purchaseId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="productId">  
+         <![CDATA[   
+           product_id = #productId#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <select id="getAll" resultMap="RM">
+    select * from pg_purchase_item  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_purchase_item where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="name" prepend="and">
+        	<![CDATA[ 
+        	name like concat('%',#name#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="title" prepend="and">
+        	<![CDATA[ 
+        	title like concat('%',#title#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="brandId" prepend="and">
+        	<![CDATA[ 
+        	brand_id = #brandId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="categoryId" prepend="and">
+        	<![CDATA[ 
+        	category_id = #categoryId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="purchaseId" prepend="and">
+        	<![CDATA[ 
+        	purchase_id = #purchaseId#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="name">
+  	<isNull property="title">
+  	<isNull property="brandId">
+  	<isNull property="categoryId">
+  	<isNull property="purchaseId">
+        <include refid="Common.validModify" />
+    </isNull>
+    </isNull>
+    </isNull>
+    </isNull>
+    </isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_purchase_item 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_purchase_item 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from pg_purchase_item
+	<include refid="where" />
+  </select>
+</sqlMap>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="http://cdn.amazeui.org/amazeui/2.2.1/css/amazeui.min.css">
+        <script src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+		<script src="http://cdn.amazeui.org/amazeui/2.2.1/js/amazeui.min.js"></script>
+		<script type="text/javascript" src="/js/Location/location.js"></script>
+		<script type="text/javascript" src="/js/jString.js"></script>
+        <title>快消助手</title>
+    </head>
+    <body>
+        <header data-am-widget="header" class="am-header am-header-default">
+		<div class="am-header-left am-header-nav">
+		  <a href="/index.htm" class="">
+		    <i class="am-header-icon am-icon-home"></i>
+		  </a>
+		</div>
+		<h1 class="am-header-title">快消助手</h1>
+		<div class="am-header-right am-header-nav">
+		  <a href="#" class="" id="login-icon" data-am-modal="{target: '#login-popup'}">
+		    <i class="am-header-icon am-icon-user"></i>
+		  </a>
+		  <a href="#" class="">
+		  </a>
+		</div>
+	</header>
+	<div id="nav-view" class="after-login">
+		<nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+		  <a href="javascript: void(0)" class="am-menu-toggle ">
+		    <i class="am-menu-toggle-icon am-icon-bars"></i>
+		  </a>
+		  <div class="am-offcanvas">
+		    <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+		      <ul class="am-menu-nav am-avg-sm-1">
+		        <li class="am-parent">
+		          <a href="#" class="" onclick="myOrderCount()">我的订单</a>
+		          <ul class="am-menu-sub am-collapse  am-avg-sm-2 ">
+		            <li class="">
+		              <a href="#" class="myOrderCount" status='0' label="待确认" badgeClass="am-badge-danger" onclick="openOrderList('0')">待确认</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="myOrderCount" status='1' label="已确认" badgeClass="am-badge-primary" onclick="openOrderList('1')">已确认</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="myOrderCount" status='2' label="已发货" badgeClass="am-badge-warning" onclick="openOrderList('2')">已发货</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="myOrderCount" status='3' label="已收货" badgeClass="am-badge-success" onclick="openOrderList('3')">已收货</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="myOrderCount" status='4' label="已完成" badgeClass="am-badge-secondary" onclick="openOrderList('4')">已完成</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="myOrderCount" status='5' label="已取消" badgeClass="" onclick="openOrderList('5')">已取消</a>
+		            </li>
+		          </ul>
+		        </li>
+		        <li class="am-parent">
+		          <a href="#c3" class="">个人信息</a>
+		          <ul class="am-menu-sub am-collapse  am-avg-sm-2 ">
+		            <li class="">
+		              <a href="#" class="" onclick="openCustomerInfo()">个人信息</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="" onclick="openWarehouseList()">地址簿</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="" data-am-modal="{target: '#password-popup'}">修改密码</a>
+		            </li>
+		            <li class="">
+		              <a href="#" class="" id="logoutBtn">退出登录</a>
+		            </li>
+		          </ul>
+		        </li>
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+	</div>
+	$screen_placeholder
+	<div data-am-widget="gotop" class="am-gotop am-gotop-fixed">
+	  <a href="#top" title="">
+	    <i class="am-gotop-icon am-icon-arrow-up"></i>
+	  </a>
+	</div>
+	<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default after-login" id="nav-bar">
+	  <ul class="am-navbar-nav am-cf am-avg-sm-4">
+	    <li>
+	      <a href="tel:123456789" class="hotline">
+	        <span class="am-icon-phone"></span>
+	        <span class="am-navbar-label">呼叫客服</span>
+	      </a>
+	    </li>
+	    <li>
+	      <a class="" onclick="openOrderList('')">
+	        <span class="am-icon-shopping-cart"></span>
+	        <span class="am-navbar-label">我的订单</span>
+	      </a>
+	    </li>
+	    <li>
+	      <a class="" onclick="openWarehouseList()">
+	        <span class="am-icon-book"></span>
+	        <span class="am-navbar-label">地址薄</span>
+	      </a>
+	    </li>
+	    <li>
+	      <a class="" onclick="openCustomerInfo()">
+	        <span class="am-icon-user"></span>
+	        <span class="am-navbar-label">个人信息</span>
+	      </a>
+	    </li>
+	  </ul>
+	</div>
+	<footer class="am-margin-top">
+	  <p class="am-text-center">
+	    <small>Powered by victor</small>
+	  </p>
+	</footer>
+	
+	<!--[if (gte IE 9)|!(IE)]><!-->
+	<script>
+		function currentDate(){
+			var d = new Date(),str = '';
+			 str += d.getFullYear()+'-';
+			 str += getTimeStr(d.getMonth() + 1)+'-';
+			 str += getTimeStr(d.getDate());
+			return str;
+		}
+		
+		function currentTime(){
+			var d = new Date(),str = '';
+			 str += d.getFullYear()+'-';
+			 str += getTimeStr(d.getMonth() + 1)+'-';
+			 str += getTimeStr(d.getDate())+' ';
+			 str += getTimeStr(d.getHours())+':'; 
+			 str += getTimeStr(d.getMinutes())+':'; 
+			 str += getTimeStr(d.getSeconds()); 
+			return str;
+		}
+		
+		function getTimestamp(){
+			var d = new Date(),str = '';
+			 str += d.getFullYear();
+			 str += getTimeStr(d.getMonth() + 1);
+			 str += getTimeStr(d.getDate());
+			 str += getTimeStr(d.getHours()); 
+			 str += getTimeStr(d.getMinutes()); 
+			 str += getTimeStr(d.getSeconds()); 
+			return str;
+		}
+
+		function getTimeStr(t){
+			if(t < 10){
+				return "0"+t;
+			} else {
+				return t;
+			}
+		}
+		
+		function getHotline(){
+			jQuery.ajax({
+				type: "get",
+				url: "/admin/api/getPhoneNumber.json",
+				success:function(data, textStatus){
+					if(data.success){
+						var phone = "tel:"+data.dataObject;
+						jQuery(".hotline").attr("href",phone);
+					}
+				}
+		 	});
+		}
+		
+		function myOrderCount(){
+			jQuery(".myOrderCount").each(function(){
+				var status = jQuery(this).attr("status");
+				var label = jQuery(this).attr("label");
+				var badgeClass= jQuery(this).attr("badgeClass");
+				var that = this;
+				jQuery.ajax({
+					type: "get",
+					url: '/admin/api/getMyOrderCount.json?status='+status,
+					success:function(data, textStatus){
+						if(data.success){
+							var size = data.dataObject;
+							var badge = "<span class='am-badge "+badgeClass+" am-round'>"+size+"</span>";
+							jQuery(that).empty().append(label+" "+badge);
+						} else {
+							jQuery(that).empty().append(label);
+						}
+					}
+			 	});
+			});
+		}
+		
+		jQuery(function(){
+			getHotline();
+			jQuery(".after-login").hide();
+			jQuery.ajax({
+				type: "get",
+				url: "/admin/api/logined.json",
+				success:function(data, textStatus){
+					if(data.success){
+						jQuery(".after-login").show();
+					} else {
+						jQuery(".after-login").hide();
+					}
+				}
+		 	});
+			
+			jQuery("#logoutBtn").click(function(){
+				confirm("确定退出吗?",function(){
+					jQuery.ajax({
+						type: "get",
+						url: "/admin/api/logout.json",
+						success:function(data, textStatus){
+							if(data.success){
+								jQuery(".after-login").hide();
+							} else {
+								jQuery(".after-login").show();
+							}
+						}
+				 	});
+				});
+			});
+		});
+	</script>
+	
+	<!-- popups -->
+	$control.setTemplate('login.vm')
+	
+	$control.setTemplate('register.vm')
+	
+	$control.setTemplate('customer.vm')
+	
+	$control.setTemplate('warehouseList.vm')
+	
+	$control.setTemplate('warehouse.vm')
+	
+	$control.setTemplate('orderList.vm')
+	
+	$control.setTemplate('orderDetail.vm')
+	
+	$control.setTemplate('order.vm')
+	
+	$control.setTemplate('password.vm')
+	
+	$control.setTemplate('confirm.vm')
+	
+	$control.setTemplate('alert.vm')
+	
+	$control.setTemplate('loading.vm')
+    </body>
+</html>

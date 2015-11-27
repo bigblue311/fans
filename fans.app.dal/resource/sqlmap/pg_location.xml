@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="LocationDO">
+
+  <typeAlias alias="Location" type="com.pg.dal.model.LocationDO"/>
+
+  <resultMap id="RM" class="Location">
+    <result property="id" 			column="id"/>
+    <result property="gmtCreate" 	column="gmt_create"/>
+    <result property="gmtModify" 	column="gmt_modify"/>
+    <result property="province" 	column="province"/>
+    <result property="city" 		column="city"/>
+    <result property="town" 		column="town"/>
+    <result property="name" 		column="name"/>
+  </resultMap>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_location  
+  </select>
+  
+</sqlMap>

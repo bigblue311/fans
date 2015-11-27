@@ -1,0 +1,87 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div class="am-popup" id="register-popup">
+<div class="am-popup-inner">
+   <div class="am-popup-bd">
+     	<form action="" class="am-form am-form-horizontal" id="registerForm">
+		<fieldset>
+		  <legend>会员注册</legend>
+		  <div class="am-form-group am-form-icon">
+		  	<i class="am-icon-user"></i>
+		    <input type="text" id="doc-register-name" minlength="3" placeholder="输入用户名" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-mobile-phone"></i>
+		    <input type="phone" id="doc-register-mobile" minlength="3" placeholder="输入手机号码" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-credit-card"></i>
+		    <input type="text" id="doc-register-idCard" minlength="3" placeholder="输入身份证号码" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-key"></i>
+		    <input type="password" id="doc-register-pwd" minlength="3" placeholder="输入密码" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-key"></i>
+		    <input type="password" id="doc-register-pwd2" minlength="3" placeholder="再次输入密码" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-mobile-phone"></i>
+		    <input type="phone" id="doc-register-recommender" minlength="3" placeholder="推荐人手机号码" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group">
+		    <small id="register-alert-message" style="color:red"></small>
+		  </div>
+		  <div class="am-form-group">
+		    <button type="submit" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+		    <button data-am-modal-close class="am-btn am-btn-primary am-fr">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+		  </div>
+		</fieldset>
+	</form>
+   </div>
+</div>
+</div>
+
+<script>
+
+function openRegister(){
+	jQuery("#register-popup").modal();
+}
+
+jQuery(function(){
+	jQuery("#registerForm").submit(function(){
+		event.preventDefault();
+		
+		jQuery("#register-alert-message").empty();
+		
+		var name = jQuery("#doc-register-name").val();
+		var mobile = jQuery("#doc-register-mobile").val();
+		var idCard = jQuery("#doc-register-idCard").val();
+		var pwd1 = jQuery("#doc-register-pwd").val();
+		var pwd2 = jQuery("#doc-register-pwd2").val();
+		var recommender = jQuery("#doc-register-recommender").val();
+		
+		if(pwd1 != pwd2){
+			jQuery("#register-alert-message").empty().append("两次密码输入不符");
+			return;
+		}
+		
+		var timestamp = currentTime();
+	    var para = "timestamp="+timestamp+"&name="+name+"&mobile="+mobile+"&idCard="+idCard+"&password="+pwd1+"&recommender="+recommender;
+		
+		jQuery.ajax({
+			type: "get",
+			url: '/admin/api/saveCustomer.json?'+ para,
+			success:function(data, textStatus){
+				if(data.success){
+					alert("注册成功");
+					jQuery("#register-popup").modal('close');
+				} else {
+					jQuery("#register-alert-message").empty().append(data.message);
+					return;
+				}
+			}
+	 	});
+	});
+});
+</script>

@@ -1,0 +1,75 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div class="am-popup" id="order-list-popup">
+<div class="am-popup-inner">
+   <div class="am-popup-hd">
+     <span data-am-modal-close class="am-close">&times;</span>
+   </div>
+   <div>
+    	<small id="order-list-alert-message" style="color:red"></small>
+   </div>
+   <div class="am-popup-bd">
+   	<div data-am-widget="list_news" class="am-list-news am-list-news-default">
+	  <!--列表标题-->
+	  <div class="am-list-news-hd am-cf">
+	      <h2><a onclick="reloadOrderList()"><i class="am-icon-refresh"></i>&nbsp;我的订单</a></h2>
+	  </div>
+	  <div class="am-list-news-bd">
+	    <ul class="am-list" id="order-list-items">
+	    </ul>
+	  </div>
+	</div>
+   </div>
+</div>
+</div>
+<script>
+var selectedStatus = '';
+
+function openOrderList(status){
+	jQuery.ajax({
+		type: "get",
+		url: '/admin/api/logined.json',
+		success:function(data, textStatus){
+			if(data.success){
+				loadOrderList(status);
+				jQuery('#order-list-popup').modal();
+			} else {
+				jQuery("#login-popup").modal();
+			}
+		}
+ 	});
+}
+
+function reloadOrderList(){
+	loadOrderList(selectedStatus);
+}
+
+function loadOrderList(status){
+	selectedStatus = status;
+	jQuery.ajax({
+		type: "get",
+		url: '/admin/api/getMyOrderList.json?status='+status,
+		success:function(data, textStatus){
+			if(data.success){
+				var size = data.dataObject.length;
+				jQuery("#order-list-items").empty();
+				for(var loop=0;loop<size;loop++){
+					var obj = data.dataObject[loop];
+					var orderDO = obj.orderDO;
+					var item = "<li class='am-g am-list-item-desced' style='padding: 1rem;'>";
+					item += "<div class='am-list-item-hd'>订单编号:"+orderDO.id + " "+obj.gmtCreate + " "+obj.statusBadge+obj.status+"</span>";
+					item += "<a class='am-fr' onclick='openOrderDetail("+orderDO.id+")'><small>&nbsp;&nbsp;&nbsp;&nbsp;<i class='am-icon-search'></i>详情</small></a></div>";
+					item += "<div class='am-list-item-text'>定金:"+orderDO.deposit+"元</div>";
+					item += "<div class='am-list-item-text'>总价:"+orderDO.totalPrice +"元</div>";
+					item += "<div class='am-list-item-text'>运费:"+orderDO.transportFee +"元</div>";
+					item += "<div class='am-list-item-text'>备注:"+orderDO.comment +"</div>";
+					item += "</li>";
+					jQuery("#order-list-items").append(item);
+				}
+			} else {
+				jQuery("#order-list-alert-message").empty().append(data.message);
+				return;
+			}
+		}
+ 	});
+}
+</script>

@@ -1,0 +1,10 @@
+*.sh
+*.bat
+antx-*.properties
+.project
+.classpath
+target/
+.settings/
+.DS_Store
+fans.app.web/src/main/webapp/WEB-INF/lib
+fans.app.web/src/main/webapp/WEB-INF/classes

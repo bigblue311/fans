@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ProdPackDO">
+
+  <typeAlias alias="ProdPack" type="com.pg.dal.model.ProdPackDO"/>
+
+  <resultMap id="RM" class="ProdPack">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="packageId" column="package_id"/>
+    <result property="productId" column="product_id"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="ProdPack">
+    <![CDATA[
+    insert into pg_prod_pack (
+      gmt_create,
+      gmt_modify,
+      package_id,
+      product_id
+    ) values (
+      now(), now(),
+      #packageId#, #productId#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="ProdPack">
+    update pg_prod_pack set 
+    <dynamic>
+      <isNotEmpty property="packageId">  
+         <![CDATA[   
+           package_id = #packageId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="productId">  
+         <![CDATA[   
+           product_id = #productId#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+  
+  <delete id="deleteById" parameterClass="java.lang.Long">
+    delete from pg_prod_pack where id = #id#
+  </delete>
+  
+  <delete id="deleteByPackageId" parameterClass="java.lang.Long">
+    delete from pg_prod_pack where package_id = #packageId#
+  </delete>
+
+  <select id="getAll" resultMap="RM">
+    select * from pg_prod_pack  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from pg_prod_pack where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="packageId" prepend="and">
+        	<![CDATA[ 
+        	package_id = #packageId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="productId" prepend="and">
+        	<![CDATA[ 
+        	product_id = #productId#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="packageId">
+  	<isNull property="productId">
+        <include refid="Common.validModify" />
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_prod_pack 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from pg_prod_pack 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from pg_prod_pack
+	<include refid="where" />
+  </select>
+</sqlMap>

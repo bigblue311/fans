@@ -1,0 +1,135 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+#set ($changePwdGroup = $form.changePwd.defaultInstance)
+<div class="crumb">
+	<i class="icon-home"></i>
+	<span class="divider">/</span>
+	<a href="/admin/welcome.htm">管理系统</a>
+	#if(${crumbs})
+		#foreach($crumb in $crumbs)
+			<span class="divider">/</span> <a href="$crumb.link">$!{crumb.name}</a>
+		#end	
+	#end 
+</div>
+<ul id="js-news" class="js-hidden">
+	#if(${newsList})
+		#foreach($news in $newsList)
+			<li class="news-item">#if($!news.url)<a href="#noescape()$news.url#end">#end$!{news.msg}#if($news.url)</a>#end</li>
+		#end	
+	#end 
+</ul>
+<script type="text/javascript">
+	$(function () {
+	    $('#js-news').ticker({
+	    	titleText: '系统通知'
+	    });
+	});
+</script>
+<label style="padding-left:20px;padding-right:20px;position:relative;top:-4px;">欢迎您[$!{loginedUser.name}]</label>
+<form method="post" id="changePwd_form" style="display:inline-block;position:relative;top:-4px;">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="employeeAction"/>
+	<input type="hidden" name="event_submit_do_change_pwd" value="true"/>
+	<input type="hidden" name="$changePwdGroup.id.key" value="$!{loginedUser.id}">
+	<input type="hidden" name="$changePwdGroup.password.key" id="form_newPassword" value="">
+	<a class="auxiliary-text" id="changePwdLink" href="#" style="padding-right:10px;"><i class="icon-user"></i>修改密码</a>
+</form>
+<form method="post" id="logout_form" style="display:inline-block;position:relative;top:-4px;">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="employeeAction"/>  
+	<input type="hidden" name="event_submit_do_logout" value="true"/>
+	<a class="auxiliary-text" id="logoutLink" href="#" style="padding-right:10px;"><i class="icon-pencil"></i>注销</a>
+	<a class="auxiliary-text" style="padding-right:10px;" href="$admin.setTarget('help.vm')" ><i class="icon-question-sign"></i>帮助</a>
+</form>
+<div style="display:none">
+	<div class="row" id="changePwd_dialog">
+	    <div class="span8 doc-content">
+	      <form class="form-horizontal">
+	        <div class="row">
+	          <div class="control-group span8">
+	            <label class="control-label"><s>*</s>旧密码：</label>
+	            <div class="controls">
+	              <input type="password" class="control-text" id="pwd1">
+	            </div>
+	          </div>
+	          <div class="control-group span8">
+	            <label class="control-label"><s>*</s>新密码：</label>
+	            <div class="controls">
+	              <input type="password" class="control-text" id="pwd2">
+	            </div>
+	          </div>
+	          <div class="control-group span8">
+	            <label class="control-label"><s>*</s>再输一次：</label>
+	            <div class="controls">
+	              <input type="password" class="control-text" id="pwd3">
+	            </div>
+	          </div>
+	        </div>
+	      </form>
+	      <div id="changePwd_error" style="color:red">
+	      	#if (!$changePwdGroup.id.valid)
+       			$changePwdGroup.id.message
+	   		#end
+	   		#if (!$changePwdGroup.password.valid)
+	       		$changePwdGroup.password.message
+	   		#end
+	      </div>
+	    </div>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery('#logoutLink').click(function(){
+		jQuery("#logout_form").submit();
+	});
+	
+	jQuery('#changePwdLink').click(function(){
+		changePwdDialog.show();
+	});
+	
+	var Overlay = BUI.Overlay;
+    
+	var changePwdDialog = new Overlay.Dialog({
+	     title:'修改密码',
+	     width:380,
+	     height:200,
+	     contentId:'changePwd_dialog',
+	     success:function () {
+	     	jQuery("#changePwd_error").empty();
+	     	var pwd1 = jQuery("#pwd1").val();
+	     	var pwd2 = jQuery("#pwd2").val();
+	     	var pwd3 = jQuery("#pwd3").val();
+	     	if(pwd1 == ""){
+	     		jQuery("#changePwd_error").append("旧密码不能为空");
+	     		return;
+	     	}
+	     	if(pwd2 == ""){
+	     		jQuery("#changePwd_error").append("新密码不能为空");
+	     		return;
+	     	}
+	     	if(pwd3 == ""){
+	     		jQuery("#changePwd_error").append("再次输入密码不能为空");
+	     		return;
+	     	}
+	     	if(pwd2 != pwd3){
+	     		jQuery("#changePwd_error").append("两次密码输入不符");
+	     		return;
+	     	}
+	     	
+	     	var timestamp = currentTime();
+		    var para = "timestamp="+timestamp+"&id=$!{loginedUser.id}&password="+pwd1;
+	     	
+	     	jQuery.ajax({
+				type: "get",
+				url: '$admin.setTarget('/api/checkEmployeePwd.json')?'+ para,
+				success:function(data, textStatus){
+					if(data.success){
+						jQuery("#form_newPassword").val(pwd2);
+						jQuery("#changePwd_form").submit();
+					} else {
+						jQuery("#changePwd_error").append(data.message);
+			     		return;
+					}
+				}
+	     	});
+	     }
+	});
+</script>

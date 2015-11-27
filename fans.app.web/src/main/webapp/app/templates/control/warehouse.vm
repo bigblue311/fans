@@ -1,0 +1,147 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div class="am-popup" id="warehouse-popup">
+<div class="am-popup-inner">
+   <div class="am-popup-bd">
+   		<input type="hidden" name="id" value="" id="doc-warehouse-id"/>
+     	<form action="" class="am-form am-form-horizontal" id="warehouseForm">
+		<fieldset>
+		  <legend>我的地址</legend>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-home"></i>
+		    <input type="text" id="doc-warehouse-name" minlength="3" placeholder="收货地址名称" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <select id="q_province" name="province"></select>
+			<select id="q_city" name="city"></select>
+			<select id="q_town" name="town"></select>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-building"></i>
+		    <input type="text" id="doc-warehouse-address" placeholder="详细地址" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-user"></i>
+		    <input type="text" id="doc-warehouse-keeper" placeholder="地址联系人" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-mobile"></i>
+		    <input type="text" id="doc-warehouse-mobile" placeholder="地址联系手机" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-phone"></i>
+		    <input type="text" id="doc-warehouse-phone" placeholder="地址联系电话" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group">
+		    <textarea id="doc-warehouse-comment" maxlength="100" placeholder="备注"></textarea>
+		  </div>
+		  <div class="am-form-group">
+		    <small id="warehouse-alert-message" style="color:red"></small>
+		  </div>
+		  <div class="am-form-group">
+		    <button type="submit" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+		    <button data-am-modal-close class="am-btn am-btn-primary am-fr">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+		  </div>
+		</fieldset>
+	</form>
+   </div>
+</div>
+</div>
+<script>
+function openWarehouse(id){
+	jQuery.ajax({
+		type: "get",
+		url: '/admin/api/logined.json',
+		success:function(data, textStatus){
+			if(data.success){
+				jQuery("#doc-warehouse-id").val('');
+				jQuery("#doc-warehouse-name").val('');
+				jQuery("#doc-warehouse-address").val('');
+				jQuery("#doc-warehouse-keeper").val('');
+				jQuery("#doc-warehouse-mobile").val('');
+				jQuery("#doc-warehouse-phone").val('');
+				jQuery("#doc-warehouse-comment").val('');
+				jQuery("#q_province").empty();
+				jQuery("#q_city").empty();
+				jQuery("#q_town").empty();
+				
+				if(id != ""){
+					jQuery.ajax({
+						type: "get",
+						url: '/admin/api/getWarehouseById.json?id='+ id,
+						success:function(data, textStatus){
+							if(data.success){
+								var obj = data.dataObject;
+								jQuery("#doc-warehouse-id").val(obj.id);
+								jQuery("#doc-warehouse-name").val(obj.name);
+								jQuery("#doc-warehouse-address").val(obj.address);
+								jQuery("#doc-warehouse-keeper").val(obj.keeper);
+								jQuery("#doc-warehouse-mobile").val(obj.mobile);
+								jQuery("#doc-warehouse-phone").val(obj.phone);
+								jQuery("#doc-warehouse-comment").val(obj.comment);
+								showLocation('q_province','q_city','q_town',obj.province,obj.city,obj.town);
+								return;
+							} else {
+								showLocation('q_province','q_city','q_town');
+								jQuery("#warehouse-alert-message").empty().append(data.message);
+								return;
+							}
+						}
+				 	});
+				} else {
+					showLocation('q_province','q_city','q_town');
+				}
+				jQuery("#warehouse-popup").modal();
+			} else {
+				jQuery("#login-popup").modal();
+			}
+		}
+ 	});
+}
+
+jQuery(function(){
+	jQuery("#warehouseForm").submit(function(){
+		event.preventDefault();
+		
+		jQuery("#warehouse-alert-message").empty();
+		
+		var id = jQuery("#doc-warehouse-id").val();
+		var name = jQuery("#doc-warehouse-name").val();
+		var address = jQuery("#doc-warehouse-address").val();
+		var keeper = jQuery("#doc-warehouse-keeper").val();
+		var mobile = jQuery("#doc-warehouse-mobile").val();
+		var phone = jQuery("#doc-warehouse-phone").val();
+		var comment = jQuery("#doc-warehouse-comment").val();
+		var province = jQuery("#q_province").val();
+		var city = jQuery("#q_city").val();
+		var town = jQuery("#q_town").val();
+
+		var timestamp = currentTime();
+	    var para = "timestamp="+timestamp;
+	    para += "&id="+id;
+	    para += "&name="+name;
+	    para += "&address="+address;
+	    para += "&keeper="+keeper;
+	    para += "&mobile="+mobile;
+	    para += "&phone="+phone;
+	    para += "&comment="+comment;
+	    para += "&province="+province;
+	    para += "&city="+city;
+	    para += "&town="+town;
+		
+		jQuery.ajax({
+			type: "get",
+			url: '/admin/api/saveWarehouse.json?'+ para,
+			success:function(data, textStatus){
+				if(data.success){
+					alert("地址薄修改成功");
+					jQuery("#warehouse-popup").modal('close');
+					loadWarehouseList();
+				} else {
+					jQuery("#warehouse-alert-message").empty().append(data.message);
+					return;
+				}
+			}
+	 	});
+	});
+});
+</script>

@@ -1,0 +1,238 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<div class="doc-content">
+	<form action="$admin.setTarget('purchase.vm')" class="form-horizontal well" id="queryForm">
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">客户名称：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="customerName" value="$!query.customerName">
+					<input type="hidden" name="orderId" value="$!query.orderId">
+					<input type="hidden" name="page" id="page" value="$!query.page">
+					<input type="hidden" name="customerId" value="$!query.customerId">
+				</div>
+				<label class="control-label">客户电话：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="customerMobile" value="$!query.customerMobile">
+				</div>
+				<label class="control-label">交易日期：</label>
+				<div class="controls">
+					<input type="text" class="calendar" name="createStart" id="createStart" value="$!query.createStart">
+					至
+					<input type="text" class="calendar" name="createEnd" id="createEnd" value="$!query.createEnd">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">产品名称：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="name" value="$!query.name">
+				</div>
+				<label class="control-label">产品包：</label>
+				<div class="controls">
+					<select name="packageId">
+						<option selected value="">全部</option>
+						#foreach($package in $packageEnum)
+						<option 
+							#if($!query.packageId)
+								#if($!query.packageId==$!package.key)
+									selected
+								#end
+							#end 
+							value="$!package.key">$!package.value</option>
+						#end
+					</select>
+				</div>
+				<label class="control-label">物流编号：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="transportCode" value="$!query.transportCode">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">联系人：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="keeper" value="$!query.keeper">
+				</div>
+				<label class="control-label">联系手机：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="mobile" value="$!query.mobile">
+				</div>
+				<label class="control-label">联系电话：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="phone" value="$!query.phone">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-actions offset3">
+				<button class="button button-primary"><i class="icon-search icon-white"></i>搜索</button>
+				<button type="reset" class="button"><i class="icon-repeat"></i>重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript">
+		var Calendar = BUI.Calendar;
+		
+		var createStart = new Calendar.DatePicker({
+		  trigger:'#createStart',
+		  selectedDate : new Date(),
+		  autoRender : true
+		});
+		
+		var createEnd = new Calendar.DatePicker({
+			  trigger:'#createEnd',
+			  selectedDate : new Date(),
+			  autoRender : true
+		});
+	</script>
+</div>
+<div id="grid"></div>
+$control.setTemplate("paging.vm")
+<div id="detail" style="display:none">
+	<form method="post" id="detailFrom">
+	</form>
+</div>
+<script type="text/javascript">
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      columns = [
+		{
+			title : 'ID',
+			elCls: 'center',
+			dataIndex : 'id',
+			width:'5%'
+		},{
+			title : '产品包名称',
+			elCls: 'left',
+			dataIndex : 'name',
+			width:'15%'
+		},{
+            title : '交易时间',
+            elCls: 'left',
+            dataIndex :'gmtCreate',
+            renderer:BUI.Grid.Format.datetimeRenderer,
+            width:'15%'
+        },{
+            title : '客户',
+            elCls: 'left',
+            dataIndex :'customerName',
+            renderer : function(val,obj,index){
+            	var customerName = obj.customerName;
+            	var customerMobile = obj.customerMobile;
+            	return customerName+"("+customerMobile+")";
+            },
+		    width:'15%'
+        },{
+            title : '物流费',
+            elCls: 'left',
+            dataIndex :'transportFee',
+            width:'15%'
+        },{
+            title : '物流编号',
+            elCls: 'left',
+            dataIndex :'transportCode',
+            width:'10%'
+        },{
+            title : '总价',
+            elCls: 'left',
+            renderer: function(val,obj,index){
+            	var total = 0;
+            	if(obj!=null){
+            		var items = obj.itemList;
+            		for(var item in items){
+            			var price = item.price;
+                		var quantity = item.quantity;
+                		if(price != null && quantity !=null){
+                			total += price * quantity;
+                		}
+            		}
+            	}
+            	return total;
+          	}, 
+            width:'10%'
+        },{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				var orderId = obj.orderId;
+				var detail = '<a href="$admin.setTarget('orderdetail.vm')?id='+orderId+'">详情</a>';
+				detail += ' <span class="grid-command" onclick="showDetail('+index+')">明细</span>';
+				return detail;
+			},
+	        width:'15%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data
+      }),
+      cascade = new Grid.Plugins.Cascade({
+		    renderer : function(record){
+			    var result = '<div><p>&nbsp;发货地址：' + record.addressFrom + '</p></div>';
+			    result += '<div><p>&nbsp;收货地址：' + record.addressTo + '</p></div>';
+			    result += '<div><p>&nbsp;联系方式：' + record.keeper + '('+record.keeperIdCard+') ' + record.mobile+' ' + record.phone + '</p></div>';
+			    result += '<div><p>&nbsp;备注：' + record.comment + '</p></div>';
+			    return result;
+		    }
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        store : store,
+        bbar : {
+        	items : [
+			{
+				btnCls : 'button button-small',
+				text : '<i class="icon-print"></i>打印搜索结果',
+				listeners : {
+					'click' : exportFunction
+				}
+			}
+			]
+        },
+        plugins : [cascade]
+      });
+
+    grid.render();
+    
+  	//创建编辑器
+    var detail = new BUI.Editor.DialogEditor({ 
+        contentId:'detail',
+        width : 650,
+        mask : true,
+        title : '成交明细',
+        form : {
+          srcNode : '#detailFrom'
+        },
+        success : function(){
+          this.accept();
+        }
+    });
+  	
+  	function showDetail(index){
+  		detail.show();
+  		var record = grid.getItemAt(index);
+  		var itemList = record.itemList;
+  		
+  		var items = "";
+  		for(var i = 0;i<itemList.length;i++){
+  			var item = itemList[i];
+  			items += "<div class='row'>";
+  			items += "<label style='display:inline-block;min-width:300px;'>"+item.name+"</label>";
+  			items += "<label style='display:inline-block;min-width:100px;'>"+item.price+"元</label>";
+  			items += "<label style='display:inline-block;min-width:100px;'>"+item.quantity+"箱</label>";
+  			items += "</div>";
+  		}
+  		$('#detailFrom').empty().append(items);
+  	}
+    
+    function exportFunction(){
+    	jQuery("#queryForm").attr("action","$admin.setTarget('/export/purchase.vm')");
+    	jQuery("#queryForm").submit();
+    }
+</script>
