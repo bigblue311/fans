@@ -1,10 +1,10 @@
-package com.pg.dal.cache.impl;
+package com.fans.dal.cache.impl;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import com.pg.dal.cache.SystemConfigCache;
-import com.pg.dal.model.SystemConfigDO;
-import com.pg.dal.query.SystemConfigQueryCondition;
+import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.model.SystemConfigDO;
+import com.fans.dal.query.SystemConfigQueryCondition;
 import com.victor.framework.dal.cache.StaticCache;
 
 public class SystemConfigCacheImpl extends StaticCache<SystemConfigDO,SystemConfigQueryCondition> implements SystemConfigCache,InitializingBean{

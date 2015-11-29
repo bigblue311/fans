@@ -24,6 +24,6 @@
 	 </transactionManager>
   
   	<sqlMap resource="sqlmap/common.xml"/>
-  	<sqlMap resource="sqlmap/pg_location.xml"/>
-  	<sqlMap resource="sqlmap/pg_system_config.xml"/>
+  	<sqlMap resource="sqlmap/cl_location.xml"/>
+  	<sqlMap resource="sqlmap/cl_system_config.xml"/>
 </sqlMapConfig>

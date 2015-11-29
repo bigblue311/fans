@@ -19,6 +19,6 @@
     	<property name="password" value="" />
     	<property name="auth" value="true" />
     	<property name="enable" value="false" />
-    	<property name="keyPrefix" value="pg.dev" />
+    	<property name="keyPrefix" value="fans.dev" />
     </bean>
 </beans>

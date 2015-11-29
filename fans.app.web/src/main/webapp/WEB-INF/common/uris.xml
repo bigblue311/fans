@@ -19,7 +19,7 @@
             <componentPath>/</componentPath>
         </uris:turbine-uri>
         
-        <uris:turbine-content-uri id="fansContent" exposed="true" extends="pg" />
+        <uris:turbine-content-uri id="fansContent" exposed="true" extends="fans" />
 
     </services:uris>
 

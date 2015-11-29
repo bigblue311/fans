@@ -1,8 +1,8 @@
-package com.pg.dal.cache;
+package com.fans.dal.cache;
 
 import java.util.List;
 
-import com.pg.dal.model.SystemConfigDO;
+import com.fans.dal.model.SystemConfigDO;
 
 public interface SystemConfigCache {
 	

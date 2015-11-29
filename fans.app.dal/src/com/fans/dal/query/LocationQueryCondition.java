@@ -1,4 +1,4 @@
-package com.pg.dal.query;
+package com.fans.dal.query;
 
 import java.util.Date;
 

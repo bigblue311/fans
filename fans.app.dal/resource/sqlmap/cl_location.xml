@@ -6,7 +6,7 @@
 
 <sqlMap namespace="LocationDO">
 
-  <typeAlias alias="Location" type="com.pg.dal.model.LocationDO"/>
+  <typeAlias alias="Location" type="com.fans.dal.model.LocationDO"/>
 
   <resultMap id="RM" class="Location">
     <result property="id" 			column="id"/>
@@ -19,7 +19,7 @@
   </resultMap>
 
   <select id="getAll" resultMap="RM">
-    select * from pg_location  
+    select * from cl_location  
   </select>
   
 </sqlMap>

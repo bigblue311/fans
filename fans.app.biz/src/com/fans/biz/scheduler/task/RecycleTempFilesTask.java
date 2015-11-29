@@ -1,4 +1,4 @@
-package com.pg.biz.scheduler.task;
+package com.fans.biz.scheduler.task;
 
 import java.util.concurrent.TimeUnit;
 

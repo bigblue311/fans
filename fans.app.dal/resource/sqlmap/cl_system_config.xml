@@ -6,7 +6,7 @@
 
 <sqlMap namespace="SystemConfigDO">
 
-  <typeAlias alias="SystemConfig" type="com.pg.dal.model.SystemConfigDO"/>
+  <typeAlias alias="SystemConfig" type="com.fans.dal.model.SystemConfigDO"/>
 
   <resultMap id="RM" class="SystemConfig">
     <result property="id" column="id"/>
@@ -18,7 +18,7 @@
   </resultMap>
   
   <update id="update" parameterClass="SystemConfig">
-    update pg_system_config set 
+    update cl_system_config set 
     <dynamic>
       <isNotEmpty property="configKey">  
          <![CDATA[   
@@ -42,10 +42,10 @@
   </update>
 
   <select id="getAll" resultMap="RM">
-    select * from pg_system_config  
+    select * from cl_system_config  
   </select>
   
   <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
-    select * from pg_system_config where id = #id#  
+    select * from cl_system_config where id = #id#  
   </select>
 </sqlMap>

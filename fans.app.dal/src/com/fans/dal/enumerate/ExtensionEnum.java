@@ -1,4 +1,4 @@
-package com.pg.dal.enumerate;
+package com.fans.dal.enumerate;
 
 import java.util.List;
 

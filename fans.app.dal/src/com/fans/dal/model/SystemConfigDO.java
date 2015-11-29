@@ -1,4 +1,4 @@
-package com.pg.dal.model;
+package com.fans.dal.model;
 
 import java.io.Serializable;
 

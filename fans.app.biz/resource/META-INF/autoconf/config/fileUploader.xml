@@ -12,7 +12,7 @@
     	http://www.springframework.org/schema/context
     	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
 
-    <bean id="fileUploadManager" class="com.pg.biz.manager.impl.FileUploadManagerImpl">
+    <bean id="fileUploadManager" class="com.fans.biz.manager.impl.FileUploadManagerImpl">
     	<property name="apacheRoot" value="${apache.root}"/>
     	<property name="extWhiteList">
     		 <list>
