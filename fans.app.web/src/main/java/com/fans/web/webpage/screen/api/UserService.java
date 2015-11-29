@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.dataresolver.Param;
-import com.alibaba.citrus.turbine.dataresolver.Params;
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
@@ -23,12 +22,7 @@ public class UserService {
     @Autowired
     private HttpSession session;
     
-    public Result<Boolean> update(@Params UserDO userDO){
-        userManager.update(userDO);
-        return Result.newInstance(true, "更新成功", true);
-    }
-    
-    public Result<List<UserDO>> more(@Param("page")int page){
+    public Result<List<UserDO>> more(@Param(name="page", defaultValue="2") int page){
         UserQueryCondition userQueryCondition = (UserQueryCondition)session.getAttribute(SessionKey.QUERY);
         if(userQueryCondition == null){
             userQueryCondition = new UserQueryCondition();

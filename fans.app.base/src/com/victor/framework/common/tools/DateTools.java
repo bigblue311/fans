@@ -105,6 +105,20 @@ public class DateTools {
 		return now.before(cal.getTime());
 	}
 	
+	/**
+     * 计算date - minLength小时后是否还未到
+     * @param hourLength
+     * @param date
+     * @return
+     */
+    public static Boolean canRefresh(int minLength,Date date){
+        Date now = today();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) - minLength);
+        return now.after(cal.getTime());
+    }
+	
 	public static Date getDate(int dayLength){
 		Date now = today();
 		Calendar cal = Calendar.getInstance();

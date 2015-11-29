@@ -22,5 +22,17 @@
 				</fm-validators:csrf-validator>
 			</field>
 		</group>
+		
+		<group name="user" extends="csrfCheck">
+			<field name="nickName" 		displayName="昵称" />
+			<field name="phone" 		displayName="电话" />
+			<field name="headImg" 		displayName="头像" />
+			<field name="gender" 		displayName="性别" />
+			<field name="qrcode" 		displayName="二维码" />
+			<field name="province" 		displayName="省" />
+			<field name="city" 			displayName="市" />
+			<field name="description" 	displayName="描述" />
+			<field name="weixinId" 		displayName="微信ID" />
+		</group>
 	</services:form>
 </beans:beans>

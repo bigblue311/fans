@@ -8,11 +8,14 @@ import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
 
 public abstract class QueryCondition {
+    
+    private static final Integer DEFAULT_PAGE_SIZE = 10;
+    
 	private Map<String,Object> queryMap = Maps.newHashMap();
 	
 	public QueryCondition(){
 		queryMap.put("start", 0);
-		queryMap.put("pageSize", 20);
+		queryMap.put("pageSize", DEFAULT_PAGE_SIZE);
 		queryMap.put("enable", "0");
 	}
 	
@@ -79,14 +82,14 @@ public abstract class QueryCondition {
 	public abstract QueryCondition setPageSize(int pageSize);
 	
 	public Integer getPageSize(){
-		return getInteger("pageSize",20);
+		return getInteger("pageSize",DEFAULT_PAGE_SIZE);
 	}
 	
 	public void setPage(int page){
 		if(page == 0) {
 			page = 1;
 		}
-		int pageSize = getInteger("pageSize",20);
+		int pageSize = getInteger("pageSize",DEFAULT_PAGE_SIZE);
 		setStart((page-1)*pageSize);
 		put("page",page);
 	}

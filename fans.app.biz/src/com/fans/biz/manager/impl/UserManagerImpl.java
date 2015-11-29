@@ -32,7 +32,10 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public void refresh(Long id) {
-        userDAO.refresh(id);
+        UserDO userDO = userDAO.getById(id);
+        if(userDO.canRefresh()){
+            userDAO.refresh(id);
+        }
     }
 
     @Override
