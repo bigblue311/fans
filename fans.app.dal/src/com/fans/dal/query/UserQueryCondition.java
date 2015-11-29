@@ -1,13 +1,19 @@
 package com.fans.dal.query;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.dal.basic.QueryCondition;
 
-public class UserQueryCondition extends QueryCondition {
+public class UserQueryCondition extends QueryCondition implements Serializable{
 	
-	public UserQueryCondition setId(Long id) {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 4331737247122405493L;
+
+    public UserQueryCondition setId(Long id) {
 		put("id",id);
 		return this;
 	}
