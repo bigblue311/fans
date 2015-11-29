@@ -16,15 +16,7 @@
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>
     
-    <bean id="newsCache" class="com.pg.dal.cache.impl.NewsCacheImpl">
-    	<property name="mySqlMapClient" ref="mySqlMapClient" />
-    </bean>
-    
 	<bean id="systemConfigCache" class="com.pg.dal.cache.impl.SystemConfigCacheImpl">
-    	<property name="mySqlMapClient" ref="mySqlMapClient" />
-    </bean>
-    
-    <bean id="roleCache" class="com.pg.dal.cache.impl.RoleCacheImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>
 </beans>

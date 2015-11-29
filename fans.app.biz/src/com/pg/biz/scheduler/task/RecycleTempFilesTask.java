@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.pg.biz.manager.FileUploadManager;
+import com.fans.biz.manager.FileUploadManager;
 import com.victor.framework.batch.thread.ScheduledTask;
 import com.victor.framework.common.tools.LogTools;
 

@@ -15,15 +15,11 @@
     <services:uris>
         <uris:uri id="server" requestAware="true" />
 
-        <uris:turbine-uri id="pg" exposed="true" extends="server">
+        <uris:turbine-uri id="fans" exposed="true" extends="server">
             <componentPath>/</componentPath>
         </uris:turbine-uri>
         
-        <uris:turbine-uri id="admin" exposed="true" extends="server">
-            <componentPath>/admin</componentPath>
-        </uris:turbine-uri>
-        
-        <uris:turbine-content-uri id="pgContent" exposed="true" extends="pg" />
+        <uris:turbine-content-uri id="fansContent" exposed="true" extends="pg" />
 
     </services:uris>
 

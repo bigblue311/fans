@@ -21,7 +21,7 @@
         <pl-valves:setLoggingContext />
 
 		<!-- 资源访问控制 -->
-        <valve class="com.pg.web.admin.pipeline.ResourceValve" 
+        <valve class="com.fans.web.pipeline.WeixinOpenIdValve" 
         	   xmlns="http://www.alibaba.com/schema/services/pipeline/valves"/>
         	   
         <!-- 分析URL，取得target。 -->

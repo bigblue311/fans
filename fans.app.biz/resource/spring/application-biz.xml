@@ -12,30 +12,12 @@
     	http://www.springframework.org/schema/context
     	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
     
-    <bean id="brandManager" class="com.pg.biz.manager.impl.BrandManagerImpl" />
-    
-    <bean id="categoryManager" class="com.pg.biz.manager.impl.CategoryManagerImpl" />
-    
-    <bean id="customerManager" class="com.pg.biz.manager.impl.CustomerManagerImpl" />
-    
-    <bean id="employeeManager" class="com.pg.biz.manager.impl.EmployeeManagerImpl" />
-    
-    <bean id="productManager" class="com.pg.biz.manager.impl.ProductManagerImpl" />
-    
-    <bean id="securityManager" class="com.pg.biz.manager.impl.SecurityManagerImpl" />
-    
-    <bean id="transactionManager" class="com.pg.biz.manager.impl.TransactionManagerImpl" />
-    
-    <bean id="warehouseManager" class="com.pg.biz.manager.impl.WarehouseManagerImpl"/>
-    
     <bean id="recycleTempFilesTask" class="com.pg.biz.scheduler.task.RecycleTempFilesTask"/>
-    
-    <bean id="orderStatisticTask" class="com.pg.biz.scheduler.task.OrderStatisticTask"/>
     
     <bean id="scheduler" class="com.pg.biz.scheduler.Scheduler" >
 		<property name="tasks">
               <list>
-              	<ref bean="orderStatisticTask" />
+              	<ref bean="recycleTempFilesTask" />
               </list>
   		</property>
     </bean>
