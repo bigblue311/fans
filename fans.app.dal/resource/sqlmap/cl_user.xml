@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="UserDO">
+
+  <typeAlias alias="User" type="com.fans.dal.model.UserDO"/>
+
+  <resultMap id="RM" class="User">
+    <result property="id" 			column="id"/>
+    <result property="gmtCreate" 	column="gmt_create"/>
+    <result property="gmtModify" 	column="gmt_modify"/>
+    <result property="openId" 		column="open_id"/>
+    <result property="nickName" 	column="nick_name"/>
+    <result property="phone" 		column="phone"/>
+    <result property="headImg" 		column="head_img"/>
+    <result property="gender" 		column="gender"/>
+    <result property="qrcode" 		column="qrcode"/>
+    <result property="province" 	column="province"/>
+    <result property="city" 		column="city"/>
+    <result property="description" 	column="description"/>
+    <result property="weixinId" 	column="weixin_id"/>
+    <result property="gmtRefresh" 	column="gmt_refresh"/>
+    <result property="gmtVipExpire" column="gmt_vip_expire"/>
+    <result property="isTest" 		column="is_test"/>
+  </resultMap>
+
+	<insert id="insert" parameterClass="User">
+	  <![CDATA[
+	  insert into cl_user (
+	    gmt_create,
+	    gmt_modify,
+	    open_id,
+	    nick_name,
+	    phone,
+	    head_img,
+	    gender,
+	    qrcode,
+	    province,
+	    city,
+	    description,
+	    weixin_id,
+	    gmt_refresh,
+	    gmt_vip_expire,
+	    is_test
+	  ) values (
+	    now(), now(),
+	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
+	    #qrcode#, #province#, #city#, #description#, #weixinId#,
+	    now(), now(), #isTest#
+	  )
+	  ]]>
+	  <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	  </selectKey>
+	 </insert>
+	 
+	 <update id="update" parameterClass="User">
+    	update cl_user set 
+	    <dynamic>
+	      <isNotEmpty property="nickName">  
+	         <![CDATA[   
+	           nick_name = #nickName#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="phone">  
+	         <![CDATA[   
+	           phone = #phone#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="headImg">  
+	         <![CDATA[   
+	           head_img = #headImg#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="gender">  
+	         <![CDATA[   
+	           gender = #gender#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="qrcode">  
+	         <![CDATA[   
+	           qrcode = #qrcode#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="province">  
+	         <![CDATA[   
+	           province = #province#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="city">  
+	         <![CDATA[   
+	           city = #city#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="description">  
+	         <![CDATA[   
+	           description = #description#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="weixinId">  
+	         <![CDATA[   
+	           weixin_id = #weixinId#,
+	         ]]> 
+	      </isNotEmpty>
+	    </dynamic>
+	    	gmt_modify = now()
+	    where
+	      	id = #id#
+	  </update>
+	  
+	  <update id="refresh">
+    	update cl_user set gmt_refresh = now()
+	    where id = #id#
+	  </update>
+	  
+	  <update id="topup" parameterClass="User">
+    	update cl_user set gmt_vip_expire = #gmtVipExpire#
+	    where id = #id#
+	  </update>
+	  
+	  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+	    select * from cl_user where id = #id#  
+	  </select>
+	  
+	  <select id="getByOpenId" parameterClass="java.lang.String" resultMap="RM">
+	    select * from cl_user where open_id = #openId#  
+	  </select>
+
+	  <sql id="where">
+  		<include refid="validate" />
+  		<dynamic prepend="where">
+	  		<isNotEmpty property="id" prepend="and">
+	        	<![CDATA[ 
+	        	id = #id#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="nickName" prepend="and">
+	        	<![CDATA[ 
+	        	nick_name like concat('%',#nickName#,'%')
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="gender" prepend="and">
+	        	<![CDATA[ 
+	        	gender = #gender#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="province" prepend="and">
+	        	<![CDATA[ 
+	        	province = #province#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotNull property="city" prepend="and">  
+	         <![CDATA[   
+	           city = #city#
+	         ]]> 
+	      	</isNotNull>
+	      	<isNotNull property="description" prepend="and">  
+	         <![CDATA[   
+	           description like concat('%',#description#,'%')
+	         ]]> 
+	      	</isNotNull>
+		    <isNotNull property="gmtCreateStart" prepend="and">
+		    	<![CDATA[
+	        	gmt_create >= #gmtCreateStart#
+	        	 ]]>
+	        </isNotNull>
+	        <isNotNull property="gmtCreateEnd" prepend="and">
+		    	<![CDATA[
+	        	gmt_create <= #gmtCreateEnd#
+	        	 ]]>
+	        </isNotNull>
+		    <include refid="Common.queryModify" />
+	  	</dynamic>
+  	</sql>
+  
+  <sql id="validate">
+  	<isNull property="id">
+  	<isNull property="nickName">
+  	<isNull property="gender">
+  	<isNull property="province">
+  	<isNull property="city">
+  	<isNull property="description">
+  	<isNull property="gmtCreateStart">
+	<isNull property="gmtCreateEnd">
+        <include refid="Common.validModify" />
+    </isNull>
+    </isNull>
+    </isNull>
+    </isNull>
+    </isNull>
+   	</isNull>
+    </isNull>
+    </isNull>
+  </sql>
+  
+  <sql id="orderByRefresh">
+		order by gmt_refresh desc
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_user 
+    <include refid="where" />
+    <include refid="orderByRefresh" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_user 
+    <include refid="where" />
+    <include refid="orderByRefresh" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from cl_user
+	<include refid="where" />
+  </select>
+
+</sqlMap>

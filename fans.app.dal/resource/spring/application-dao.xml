@@ -15,4 +15,8 @@
     <bean id="mySqlMapClient" class="com.victor.framework.dal.basic.MySqlMapClient">
     	<property name="dataSource" value="ibatis/dataSource.xml" />
     </bean>
+    
+    <bean id="userDAO" class="com.fans.dal.dao.impl.UserDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient" />
+    </bean>
 </beans>
