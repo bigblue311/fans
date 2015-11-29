@@ -19,7 +19,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String province;
     private String city;
     private String description;
-    private String weixin_id;
+    private String weixinId;
     private Date gmtRefresh;
     private Date gmtVipExpire;
     private Boolean isTest;
@@ -77,11 +77,11 @@ public class UserDO extends EntityDO implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-    public String getWeixin_id() {
-        return weixin_id;
+    public String getWeixinId() {
+        return weixinId;
     }
-    public void setWeixin_id(String weixin_id) {
-        this.weixin_id = weixin_id;
+    public void setWeixinId(String weixinId) {
+        this.weixinId = weixinId;
     }
     public Date getGmtRefresh() {
         return gmtRefresh;
