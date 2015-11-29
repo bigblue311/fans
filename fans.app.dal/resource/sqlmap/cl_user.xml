@@ -111,7 +111,7 @@
 	      	id = #id#
 	  </update>
 	  
-	  <update id="refresh">
+	  <update id="refresh" parameterClass="User">
     	update cl_user set gmt_refresh = now()
 	    where id = #id#
 	  </update>
@@ -162,6 +162,11 @@
 	           description like concat('%',#description#,'%')
 	         ]]> 
 	      	</isNotNull>
+	      	<isNotNull property="valid" prepend="and">
+		    	<![CDATA[
+	        	qrcode is not null 
+	        	 ]]>
+	        </isNotNull>
 		    <isNotNull property="gmtCreateStart" prepend="and">
 		    	<![CDATA[
 	        	gmt_create >= #gmtCreateStart#

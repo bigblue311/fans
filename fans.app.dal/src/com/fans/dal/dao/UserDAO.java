@@ -20,6 +20,20 @@ public interface UserDAO {
     Boolean update(UserDO userDO);
     
     /**
+     * 刷新置顶
+     * @param id
+     * @return
+     */
+    Boolean refresh(Long id);
+    
+    /**
+     * 充值
+     * @param userDO
+     * @return
+     */
+    Boolean topup(UserDO userDO);
+    
+    /**
      * 根据ID获取
      * @param id
      * @return

@@ -3,6 +3,8 @@ package com.fans.dal.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fans.dal.query.UserQueryCondition;
+import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.dal.basic.EntityDO;
 
 public class UserDO extends EntityDO implements Serializable{
@@ -10,18 +12,18 @@ public class UserDO extends EntityDO implements Serializable{
      * 
      */
     private static final long serialVersionUID = 9107233004949997492L;
-    private String openId;
-    private String nickName;
-    private String phone;
-    private String headImg;
-    private Integer gender;
-    private String qrcode;
-    private String province;
-    private String city;
-    private String description;
-    private String weixinId;
-    private Date gmtRefresh;
-    private Date gmtVipExpire;
+    private String openId;              //微信OPEN ID
+    private String nickName;            //微信昵称
+    private String phone;               //手机号码
+    private String headImg;             //头像
+    private Integer gender;             //性别
+    private String qrcode;              //二维码
+    private String province;            //省
+    private String city;                //市
+    private String description;         //描述
+    private String weixinId;            //微信ID
+    private Date gmtRefresh;            //置顶刷新时间
+    private Date gmtVipExpire;          //vip过期时间
     private Boolean isTest;
     public String getOpenId() {
         return openId;
@@ -100,5 +102,18 @@ public class UserDO extends EntityDO implements Serializable{
     }
     public void setIsTest(Boolean isTest) {
         this.isTest = isTest;
+    }
+    
+    public boolean isVip(){
+        if(gmtVipExpire == null){
+            return false;
+        }
+        return DateTools.today().before(gmtVipExpire);
+    }
+    
+    public UserQueryCondition toQueryCondition(){
+        UserQueryCondition queryCondition = new UserQueryCondition();
+        queryCondition.setQueryMap(this.toMap());
+        return queryCondition;
     }
 }

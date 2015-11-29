@@ -78,6 +78,11 @@ public class UserQueryCondition extends QueryCondition {
 	public String getCreateEnd(){
 		return getString("createEnd");
 	}
+	
+	public UserQueryCondition valid(){
+	    super.put("valid", true);
+	    return this;
+	}
 
 	public UserQueryCondition setGmtCreateStart(Date from){
 		put("gmtCreateStart", DateTools.getDayBegin(from));

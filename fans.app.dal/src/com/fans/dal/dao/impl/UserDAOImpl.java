@@ -15,4 +15,16 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
     public UserDO getByOpenId(String openId) {
         return super.queryForEntity("getByOpenId", "openId", openId);
     }
+
+    @Override
+    public Boolean refresh(Long id) {
+        UserDO forUpdate = new UserDO();
+        forUpdate.setId(id);
+        return super.updateBySID("refresh", forUpdate);
+    }
+
+    @Override
+    public Boolean topup(UserDO userDO) {
+        return super.updateBySID("topup", userDO);
+    }
 }
