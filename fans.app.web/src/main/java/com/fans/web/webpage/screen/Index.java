@@ -7,7 +7,6 @@ import com.fans.biz.manager.UserManager;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.constant.RequestSession;
-import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.dal.basic.Paging;
 
 public class Index {
@@ -28,7 +27,7 @@ public class Index {
         } else {
             context.put("isVip", false);
             context.put("canRefresh", true);
-            context.put("nextRefresh", DateTools.today());
+            context.put("nextRefresh", 0);
         }
     }
 }
