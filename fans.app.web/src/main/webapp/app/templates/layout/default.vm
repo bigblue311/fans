@@ -1,1 +1,102 @@
-$screen_placeholder
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="http://cdn.amazeui.org/amazeui/2.2.1/css/amazeui.min.css">
+        <script src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+		<script src="http://cdn.amazeui.org/amazeui/2.2.1/js/amazeui.min.js"></script>
+		<script type="text/javascript" src="/js/Location/location.js"></script>
+        <title>贵圈真乱</title>
+    </head>
+    <body>
+    <header data-am-widget="header" class="am-header am-header-default">
+      <div class="am-header-left am-header-nav">
+		<a href="#left-link">
+              <i class="am-header-icon am-icon-search"></i>
+              <span class="am-header-nav-title">
+                搜索
+              </span>
+        </a>
+      </div>
+      <h1 class="am-header-title">
+          贵圈真乱
+      </h1>
+      <div class="am-header-right am-header-nav">
+          <a href="#left-link">
+              <i class="am-header-icon am-icon-user"></i>
+              <span class="am-header-nav-title">
+                我的
+              </span>
+          </a>
+      </div>
+  	</header>
+	$screen_placeholder
+	<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+      <ul class="am-navbar-nav am-cf am-avg-sm-4">
+          <li >
+            <a href="#left-link">
+               刷新本页
+      	  	</a>
+          </li>
+          <li>
+          	<a href="#left-link">
+          	   置顶刷新
+          	</a>
+          </li>
+      </ul>
+  	</div>
+  	<div data-am-widget="gotop" class="am-gotop am-gotop-fixed" >
+	  <a href="#top" title="">
+	  		<i class="am-gotop-icon am-icon-angle-up"></i>
+	  </a>
+	</div>
+	<script>
+		function currentDate(){
+			var d = new Date(),str = '';
+			 str += d.getFullYear()+'-';
+			 str += getTimeStr(d.getMonth() + 1)+'-';
+			 str += getTimeStr(d.getDate());
+			return str;
+		}
+		
+		function currentTime(){
+			var d = new Date(),str = '';
+			 str += d.getFullYear()+'-';
+			 str += getTimeStr(d.getMonth() + 1)+'-';
+			 str += getTimeStr(d.getDate())+' ';
+			 str += getTimeStr(d.getHours())+':'; 
+			 str += getTimeStr(d.getMinutes())+':'; 
+			 str += getTimeStr(d.getSeconds()); 
+			return str;
+		}
+		
+		function getTimestamp(){
+			var d = new Date(),str = '';
+			 str += d.getFullYear();
+			 str += getTimeStr(d.getMonth() + 1);
+			 str += getTimeStr(d.getDate());
+			 str += getTimeStr(d.getHours()); 
+			 str += getTimeStr(d.getMinutes()); 
+			 str += getTimeStr(d.getSeconds()); 
+			return str;
+		}
+
+		function getTimeStr(t){
+			if(t < 10){
+				return "0"+t;
+			} else {
+				return t;
+			}
+		}
+		
+		jQuery(function(){
+		});
+	</script>
+	
+	<!-- popups -->
+	$control.setTemplate('qrcode.vm')
+</body>
+</html>
