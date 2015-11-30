@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
+import com.fans.web.webpage.RequestSessionBase;
 
-public class WeixinOpenIdValve implements Valve{
+public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 
 	@Autowired
 	private HttpServletRequest request;
@@ -19,7 +20,8 @@ public class WeixinOpenIdValve implements Valve{
 	@Override
 	public void invoke(PipelineContext pipelineContext) throws Exception {
 		try {
-			System.out.println("this is my first application valve");
+			String openId = "123123123";
+			super.setOpenId(response, openId);
 		} finally {
 			pipelineContext.invokeNext();
 		}

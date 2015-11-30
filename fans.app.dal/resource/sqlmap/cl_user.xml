@@ -125,7 +125,7 @@
 	    select * from cl_user where id = #id#  
 	  </select>
 	  
-	  <select id="getByOpenId" parameterClass="java.lang.String" resultMap="RM">
+	  <select id="getByOpenId" parameterClass="java.util.HashMap" resultMap="RM">
 	    select * from cl_user where open_id = #openId#  
 	  </select>
 
