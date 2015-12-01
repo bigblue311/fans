@@ -1,0 +1,49 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div class="am-popup" id="search-popup">
+<div class="am-popup-inner">
+   <div class="am-popup-bd">
+     	<form action="" class="am-form am-form-horizontal" id="searchFrom">
+		<fieldset>
+		  <legend>高级搜索</legend>
+		  <div class="am-form-group am-form-icon">
+		  	<i class="am-icon-user"></i>
+		    <input type="text" id="doc-register-name" minlength="3" placeholder="输入用户名" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-mobile-phone"></i>
+		    <input type="phone" id="doc-register-mobile" minlength="3" placeholder="输入手机号码" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-credit-card"></i>
+		    <input type="text" id="doc-register-idCard" minlength="3" placeholder="输入身份证号码" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-key"></i>
+		    <input type="password" id="doc-register-pwd" minlength="3" placeholder="输入密码" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-key"></i>
+		    <input type="password" id="doc-register-pwd2" minlength="3" placeholder="再次输入密码" class="am-form-field" required/>
+		  </div>
+		  <div class="am-form-group am-form-icon">
+		    <i class="am-icon-mobile-phone"></i>
+		    <input type="phone" id="doc-register-recommender" minlength="3" placeholder="推荐人手机号码" class="am-form-field"/>
+		  </div>
+		  <div class="am-form-group">
+		    <small id="register-alert-message" style="color:red"></small>
+		  </div>
+		  <div class="am-form-group">
+		    <button type="submit" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+		    <button data-am-modal-close class="am-btn am-btn-primary am-fr">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+		  </div>
+		</fieldset>
+	</form>
+   </div>
+</div>
+</div>
+
+<script>
+	function showSearch(){
+		jQuery("#search-popup").modal();
+	}
+</script>
