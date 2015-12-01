@@ -1,12 +1,11 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-#set ($userGroup = $form.user.defaultInstance)
 <div class="am-popup" id="search-popup">
 <div class="am-popup-inner">
    <div class="am-popup-hd">
      <span data-am-modal-close class="am-close">&times;</span>
    </div>
    <div class="am-popup-bd">
-   <form action="/index.htm" method="post" class="am-form am-form-horizontal" id="searchFrom">
+   <form action="/index.htm" method="post" class="am-form am-form-horizontal" id="searchForm">
 		$csrfToken.hiddenField
 		<input type="hidden" name="action" value="userAction"/>
 		<input type="hidden" name="event_submit_do_query" value="true"/>
@@ -49,7 +48,7 @@
 			jQuery("#q_city").val('');
 			jQuery("#q_gender").val('');
 			jQuery("#q_desc").val('');
-			jQuery("#searchFrom").submit();
+			jQuery("#searchForm").submit();
 		});
 	});
 

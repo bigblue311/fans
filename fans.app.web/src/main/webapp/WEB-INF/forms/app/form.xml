@@ -24,6 +24,7 @@
 		</group>
 		
 		<group name="user" extends="csrfCheck">
+			<field name="id" 			displayName="ID" />
 			<field name="nickName" 		displayName="昵称" />
 			<field name="phone" 		displayName="电话" />
 			<field name="headImg" 		displayName="头像" />

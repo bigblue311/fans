@@ -126,7 +126,7 @@ public class UserDO extends EntityDO implements Serializable{
         Calendar cal = Calendar.getInstance();
         cal.setTime(gmtRefresh);
         cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 10);
-        Long countDown = DateTools.today().getTime() - cal.getTime().getTime();
+        Long countDown = cal.getTime().getTime() - DateTools.today().getTime();
         countDown = countDown / 1000;
         return countDown <= 0 ? 0 : countDown.intValue();
     }

@@ -12,6 +12,7 @@
         <title>贵圈真乱</title>
     </head>
     <body>
+    #set ($userGroup = $form.user.defaultInstance)
     <header data-am-widget="header" class="am-header am-header-default">
       <div class="am-header-left am-header-nav">
 		<a href="#" onclick="showSearch()">
@@ -25,7 +26,7 @@
           贵圈真乱
       </h1>
       <div class="am-header-right am-header-nav">
-          <a href="#left-link">
+          <a href="#">
               <i class="am-header-icon am-icon-user"></i>
               <span class="am-header-nav-title">
                 我的
@@ -37,14 +38,20 @@
 	<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
       <ul class="am-navbar-nav am-cf am-avg-sm-4">
           <li >
-            <a href="#left-link">
+            <a href="/index.htm">
                刷新本页
       	  	</a>
           </li>
           <li>
-          	<a href="#left-link">
-          	   置顶刷新
+          	<a href="#" id="refreshBtn">
+          	   置顶刷新<font color="white" id="countDown"></font>
           	</a>
+          	<form action="/index.htm" method="post" class="am-form am-form-horizontal" id="refreshForm">
+          		$csrfToken.hiddenField
+				<input type="hidden" name="action" value="userAction"/>
+				<input type="hidden" name="event_submit_do_refresh" value="true"/>
+				<input type="hidden" name="$!userGroup.id.key" value="$!user.id"/>
+          	</form>
           </li>
       </ul>
   	</div>
@@ -92,8 +99,29 @@
 			}
 		}
 		
+		var countDown = $!nextRefresh;
+		
+		var timer = setInterval("countDownTask()",1000);
+		
+		function countDownTask(){
+			jQuery("#countDown").empty().append("("+countDown+")");
+			countDown--;
+			if(countDown == -1) {
+				countDown = 0;
+				clearInterval(timer);
+			} 
+		}
+		
 		jQuery(function(){
+			
+			jQuery("#refreshBtn").click(function(){
+				if(countDown <= 0){
+					jQuery("#refreshForm").submit();
+				}
+			});
 		});
+		
+		
 	</script>
 	
 	<!-- popups -->

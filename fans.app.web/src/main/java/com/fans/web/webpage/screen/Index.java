@@ -22,6 +22,7 @@ public class Index {
         
         UserDO userDO = RequestSession.userDO();
         if(userDO != null){
+            context.put("user", userDO);
             context.put("isVip", userDO.isVip());
             context.put("canRefresh", userDO.canRefresh());
             context.put("nextRefresh", userDO.nextRefresh());
