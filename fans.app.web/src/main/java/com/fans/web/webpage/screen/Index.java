@@ -24,11 +24,9 @@ public class Index {
         if(userDO != null){
             context.put("user", userDO);
             context.put("isVip", userDO.isVip());
-            context.put("canRefresh", userDO.canRefresh());
             context.put("nextRefresh", userDO.nextRefresh());
         } else {
             context.put("isVip", false);
-            context.put("canRefresh", true);
             context.put("nextRefresh", 0);
         }
     }
