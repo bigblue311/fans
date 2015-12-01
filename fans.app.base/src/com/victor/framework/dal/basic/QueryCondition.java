@@ -9,7 +9,7 @@ import com.victor.framework.common.tools.StringTools;
 
 public abstract class QueryCondition {
     
-    private static final Integer DEFAULT_PAGE_SIZE = 10;
+    public static final Integer DEFAULT_PAGE_SIZE = 10;
     
 	private Map<String,Object> queryMap = Maps.newHashMap();
 	

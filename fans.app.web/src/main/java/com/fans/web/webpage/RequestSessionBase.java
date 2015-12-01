@@ -32,7 +32,7 @@ public abstract class RequestSessionBase extends CookieBase{
                 //do nothing
             }
         }
-        queryCondition.valid().setPage(1);
+        queryCondition.valid().setPageSize(UserQueryCondition.DEFAULT_PAGE_SIZE).setPage(1);
         return queryCondition;
     }
     

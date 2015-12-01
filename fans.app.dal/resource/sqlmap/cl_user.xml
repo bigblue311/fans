@@ -159,7 +159,9 @@
 	      	</isNotNull>
 	      	<isNotNull property="description" prepend="and">  
 	         <![CDATA[   
-	           description like concat('%',#description#,'%')
+	           (description like concat('%',#description#,'%') 
+	           		or 
+	           	nick_name like concat('%',#description#,'%'))
 	         ]]> 
 	      	</isNotNull>
 	      	<isNotNull property="valid" prepend="and">

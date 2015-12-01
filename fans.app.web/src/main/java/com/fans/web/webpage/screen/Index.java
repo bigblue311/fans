@@ -15,8 +15,9 @@ public class Index {
     
     public void execute(Context context){
         UserQueryCondition userQueryCondition = RequestSession.queryCondition();
-        userQueryCondition.valid().setPage(1);
+        userQueryCondition.valid().setPageSize(UserQueryCondition.DEFAULT_PAGE_SIZE).setPage(1);
         Paging<UserDO> paging = userManager.getPage(userQueryCondition);
+        context.put("query", userQueryCondition);
         context.put("list", paging.getData());
         
         UserDO userDO = RequestSession.userDO();

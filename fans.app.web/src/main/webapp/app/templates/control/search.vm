@@ -1,40 +1,38 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+#set ($userGroup = $form.user.defaultInstance)
 <div class="am-popup" id="search-popup">
 <div class="am-popup-inner">
+   <div class="am-popup-hd">
+     <span data-am-modal-close class="am-close">&times;</span>
+   </div>
    <div class="am-popup-bd">
-     	<form action="" class="am-form am-form-horizontal" id="searchFrom">
+   <form action="/index.htm" method="post" class="am-form am-form-horizontal" id="searchFrom">
+		$csrfToken.hiddenField
+		<input type="hidden" name="action" value="userAction"/>
+		<input type="hidden" name="event_submit_do_query" value="true"/>
 		<fieldset>
 		  <legend>高级搜索</legend>
 		  <div class="am-form-group am-form-icon">
-		  	<i class="am-icon-user"></i>
-		    <input type="text" id="doc-register-name" minlength="3" placeholder="输入用户名" class="am-form-field" required/>
+		    <select id="q_province" name="$!userGroup.province.key" style="width:112px; float:left;"></select>
+          	<select id="q_city" name="$!userGroup.city.key" style="width:112px; float:left; margin-left:10px;"></select>
+          	<select id="q_twon" style="display:none;"></select>
 		  </div>
 		  <div class="am-form-group am-form-icon">
-		    <i class="am-icon-mobile-phone"></i>
-		    <input type="phone" id="doc-register-mobile" minlength="3" placeholder="输入手机号码" class="am-form-field" required/>
+		    <select id="q_gender" name="$!userGroup.gender.key" style="width:112px; float:left;">
+		    	<option #if($!query.gender == "")selected#end value="">性别</option>
+		    	<option #if($!query.gender == "0")selected#end value="0">男</option>
+		    	<option #if($!query.gender == "1")selected#end value="1">女</option>
+		    </select>
 		  </div>
 		  <div class="am-form-group am-form-icon">
-		    <i class="am-icon-credit-card"></i>
-		    <input type="text" id="doc-register-idCard" minlength="3" placeholder="输入身份证号码" class="am-form-field"/>
-		  </div>
-		  <div class="am-form-group am-form-icon">
-		    <i class="am-icon-key"></i>
-		    <input type="password" id="doc-register-pwd" minlength="3" placeholder="输入密码" class="am-form-field" required/>
-		  </div>
-		  <div class="am-form-group am-form-icon">
-		    <i class="am-icon-key"></i>
-		    <input type="password" id="doc-register-pwd2" minlength="3" placeholder="再次输入密码" class="am-form-field" required/>
-		  </div>
-		  <div class="am-form-group am-form-icon">
-		    <i class="am-icon-mobile-phone"></i>
-		    <input type="phone" id="doc-register-recommender" minlength="3" placeholder="推荐人手机号码" class="am-form-field"/>
-		  </div>
-		  <div class="am-form-group">
-		    <small id="register-alert-message" style="color:red"></small>
+		    <input type="text" id="q_desc" placeholder="关键字,从描述和姓名中搜索" 
+		    	name="$!userGroup.description.key"
+		    	class="am-form-field" 
+		    	value="$!{query.description}"/>
 		  </div>
 		  <div class="am-form-group">
 		    <button type="submit" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
-		    <button data-am-modal-close class="am-btn am-btn-primary am-fr">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+		    <button type="button" id="btnReset" class="am-btn am-btn-primary am-fr">&nbsp;&nbsp;重置&nbsp;&nbsp;</button>
 		  </div>
 		</fieldset>
 	</form>
@@ -43,6 +41,18 @@
 </div>
 
 <script>
+	jQuery(function(){
+		showLocation('q_province','q_city','q_twon','$!{query.province}','$!{query.city}','');
+		
+		jQuery("#btnReset").click(function(){
+			jQuery("#q_province").val('');
+			jQuery("#q_city").val('');
+			jQuery("#q_gender").val('');
+			jQuery("#q_desc").val('');
+			jQuery("#searchFrom").submit();
+		});
+	});
+
 	function showSearch(){
 		jQuery("#search-popup").modal();
 	}
