@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.citrus.service.requestcontext.parser.ParameterParser;
 import com.alibaba.citrus.turbine.TurbineRunDataInternal;
 import com.fans.biz.manager.FileUploadManager;
 import com.victor.framework.common.shared.Result;
@@ -23,7 +24,8 @@ public class FileService {
 	
 	public Result<String> execute() throws IOException {
 		TurbineRunDataInternal rundata = (TurbineRunDataInternal) getTurbineRunData(request);
-		FileItem uploadFile = rundata.getParameters().getFileItem("Filedata");
+		ParameterParser parser = rundata.getParameters();
+		FileItem uploadFile = parser.getFileItem("Filedata");
 		if(uploadFile == null) {
 			return Result.newInstance("", "文件未找到", false);
 		}

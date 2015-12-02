@@ -13,7 +13,6 @@
         <title>贵圈真乱</title>
     </head>
     <body>
-    #set ($userGroup = $form.user.defaultInstance)
     <header data-am-widget="header" class="am-header am-header-default">
       <div class="am-header-left am-header-nav">
 		<a href="/index.htm">

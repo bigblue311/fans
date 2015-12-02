@@ -5,6 +5,7 @@
      <span data-am-modal-close class="am-close">&times;</span>
    </div>
    <div class="am-popup-bd">
+   #set ($userGroup = $form.user.defaultInstance)
    <form action="/index.htm" method="post" class="am-form am-form-horizontal" id="searchForm">
 		$csrfToken.hiddenField
 		<input type="hidden" name="action" value="userAction"/>
@@ -16,14 +17,14 @@
           	<select id="q_city" name="$!userGroup.city.key" style="width:112px; float:left; margin-left:10px;"></select>
           	<select id="q_twon" style="display:none;"></select>
 		  </div>
-		  <div class="am-form-group am-form-icon">
+		  <div class="am-form-group">
 		    <select id="q_gender" name="$!userGroup.gender.key" style="width:112px; float:left;">
 		    	<option #if($!query.gender == "")selected#end value="">性别</option>
 		    	<option #if($!query.gender == "0")selected#end value="0">男</option>
 		    	<option #if($!query.gender == "1")selected#end value="1">女</option>
 		    </select>
 		  </div>
-		  <div class="am-form-group am-form-icon">
+		  <div class="am-form-group">
 		    <input type="text" id="q_desc" placeholder="关键字,从描述和姓名中搜索" 
 		    	name="$!userGroup.description.key"
 		    	class="am-form-field" 
