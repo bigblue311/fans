@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 #foreach($each in $list)
 <div class="am-g doc-am-g" style="padding:5px;">
 	<div class="am-u-sm-2">

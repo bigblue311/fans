@@ -11,7 +11,7 @@
 		<input type="hidden" name="event_submit_do_query" value="true"/>
 		<fieldset>
 		  <legend>高级搜索</legend>
-		  <div class="am-form-group am-form-icon">
+		  <div class="am-form-group">
 		    <select id="q_province" name="$!userGroup.province.key" style="width:112px; float:left;"></select>
           	<select id="q_city" name="$!userGroup.city.key" style="width:112px; float:left; margin-left:10px;"></select>
           	<select id="q_twon" style="display:none;"></select>
