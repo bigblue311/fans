@@ -1,7 +1,6 @@
 package com.fans.dal.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.fans.dal.query.UserQueryCondition;
@@ -110,25 +109,6 @@ public class UserDO extends EntityDO implements Serializable{
             return false;
         }
         return DateTools.today().before(gmtVipExpire);
-    }
-    
-    public boolean canRefresh(){
-        if(gmtRefresh == null){
-            return false;
-        }
-        return DateTools.canRefresh(10, gmtRefresh);
-    }
-    
-    public Integer nextRefresh(){
-        if(gmtRefresh == null){
-            return 0;
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(gmtRefresh);
-        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 10);
-        Long countDown = cal.getTime().getTime() - DateTools.today().getTime();
-        countDown = countDown / 1000;
-        return countDown <= 0 ? 0 : countDown.intValue();
     }
     
     public UserQueryCondition toQueryCondition(){

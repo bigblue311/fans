@@ -6,10 +6,7 @@ import com.google.common.collect.Lists;
 
 public enum SystemConfigKeyEnum {
 	SYSTEM_DEBUG_MODE("SYSTEM_DEBUG_MODE","调试模式 值ON/OFF 一旦开启将进入系统调试模式"),
-	SYSTEM_1M_CHARGE("SYSTEM_1M_CHARGE","充值一个月金额"),
-	SYSTEM_3M_CHARGE("SYSTEM_3M_CHARGE","充值三个月金额"),
-	SYSTEM_6M_CHARGE("SYSTEM_6M_CHARGE","充值六个月金额"),
-	SYSTEM_12M_CHARGE("SYSTEM_12M_CHARGE","充值一年金额");
+	SYSTEM_REFRESH_INTERVAL("SYSTEM_REFRESH_INTERVAL","刷新置顶时间, 单位分钟");
 	
 	private String code;
 	private String desc;

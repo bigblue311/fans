@@ -21,13 +21,7 @@ public class Index {
         context.put("list", paging.getData());
         
         UserDO userDO = RequestSession.userDO();
-        if(userDO != null){
-            context.put("user", userDO);
-            context.put("isVip", userDO.isVip());
-            context.put("nextRefresh", userDO.nextRefresh());
-        } else {
-            context.put("isVip", false);
-            context.put("nextRefresh", 0);
-        }
+        context.put("user", userDO);
+        context.put("nextRefresh", userManager.nextRefresh(userDO));
     }
 }

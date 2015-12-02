@@ -43,6 +43,20 @@ public interface UserManager {
 	UserDO getByOpenId(String openId);
 	
 	/**
+	 * 是否可以刷新
+	 * @param userDO
+	 * @return
+	 */
+	Boolean canRefresh(UserDO userDO);
+	
+	/**
+	 * 下次刷新时间. 单位秒
+	 * @param userDO
+	 * @return
+	 */
+	Integer nextRefresh(UserDO userDO);
+	
+	/**
 	 * 根据查询条件获取
 	 * @param queryCondition
 	 * @return
