@@ -2,8 +2,6 @@ package com.fans.web.webpage.screen.api;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.dataresolver.Param;
@@ -19,10 +17,7 @@ public class UserService {
     @Autowired
     private UserManager userManager;
     
-    @Autowired
-    private HttpSession session;
-    
-    public Result<List<UserDO>> more(@Param(name="page", defaultValue="2") int page){
+    public Result<List<UserDO>> execute(@Param(name="page", defaultValue="2") int page){
         UserQueryCondition userQueryCondition = RequestSession.queryCondition();
         userQueryCondition.valid().setPage(page);
         Paging<UserDO> paging = userManager.getPage(userQueryCondition);

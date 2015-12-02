@@ -32,45 +32,6 @@
 	  		<i class="am-gotop-icon am-icon-angle-up"></i>
 	  </a>
 	</div>
-	<script>
-		function currentDate(){
-			var d = new Date(),str = '';
-			 str += d.getFullYear()+'-';
-			 str += getTimeStr(d.getMonth() + 1)+'-';
-			 str += getTimeStr(d.getDate());
-			return str;
-		}
-		
-		function currentTime(){
-			var d = new Date(),str = '';
-			 str += d.getFullYear()+'-';
-			 str += getTimeStr(d.getMonth() + 1)+'-';
-			 str += getTimeStr(d.getDate())+' ';
-			 str += getTimeStr(d.getHours())+':'; 
-			 str += getTimeStr(d.getMinutes())+':'; 
-			 str += getTimeStr(d.getSeconds()); 
-			return str;
-		}
-		
-		function getTimestamp(){
-			var d = new Date(),str = '';
-			 str += d.getFullYear();
-			 str += getTimeStr(d.getMonth() + 1);
-			 str += getTimeStr(d.getDate());
-			 str += getTimeStr(d.getHours()); 
-			 str += getTimeStr(d.getMinutes()); 
-			 str += getTimeStr(d.getSeconds()); 
-			return str;
-		}
-
-		function getTimeStr(t){
-			if(t < 10){
-				return "0"+t;
-			} else {
-				return t;
-			}
-		}
-	</script>
 	<!-- popups -->
 </body>
 </html>

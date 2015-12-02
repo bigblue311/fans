@@ -46,6 +46,7 @@
           	<a href="#" id="refreshBtn">
           	   置顶刷新<font color="white" id="countDown"></font>
           	</a>
+          	#set ($userGroup = $form.user.defaultInstance)
           	<form action="/index.htm" method="post" class="am-form am-form-horizontal" id="refreshForm">
           		$csrfToken.hiddenField
 				<input type="hidden" name="action" value="userAction"/>

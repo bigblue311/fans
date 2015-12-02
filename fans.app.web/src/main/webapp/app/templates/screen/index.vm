@@ -16,6 +16,11 @@
 	</div>
 </div>
 #end
+<div id="more" page="2">
+</div>
+<div id="loading-more" style="text-align: center;">
+	<i class='am-icon-spinner am-icon-spin'></i>正在加载中...
+</div>
 <script type="text/javascript">
 	jQuery(function(){
 		jQuery(".location").each(function(){
@@ -28,5 +33,57 @@
 			
 			jQuery(this).empty().append("["+provinceName+" "+cityName+"]");
 		});
+		
+		$(window).scroll(function() {
+	        if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+	        	var timestamp = currentTime();
+		 	    var para = "?timestamp="+timestamp;
+		 	    para += "&page=" + $("#more").attr("page");
+				jQuery.ajax({
+		 			type: "get",
+		 			url: '/api/userService.json'+ para,
+		 			success:function(data, textStatus){
+		 				if(data.success){
+		 					var list = data.dataObject;
+		 					if(list.length==0){
+		 						$("#loading-more").empty().append("<font color='grey'>没有更多了</font>");
+		 						return;
+		 					}
+		 					for(var i=0;i<list.length;i++){
+		 						var headImg = list[i].headImg;
+		 						var provinceCode = list[i].province;
+		 						var cityCode = list[i].city;
+		 						
+		 						var location = new Location();
+		 			    		var provinceName = location.findProvince(provinceCode);
+		 			    		var cityName = location.findCity(provinceCode,cityCode);
+		 						
+		 						var nickName = list[i].nickName;
+		 						var description = list[i].description;
+		 						var qrcode = list[i].qrcode;
+		 						var msg = "<div class='am-g doc-am-g' style='padding:5px;'>";
+		 						msg += "<div class='am-u-sm-2' style='border:0px;'>";
+		 						msg += "<img src='"+headImg+"' class='am-img-thumbnail am-circle'/>";
+		 						msg += "</div>";
+		 						msg += "<div class='am-u-sm-7' style='padding-left:5px; border:0px;background:white'>";
+		 						msg += "<p>";
+		 						msg += "<font color='grey'>["+provinceName+" "+cityName+"]</font> "+nickName;
+		 						msg += "<br>";
+		 						msg += description;
+		 						msg += "</p>";
+		 						msg += "</div>";
+		 						msg += "<div class='am-u-sm-3' style='border:0px;'>";
+		 						msg += "<button type='button' class='am-btn am-btn-success am-btn-sm' style='margin-top:5px;' onclick='qrcodeShow(\""+nickName+"\",\""+qrcode+"\")'>加为好友</button>";
+		 						msg += "</div>";
+		 						msg += "</div>";
+		 						$("#more").append(msg);
+		 					}
+		 					page++;
+		 					$("#more").attr("page",page);
+		 				}
+		 			}
+		 		});
+	        }
+	    });
 	});
 </script>
