@@ -1,5 +1,6 @@
 package com.fans.web.webpage.action;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,15 @@ public class UserAction extends RequestSessionBase{
     private FileUploadManager fileUploadManager;
     
     @Autowired
+    private HttpServletRequest request;
+    
+    @Autowired
     private HttpServletResponse response;
     
     public void doQuery(@FormGroup("user") UserDO userDO){
         if(userDO == null){
             userDO = new UserDO();
         }
-        RequestSession.queryCondition(userDO);
         super.setQuery(response, userDO);
     }
     
@@ -49,10 +52,26 @@ public class UserAction extends RequestSessionBase{
                 userDO.setQrcode("");
             }
         }
+        if(StringTools.isNotEmpty(userDO.getGroupQrcode()) && userDO.getGroupQrcode().contains("temp/")){
+            Result<String> result = fileUploadManager.copyTemp(userDO.getGroupQrcode());
+            if(result.isSuccess()){
+                userDO.setGroupQrcode(result.getDataObject());
+            } else {
+                userDO.setGroupQrcode("");
+            }
+        }
         userManager.update(userDO);
+        updateRequestSession();
     }
     
     public void doRefresh(@FormGroup("user") UserDO userDO){
         userManager.refresh(userDO.getId());
+        updateRequestSession();
+    }
+    
+    private void updateRequestSession(){
+        String openId = super.getOpenId(request);
+        UserDO userDO = userManager.getByOpenId(openId);
+        RequestSession.userDO(userDO);
     }
 }

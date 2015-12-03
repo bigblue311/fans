@@ -30,6 +30,7 @@
 			<field name="headImg" 		displayName="头像" />
 			<field name="gender" 		displayName="性别" />
 			<field name="qrcode" 		displayName="二维码" />
+			<field name="groupQrcode" 	displayName="群二维码" />
 			<field name="province" 		displayName="省" />
 			<field name="city" 			displayName="市" />
 			<field name="description" 	displayName="描述" />

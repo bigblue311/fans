@@ -12,7 +12,7 @@
 <script>
 	function qrcodeShow(nickname, imgurl){
 		jQuery("#qrcodeModal .am-modal-hd").empty().append(nickname+"的二维码");
-		jQuery("#qrcodeModal .am-modal-bd").empty().append("<img src='"+imgurl+"'></img><br>");
+		jQuery("#qrcodeModal .am-modal-bd").empty().append("<img src='"+imgurl+"' style='width:100%'></img><br>");
 		jQuery("#qrcodeModal .am-modal-bd").append("1、长按识别二维码<br>");
 		jQuery("#qrcodeModal .am-modal-bd").append("2、添加时请注明来自<b>贵圈真乱</b><br>");
 		var $modal = jQuery('#qrcodeModal');

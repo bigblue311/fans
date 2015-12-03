@@ -18,6 +18,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String headImg;             //头像
     private Integer gender;             //性别
     private String qrcode;              //二维码
+    private String groupQrcode;         //群二维码
     private String province;            //省
     private String city;                //市
     private String description;         //描述
@@ -60,6 +61,12 @@ public class UserDO extends EntityDO implements Serializable{
     }
     public void setQrcode(String qrcode) {
         this.qrcode = qrcode;
+    }
+    public String getGroupQrcode() {
+        return groupQrcode;
+    }
+    public void setGroupQrcode(String groupQrcode) {
+        this.groupQrcode = groupQrcode;
     }
     public String getProvince() {
         return province;

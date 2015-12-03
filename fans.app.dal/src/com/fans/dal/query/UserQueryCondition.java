@@ -3,6 +3,7 @@ package com.fans.dal.query;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fans.dal.enumerate.SearchTypeEnum;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.dal.basic.QueryCondition;
 
@@ -89,6 +90,20 @@ public class UserQueryCondition extends QueryCondition implements Serializable{
 	    super.put("valid", true);
 	    return this;
 	}
+	
+	public String getSearchType(){
+        return getString("searchType");
+    }
+    
+    public UserQueryCondition searchGroup(){
+        super.put("searchType", SearchTypeEnum.群二维码.getCode());
+        return this;
+    }
+    
+    public UserQueryCondition searchPerson(){
+        super.put("searchType", SearchTypeEnum.个人二维码.getCode());
+        return this;
+    }
 
 	public UserQueryCondition setGmtCreateStart(Date from){
 		put("gmtCreateStart", DateTools.getDayBegin(from));

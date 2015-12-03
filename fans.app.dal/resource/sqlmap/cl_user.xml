@@ -18,6 +18,7 @@
     <result property="headImg" 		column="head_img"/>
     <result property="gender" 		column="gender"/>
     <result property="qrcode" 		column="qrcode"/>
+    <result property="groupQrcode" 	column="group_qrcode"/>
     <result property="province" 	column="province"/>
     <result property="city" 		column="city"/>
     <result property="description" 	column="description"/>
@@ -38,6 +39,7 @@
 	    head_img,
 	    gender,
 	    qrcode,
+	    group_qrcode,
 	    province,
 	    city,
 	    description,
@@ -48,8 +50,8 @@
 	  ) values (
 	    now(), now(),
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
-	    #qrcode#, #province#, #city#, #description#, #weixinId#,
-	    now(), now(), #isTest#
+	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
+	    #weixinId#, now(), now(), #isTest#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -83,6 +85,11 @@
 	      <isNotEmpty property="qrcode">  
 	         <![CDATA[   
 	           qrcode = #qrcode#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="groupQrcode">  
+	         <![CDATA[   
+	           group_qrcode = #groupQrcode#,
 	         ]]> 
 	      </isNotEmpty>
 	      <isNotEmpty property="province">  
@@ -164,11 +171,20 @@
 	           	nick_name like concat('%',#description#,'%'))
 	         ]]> 
 	      	</isNotNull>
-	      	<isNotNull property="valid" prepend="and">
-		    	<![CDATA[
-	        	qrcode is not null 
-	        	 ]]>
-	        </isNotNull>
+	      	<isEqual property="searchType" compareValue="0">
+	      		<isNotNull property="valid" prepend="and">
+			    	<![CDATA[
+		        	qrcode is not null 
+		        	 ]]>
+	        	</isNotNull>
+	      	</isEqual>
+	      	<isEqual property="searchType" compareValue="1">
+	      		<isNotNull property="valid" prepend="and">
+			    	<![CDATA[
+		        	group_qrcode is not null 
+		        	 ]]>
+	        	</isNotNull>
+	      	</isEqual>
 		    <isNotNull property="gmtCreateStart" prepend="and">
 		    	<![CDATA[
 	        	gmt_create >= #gmtCreateStart#

@@ -34,6 +34,12 @@
           </a>
       </div>
   	</header>
+  	<div class="am-tabs" id="doc-my-tabs">
+	  <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+	    <li #if($!searchType == '0')class="am-active"#end><a href="/index.htm?searchType=0">个人二维码</a></li>
+	    <li #if($!searchType == '1')class="am-active"#end><a href="/index.htm?searchType=1">群二维码</a></li>
+	  </ul>
+	</div>
 	$screen_placeholder
 	<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
       <ul class="am-navbar-nav am-cf am-avg-sm-4">
