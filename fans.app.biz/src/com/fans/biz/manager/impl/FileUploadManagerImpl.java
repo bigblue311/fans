@@ -20,9 +20,9 @@ public class FileUploadManagerImpl implements FileUploadManager {
 	@Override
 	public Result<String> uploadImg(String fileName, InputStream in) {
 		Result<String> result = checkExt(fileName);
-		if (!result.isSuccess()) {
-			return result;
-		}
+	    if (!result.isSuccess()) {
+            return result;
+        }
 		String ext = result.getDataObject();
 		String returnUri = "/UploadFiles/temp" + "/" + DateTools.getTodayPath()
 				+ "/" + DateTools.getRandomId() + ext;
@@ -59,7 +59,7 @@ public class FileUploadManagerImpl implements FileUploadManager {
 		if (StringTools.isAllEmpty(fileName, ext)) {
 			return Result.newInstance("", "文件损坏或者文件后缀为空", false);
 		}
-		if (extWhiteList.contains(ext.toUpperCase())) {
+		if (extWhiteList.contains(ext.toUpperCase()) || extWhiteList.contains("*")) {
 			return Result.newInstance(ext, "文件可用", true);
 		} else {
 			return Result.newInstance("", "文件后缀必须为" + allowedExt, false);

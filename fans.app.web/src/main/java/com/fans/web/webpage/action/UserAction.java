@@ -60,7 +60,14 @@ public class UserAction extends RequestSessionBase{
                 userDO.setGroupQrcode("");
             }
         }
-        userManager.update(userDO);
+        if(StringTools.isEmpty(userDO.getOpenId())){
+            userDO.setOpenId(super.getOpenId(request));
+        }
+        if(userDO.getId() == null){
+            userManager.create(userDO);
+        } else {
+            userManager.update(userDO);
+        }
         updateRequestSession();
     }
     

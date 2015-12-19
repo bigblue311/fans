@@ -60,7 +60,8 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public UserDO getByOpenId(String openId) {
-        return userDAO.getByOpenId(openId);
+        UserDO userDO = userDAO.getByOpenId(openId);
+        return userDO;
     }
 
     @Override
