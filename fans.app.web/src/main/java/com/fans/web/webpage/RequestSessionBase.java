@@ -20,6 +20,21 @@ public abstract class RequestSessionBase extends CookieBase{
         super.setCookie(response, CookieKey.OPEN_ID, openId);
     }
     
+    public Integer getWxVersion(HttpServletRequest request) {
+        String userAgent = request.getHeader("user-agent");
+        char agent = userAgent.charAt(userAgent.indexOf("MicroMessenger")+15);
+        String agentStr = new String(new char[]{agent});
+        try{
+            if(StringTools.isNotEmpty(agentStr)){
+                return Integer.parseInt(agentStr);
+            } else {
+                return null;
+            }
+        } catch(Exception ex) {
+            return null;
+        }
+    }
+    
     public Boolean isSearchGroup(HttpServletRequest request){
         String searchType = getSearchType(request);
         return SearchTypeEnum.群二维码.getCode().equals(searchType);

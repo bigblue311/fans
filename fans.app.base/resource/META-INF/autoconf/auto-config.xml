@@ -18,6 +18,8 @@
 	</group>
 	<group>
 		<property name="weixin.appId" 			defaultValue="" description="合作身份者ID，以2088开头由16位纯数字组成的字符串"/>
+		<property name="weixin.mchId" 			defaultValue="" description="微信商户ID"/>
+		<property name="weixin.payKey" 			defaultValue="" description="微信支付秘钥"/>
 		<property name="weixin.appSecret" 		defaultValue="" description="商户的私钥"/>
 		<property name="weixin.reUrl" 			defaultValue="" description="调试用，创建TXT日志文件夹路径"/>
 	</group>

@@ -14,6 +14,8 @@
     
     <bean id="weixinService" class="com.weixin.service.WeixinServiceImpl">
     	<property name="appId" value="" />
+    	<property name="mchId" value="" />
+    	<property name="key" value="" />
     	<property name="appSecret" value="" />
     	<property name="reUrl" value="" />
     </bean>

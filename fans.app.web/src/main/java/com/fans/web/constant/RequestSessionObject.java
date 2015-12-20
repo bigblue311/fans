@@ -6,6 +6,7 @@ import com.fans.dal.query.UserQueryCondition;
 public class RequestSessionObject {
     private UserDO              userDO;
     private String              openId;
+    private Integer             wxVersion;
     private UserQueryCondition  query;
     
     public UserDO getUserDO() {
@@ -19,6 +20,12 @@ public class RequestSessionObject {
     }
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+    public Integer getWxVersion() {
+        return wxVersion;
+    }
+    public void setWxVersion(Integer wxVersion) {
+        this.wxVersion = wxVersion;
     }
     public UserQueryCondition getQuery() {
         return query;

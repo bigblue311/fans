@@ -25,6 +25,17 @@ public class RequestSession {
         return obj.getOpenId();
     }
     
+    public static void wxVersion(Integer wxVersion){
+        RequestSessionObject obj = get();
+        obj.setWxVersion(wxVersion);
+        threadLocal.set(obj);
+    }
+    
+    public static Integer wxVersion(){
+        RequestSessionObject obj = get();
+        return obj.getWxVersion();
+    }
+    
     public static void userDO(UserDO userDO){
         RequestSessionObject obj = get();
         obj.setUserDO(userDO);

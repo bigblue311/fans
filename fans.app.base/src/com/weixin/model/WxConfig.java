@@ -7,6 +7,7 @@ public class WxConfig {
     private static String OAUTH2_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?";
     private static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?";
     private static String USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo?";
+    public static String UNIFILED_ORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     
     static{
         OAUTH2_URL += "appid=[APP_ID]&";
