@@ -41,8 +41,13 @@ public class getPrepay extends RequestSessionBase{
         parameters.put("nonceStr", wxPay.getNonceStr());
         parameters.put("package", wxPay.getPackageValue());
         parameters.put("signType", "MD5");
+        System.out.println("========================");
+        for(String key : parameters.keySet()){
+        	System.out.println(key+":"+parameters.get(key));
+        }
         String paySign = weixinService.createSign(parameters);
         wxPay.setPaySign(paySign);
+        System.out.println(paySign);
         return wxPay;
     }
 }

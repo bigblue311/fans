@@ -1,6 +1,19 @@
 <a id="pay" href="#">click me</a>
 
 <script>
+if (typeof WeixinJSBridge == "undefined"){
+   if(document.addEventListener){
+       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+   }else if (document.attachEvent){
+       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+   }
+}
+
+function onBridgeReady(){
+	
+}
+
 $('#pay').on('click', function() {
 	$.ajax({
 		  url: '/api/getPrepay.json',
@@ -14,14 +27,15 @@ $('#pay').on('click', function() {
 				  alert("您的微信版本低于5.0无法使用微信支付");  
 	              return;  
 			  }
-			  WeixinJSBridge.invoke('getBrandWCPayRequest',{  
-	                "appId" : data.appId,              //公众号名称，由商户传入  
-	                "timeStamp": data.timestamp,        //时间戳，自 1970 年以来的秒数  
-	                "nonceStr" : obj.nonceStr,         //随机串  
-	                "package" :  obj.packageValue,     //prepay_id=xxxx
-	                "signType" : "MD5",         	   //微信签名方式:  
-	                "paySign" : obj.paySign            //微信签名  
-	                },function(res){      
+			  try{
+				  WeixinJSBridge.invoke('getBrandWCPayRequest',{  
+		                "appId" : data.appId,              //公众号名称，由商户传入  
+		                "timeStamp": data.timestamp,        //时间戳，自 1970 年以来的秒数  
+		                "nonceStr" : data.nonceStr,         //随机串  
+		                "package" :  data.packageValue,     //prepay_id=xxxx
+		                "signType" : "MD5",         	   //微信签名方式:  
+		                "paySign" : data.paySign            //微信签名  
+		          },function(res){      
 	                    alert(res.err_msg);  
 		                if(res.err_msg == "get_brand_wcpay_request:ok" ) {  
 		                    window.location.href = "/wxCallback.htm";  
@@ -29,7 +43,14 @@ $('#pay').on('click', function() {
 		                    alert("支付失败");
 		                    window.location.href="/wxCallback.htm";     
 		                }  
-	            });
+		          });
+			  } catch(e){
+				  alert(e.message); 
+				  alert(e.description);
+				  alert(e.number); 
+				  alert(e.name); 
+			  }
+			  
 		  },
 		  dataType: "json"
 	});

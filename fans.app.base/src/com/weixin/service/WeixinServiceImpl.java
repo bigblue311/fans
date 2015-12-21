@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.rmi.ConnectException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +67,13 @@ public class WeixinServiceImpl implements WeixinService{
     @Override
     public WxPay getUnifiedorder(String openId) {
         String result = httpsRequest(WxConfig.UNIFILED_ORDER, getPostData(openId));
+        System.out.println(result);
         WxPay wxPay = new WxPay();
         try {
             Map<String,String> map = doXMLParse(result);
             for(String key : map.keySet()){
                 if(StringTools.isEmpty(key)) continue;
+                System.out.println(key+":"+map.get(key));
                 if(key.equals("result_code")){
                     wxPay.setResultCode(map.get(key));
                 }
@@ -109,7 +113,7 @@ public class WeixinServiceImpl implements WeixinService{
     private String getPostData(String openId){
         SortedMap<String,String> parameters = new TreeMap<String,String>();
         parameters.put("appid", appId);
-        parameters.put("body", "测试");
+        parameters.put("body", "test");
         parameters.put("mch_id", mchId);
         parameters.put("nonce_str", UUIDTools.getID());
         parameters.put("notify_url", "http://wxt.wetuan.com/wxcallBack.htm");
@@ -118,25 +122,29 @@ public class WeixinServiceImpl implements WeixinService{
         parameters.put("total_fee", "1");
         parameters.put("trade_type", "JSAPI");
         String sign = createSign(parameters);
+        System.out.println(sign);
         parameters.put("sign", sign);
-        return getRequestXml(parameters);
+        String postData = getRequestXml(parameters);
+        System.out.println(postData);
+        return postData;
     }
     
     @Override
     public String createSign(SortedMap<String,String> parameters){
         StringBuffer sb = new StringBuffer();
-        Set<Map.Entry<String, String>> es = parameters.entrySet();
-        Iterator<Map.Entry<String, String>> it = es.iterator();
-        while(it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            String k = (String)entry.getKey();
-            Object v = entry.getValue();
-            if(null != v && !"".equals(v) 
-                    && !"sign".equals(k) && !"key".equals(k)) {
+        
+        List<String> keys = new ArrayList<String>(parameters.keySet());
+        Collections.sort(keys);
+
+        for (int i = 0; i < keys.size(); i++) {
+        	String k = keys.get(i);
+            String v = parameters.get(k);
+            if(StringTools.isNotEmpty(v) && !"sign".equals(k) && !"key".equals(k)) {
                 sb.append(k + "=" + v + "&");
             }
         }
         sb.append("key=" + key);
+        System.out.println(sb.toString());
         String sign = MD5.getMD5(sb.toString()).toUpperCase();
         return sign;
     }
