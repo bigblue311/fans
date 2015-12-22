@@ -2,7 +2,7 @@ package com.weixin.model;
 
 import com.victor.framework.common.tools.DateTools;
 
-public class WxPay {
+public class WxPayResponse {
     private String resultCode;
     private String sign;
     private String mchId;
@@ -16,7 +16,7 @@ public class WxPay {
     private Integer wxVersion;
     private String paySign;
     
-    public WxPay(){
+    public WxPayResponse(){
         String ts = Long.toString(DateTools.today().getTime());
         this.setTimestamp(ts);
     }

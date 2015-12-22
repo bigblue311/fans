@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ import com.victor.framework.common.tools.MD5;
 import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.common.tools.UUIDTools;
 import com.weixin.model.WxConfig;
-import com.weixin.model.WxPay;
+import com.weixin.model.WxPayResponse;
+import com.weixin.model.WxPayRequest;
 import com.weixin.model.WxUser;
 
 public class WeixinServiceImpl implements WeixinService{
@@ -64,9 +66,9 @@ public class WeixinServiceImpl implements WeixinService{
     }
 
     @Override
-    public WxPay getUnifiedorder(String openId) {
-        String result = httpRequest(WxConfig.UNIFILED_ORDER, getPostData(openId));
-        WxPay wxPay = new WxPay();
+    public WxPayResponse getUnifiedorder(WxPayRequest wxPayRequest) {
+        String result = httpRequest(WxConfig.UNIFILED_ORDER, getPostData(wxPayRequest));
+        WxPayResponse wxPay = new WxPayResponse();
         try {
             Map<String,String> map = doXMLParse(result);
             for(String key : map.keySet()){
@@ -107,18 +109,18 @@ public class WeixinServiceImpl implements WeixinService{
         return wxPay;
     }
     
-    private String getPostData(String openId){
+    private String getPostData(WxPayRequest wxPayRequest){
         SortedMap<String,String> parameters = new TreeMap<String,String>();
-        parameters.put("appid", appId);
-        parameters.put("body", "test");
-        parameters.put("mch_id", mchId);
-        parameters.put("nonce_str", UUIDTools.getID());
-        parameters.put("notify_url", "http://wxt.wetuan.com/wxcallBack.htm");
-        parameters.put("openid", openId);
-        parameters.put("out_trade_no", UUIDTools.getID());
-        parameters.put("total_fee", "1");
-        parameters.put("trade_type", "JSAPI");
-        //parameters.put("trade_type", "NATIVE");
+        parameters.put("appid", 		appId);
+        parameters.put("body", 			wxPayRequest.getDescription());
+        parameters.put("mch_id", 		mchId);
+        parameters.put("nonce_str", 	UUIDTools.getID());
+        parameters.put("notify_url",	wxPayRequest.getNotifyUrl());
+        parameters.put("openid", 		wxPayRequest.getOpenId());
+        parameters.put("out_trade_no", 	wxPayRequest.getTradeNo());
+        parameters.put("total_fee", 	wxPayRequest.getTotalFee().toPlainString());
+        parameters.put("trade_type", 	"JSAPI");
+        parameters.put("trade_type", 	"NATIVE");
         String sign = createSign(parameters);
         parameters.put("sign", sign);
         String postData = getRequestXml(parameters);
@@ -279,6 +281,12 @@ public class WeixinServiceImpl implements WeixinService{
 
     public static void main(String[] args){
         WeixinServiceImpl test = new WeixinServiceImpl();
-        test.getUnifiedorder("ogOTHwaJi6KDLOjDu-59Nze0YW8M");
+        WxPayRequest wxPayRequest = new WxPayRequest();
+        wxPayRequest.setDescription("test");
+        wxPayRequest.setNotifyUrl("http://wxt.wetuan.com/wxCallback.htm");
+        wxPayRequest.setOpenId("ogOTHwaJi6KDLOjDu-59Nze0YW8M");
+        wxPayRequest.setTradeNo(UUIDTools.getID());
+        wxPayRequest.setTotalFee(new BigDecimal(1));
+        test.getUnifiedorder(wxPayRequest);
     }
 }

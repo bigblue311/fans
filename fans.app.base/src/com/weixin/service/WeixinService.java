@@ -2,7 +2,8 @@ package com.weixin.service;
 
 import java.util.SortedMap;
 
-import com.weixin.model.WxPay;
+import com.weixin.model.WxPayResponse;
+import com.weixin.model.WxPayRequest;
 import com.weixin.model.WxUser;
 
 public interface WeixinService {
@@ -17,7 +18,7 @@ public interface WeixinService {
      * 预付订单
      * @return
      */
-    WxPay getUnifiedorder(String openId);
+    WxPayResponse getUnifiedorder(WxPayRequest wxPayRequest);
     
     /**
      * 生成微信签名

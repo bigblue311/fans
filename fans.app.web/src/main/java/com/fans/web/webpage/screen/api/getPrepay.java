@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.web.constant.RequestSession;
 import com.fans.web.webpage.RequestSessionBase;
-import com.weixin.model.WxPay;
+import com.weixin.model.WxPayResponse;
 import com.weixin.service.WeixinService;
 
 /**
@@ -31,8 +31,8 @@ public class getPrepay extends RequestSessionBase{
     @Autowired
     private HttpServletRequest request;
     
-    public WxPay execute(){
-        WxPay wxPay = weixinService.getUnifiedorder(RequestSession.openId());
+    public WxPayResponse execute(){
+        WxPayResponse wxPay = weixinService.getUnifiedorder(RequestSession.openId());
         wxPay.setWxVersion(super.getWxVersion(request));
         
         SortedMap<String,String> parameters = new TreeMap<String,String>();
