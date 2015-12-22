@@ -16,6 +16,8 @@
     
     <bean id="transactionManager" class="com.fans.biz.manager.impl.TransactionManagerImpl"/>
     
+    <bean id="priceManager" class="com.fans.biz.manager.impl.PriceManagerImpl"/>
+    
     <bean id="recycleTempFilesTask" class="com.fans.biz.scheduler.task.RecycleTempFilesTask"/>
     
     <bean id="scheduler" class="com.fans.biz.scheduler.Scheduler" >

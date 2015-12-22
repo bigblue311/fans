@@ -1,7 +1,6 @@
 package com.fans.biz.manager.impl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +42,6 @@ public class UserManagerImpl implements UserManager{
         if(canRefresh(userDO)){
             userDAO.refresh(id);
         }
-    }
-
-    @Override
-    public void topup(Long id, Date expire) {
-        userDAO.vipExtend(id, expire);
     }
 
     @Override
@@ -98,5 +92,10 @@ public class UserManagerImpl implements UserManager{
         countDown = countDown / 1000;
         return countDown <= 0 ? 0 : countDown.intValue();
     }
+
+	@Override
+	public void stopZhuangB() {
+		userDAO.stopZhuangB();
+	}
     
 }

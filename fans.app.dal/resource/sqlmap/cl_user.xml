@@ -25,6 +25,7 @@
     <result property="weixinId" 	column="weixin_id"/>
     <result property="coins" 		column="coins"/>
     <result property="gmtRefresh" 	column="gmt_refresh"/>
+    <result property="gmtReserve" 	column="gmt_reserve"/>
     <result property="gmtVipExpire" column="gmt_vip_expire"/>
     <result property="isTest" 		column="is_test"/>
   </resultMap>
@@ -47,13 +48,14 @@
 	    weixin_id,
 	    coins,
 	    gmt_refresh,
+	    gmt_reserve,
 	    gmt_vip_expire,
 	    is_test
 	  ) values (
 	    now(), now(),
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
-	    #weixinId#, #coins#, now(), now(), #isTest#
+	    #weixinId#, #coins#,now(), now(), now(), #isTest#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -125,8 +127,20 @@
 	      	id = #id#
 	  </update>
 	  
+	  <update id="startZhuangB" parameterClass="User">
+    	update cl_user set gmt_refresh = #gmtRefresh#, gmt_reserve = #gmtReserve#
+	    where id = #id#
+	  </update>
+	  
+	  <update id="stopZhuangB">
+    	<![CDATA[ 
+    	update cl_user set gmt_refresh = now(), gmt_reserve = now()
+	    where gmt_reserve < now()
+	    ]]>
+	  </update>
+	  
 	  <update id="refresh" parameterClass="User">
-    	update cl_user set gmt_refresh = now()
+    	update cl_user set gmt_refresh = now(), gmt_reserve = now()
 	    where id = #id#
 	  </update>
 	  
@@ -232,7 +246,7 @@
   </sql>
   
   <sql id="orderByRefresh">
-		order by gmt_refresh desc
+		order by gmt_refresh, gmt_reserve desc
   </sql>
   
   <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">

@@ -141,6 +141,13 @@ public class DateTools {
 		return cal.getTime();
 	}
 	
+	public static Date addMinute(Date date, int minuteToAdd){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE)+minuteToAdd);
+		return cal.getTime();
+	}
+	
 	public static Date getDateTime(long duration){
 		Date now = today();
 		long time = now.getTime()+duration;

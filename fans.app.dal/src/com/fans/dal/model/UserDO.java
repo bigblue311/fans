@@ -25,6 +25,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String weixinId;            //微信ID
     private Integer coins;				//金币
     private Date gmtRefresh;            //置顶刷新时间
+    private Date gmtReserve;			//预约置顶时间
     private Date gmtVipExpire;          //vip过期时间
     private Boolean isTest;
     public String getOpenId() {
@@ -99,7 +100,13 @@ public class UserDO extends EntityDO implements Serializable{
     public void setGmtRefresh(Date gmtRefresh) {
         this.gmtRefresh = gmtRefresh;
     }
-    public Date getGmtVipExpire() {
+    public Date getGmtReserve() {
+		return gmtReserve;
+	}
+	public void setGmtReserve(Date gmtReserve) {
+		this.gmtReserve = gmtReserve;
+	}
+	public Date getGmtVipExpire() {
         return gmtVipExpire;
     }
     public void setGmtVipExpire(Date gmtVipExpire) {
@@ -117,6 +124,14 @@ public class UserDO extends EntityDO implements Serializable{
 	public void setCoins(Integer coins) {
 		this.coins = coins;
 	}
+	
+	public boolean isZhuangB(){
+		if(gmtReserve == null){
+            return false;
+        }
+        return DateTools.today().before(gmtReserve);
+	}
+	
 	public boolean isVip(){
         if(gmtVipExpire == null){
             return false;

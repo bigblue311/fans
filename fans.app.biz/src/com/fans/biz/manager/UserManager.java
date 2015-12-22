@@ -1,6 +1,5 @@
 package com.fans.biz.manager;
 
-import java.util.Date;
 import java.util.List;
 
 import com.fans.dal.model.UserDO;
@@ -27,12 +26,7 @@ public interface UserManager {
 	 */
 	void refresh(Long id);
 	
-	/**
-	 * 充值
-	 * @param id
-	 * @param expire
-	 */
-	void topup(Long id, Date expire);
+	void stopZhuangB();
 	
 	/**
 	 * 根据ID获取

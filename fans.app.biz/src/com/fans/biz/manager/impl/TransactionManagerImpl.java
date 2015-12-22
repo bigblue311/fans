@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fans.biz.manager.PriceManager;
 import com.fans.biz.manager.TransactionManager;
 import com.fans.dal.dao.CoinsDAO;
 import com.fans.dal.dao.TopupDAO;
@@ -27,6 +28,9 @@ public class TransactionManagerImpl implements TransactionManager{
 	@Autowired
 	private CoinsDAO coinsDao;
 	
+	@Autowired
+	private PriceManager priceManager;
+	
 	@Override
 	public TopupDO createTopup(TopupDO topupDO) {
 		Long id = topupDao.insert(topupDO);
@@ -40,13 +44,14 @@ public class TransactionManagerImpl implements TransactionManager{
 		if(topupDO==null){
 			return;
 		}
-		Integer amount = topupDO.getAmount();
+		Integer money = topupDO.getAmount();
+		Integer coins = priceManager.topupM2C(money);
 		Long userId = topupDO.getUserId();
-		if(userId!=null && amount != null && amount > 0){
-			userDao.topup(userId, amount);
+		if(userId!=null && coins != null && coins > 0){
+			userDao.topup(userId, coins);
 			CoinsDO coinsDO = new CoinsDO();
 			coinsDO.setType(CoinsTypeEnum.充值.getCode());
-			coinsDO.setAmount(amount);
+			coinsDO.setAmount(coins);
 			coinsDO.setTopupId(topupId);
 			coinsDO.setUserId(userId);
 			coinsDO.setOpenId(topupDO.getOpenId());
@@ -71,11 +76,12 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 
 	@Override
-	public PayStatusEnum buyVip(Long userId, Integer coins, Integer month) {
+	public PayStatusEnum buyVip(Long userId, Integer month) {
 		try {
-			if(month <= 0){
+			if(month==null || month <= 0){
 				return PayStatusEnum.支付失败;
 			}
+			Integer coins = priceManager.buyVipUseCoins(month);
 			PayStatusEnum payStatus = pay(userId, coins);
 			if(payStatus.getSuccess()){
 				Date expire = DateTools.getDayBegin(DateTools.today());
@@ -88,6 +94,58 @@ public class TransactionManagerImpl implements TransactionManager{
 			e.printStackTrace();
 			return PayStatusEnum.支付失败;
 		}
+	}
+	
+	@Override
+	public void buyVipSuccess(Long topupId, String weixinOrderId, Integer month) {
+		TopupDO topupDO = topupDao.getById(topupId);
+		if(topupDO==null){
+			return;
+		}
+		Long userId = topupDO.getUserId();
+		if(userId!=null){
+			Date expire = DateTools.getDayBegin(DateTools.today());
+			DateTools.addMonth(expire, month);
+			userDao.vipExtend(userId, expire);
+			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			return;
+		}
+	}
+	
+	@Override
+	public PayStatusEnum buyZhuangB(Long userId, Integer minutes) {
+		try {
+			if(minutes == null || minutes < 0){
+				return PayStatusEnum.支付失败;
+			}
+			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
+			PayStatusEnum payStatus = pay(userId, coins);
+			if(payStatus.getSuccess()){
+				Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
+				userDao.startZhuangB(userId, gmtReserve);
+				return PayStatusEnum.支付成功;
+			}
+			return payStatus;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return PayStatusEnum.支付失败;
+		}
+	}
+	
+	@Override
+	public void buyZhuangBSuccess(Long topupId, String weixinOrderId, Integer minutes) {
+		TopupDO topupDO = topupDao.getById(topupId);
+		if(topupDO==null){
+			return;
+		}
+		Long userId = topupDO.getUserId();
+		if(userId!=null){
+			Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
+			userDao.startZhuangB(userId, gmtReserve);
+			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			return;
+		}
+		
 	}
 
 	@Override
@@ -110,5 +168,4 @@ public class TransactionManagerImpl implements TransactionManager{
 			return PayStatusEnum.支付失败;
 		}
 	}
-
 }
