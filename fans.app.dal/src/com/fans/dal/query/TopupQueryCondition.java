@@ -49,6 +49,15 @@ public class TopupQueryCondition extends QueryCondition implements Serializable{
 		return getInteger("status");
 	}
 	
+	public TopupQueryCondition setType(Integer type) {
+		put("type",type);
+		return this;
+	}
+	
+	public Integer getType(){
+		return getInteger("type");
+	}
+	
 	@Override
 	public TopupQueryCondition setGmtModifyStart(Date from){
 		put("gmtModifyStart", DateTools.getDayBegin(from));

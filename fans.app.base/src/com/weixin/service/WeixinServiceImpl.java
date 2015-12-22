@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.rmi.ConnectException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -50,14 +49,14 @@ public class WeixinServiceImpl implements WeixinService{
     @Override
     public WxUser getUserInfo(String code) {
         String url = WxConfig.getAccessTokenUrl(appId, appSecret, code);
-        String result = httpsRequest(url,null);
+        String result = httpRequest(url,null);
         JSONObject json = JSON.parseObject(result);
         
         String openId = json.getString("openid");
         String accessToken = json.getString("access_token");
         
         url = WxConfig.getUserInfoUrl(accessToken, openId);
-        result = httpsRequest(url,null);
+        result = httpRequest(url,null);
         WxUser wxUser = JsonTools.fromJson(result, WxUser.class);
         wxUser.setAccessToken(accessToken);
         wxUser.setOpenId(openId);
@@ -66,14 +65,12 @@ public class WeixinServiceImpl implements WeixinService{
 
     @Override
     public WxPay getUnifiedorder(String openId) {
-        String result = httpsRequest(WxConfig.UNIFILED_ORDER, getPostData(openId));
-        System.out.println(result);
+        String result = httpRequest(WxConfig.UNIFILED_ORDER, getPostData(openId));
         WxPay wxPay = new WxPay();
         try {
             Map<String,String> map = doXMLParse(result);
             for(String key : map.keySet()){
                 if(StringTools.isEmpty(key)) continue;
-                System.out.println(key+":"+map.get(key));
                 if(key.equals("result_code")){
                     wxPay.setResultCode(map.get(key));
                 }
@@ -123,10 +120,8 @@ public class WeixinServiceImpl implements WeixinService{
         parameters.put("trade_type", "JSAPI");
         //parameters.put("trade_type", "NATIVE");
         String sign = createSign(parameters);
-        System.out.println(sign);
         parameters.put("sign", sign);
         String postData = getRequestXml(parameters);
-        System.out.println(postData);
         return postData;
     }
     
@@ -145,7 +140,6 @@ public class WeixinServiceImpl implements WeixinService{
             }
         }
         sb.append("key=" + key);
-        System.out.println(sb.toString());
         String sign = MD5.getMD5(sb.toString()).toUpperCase();
         return sign;
     }
@@ -169,9 +163,8 @@ public class WeixinServiceImpl implements WeixinService{
         return sb.toString();
     }
     
-    private String httpsRequest(String requestUrl, String outputStr) {
+    private String httpRequest(String requestUrl, String outputStr) {
         try {
-            // 创建SSLContext对象，并使用我们指定的信任管理器初始化
             URL url = new URL(requestUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -200,8 +193,6 @@ public class WeixinServiceImpl implements WeixinService{
             inputStream = null;
             conn.disconnect();
             return buffer.toString();
-        } catch (ConnectException ce) {
-            ce.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

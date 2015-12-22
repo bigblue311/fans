@@ -58,13 +58,16 @@ public class TransactionManagerImpl implements TransactionManager{
 			coinsDO.setDescription("充值获得金币");
 			coinsDao.insert(coinsDO);
 			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			return;
+		} else {
+			updateTopup(topupId,weixinOrderId,TopupStatusEnum.业务异常.getCode());
+			return;
 		}
-		//TODO 这里有异常处理的问题
 	}
 
 	@Override
 	public void topupFailed(Long topupId, String weixinOrderId) {
-		updateTopup(topupId,weixinOrderId,TopupStatusEnum.失败.getCode());
+		updateTopup(topupId,weixinOrderId,TopupStatusEnum.支付失败.getCode());
 	}
 	
 	private void updateTopup(Long id, String weixinOrderId, Integer status) {
@@ -97,17 +100,21 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
-	public void buyVipSuccess(Long topupId, String weixinOrderId, Integer month) {
+	public void buyVipSuccess(Long topupId, String weixinOrderId) {
 		TopupDO topupDO = topupDao.getById(topupId);
 		if(topupDO==null){
 			return;
 		}
 		Long userId = topupDO.getUserId();
+		Integer month = Integer.parseInt(topupDO.getData1());
 		if(userId!=null){
 			Date expire = DateTools.getDayBegin(DateTools.today());
 			DateTools.addMonth(expire, month);
 			userDao.vipExtend(userId, expire);
 			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			return;
+		} else {
+			updateTopup(topupId,weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
 	}
@@ -133,19 +140,22 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
-	public void buyZhuangBSuccess(Long topupId, String weixinOrderId, Integer minutes) {
+	public void buyZhuangBSuccess(Long topupId, String weixinOrderId) {
 		TopupDO topupDO = topupDao.getById(topupId);
 		if(topupDO==null){
 			return;
 		}
 		Long userId = topupDO.getUserId();
+		Integer minutes = Integer.parseInt(topupDO.getData1());
 		if(userId!=null){
 			Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
 			userDao.startZhuangB(userId, gmtReserve);
 			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
 			return;
+		} else {
+			updateTopup(topupId,weixinOrderId,TopupStatusEnum.业务异常.getCode());
+			return;
 		}
-		
 	}
 
 	@Override

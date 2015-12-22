@@ -7,7 +7,8 @@ import com.google.common.collect.Lists;
 public enum TopupStatusEnum {
 	待支付(0,"待支付"),
 	成功(1,"成功"),
-	失败(2,"失败");
+	支付失败(2,"支付失败"),
+	业务异常(3,"业务异常");
 	
 	private Integer code;
 	private String desc;

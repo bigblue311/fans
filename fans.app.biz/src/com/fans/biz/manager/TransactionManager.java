@@ -40,7 +40,7 @@ public interface TransactionManager {
 	 * @param month
 	 */
 	PayStatusEnum buyVip(Long userId, Integer month);
-	void buyVipSuccess(Long topupId, String weixinOrderId, Integer month);
+	void buyVipSuccess(Long topupId, String weixinOrderId);
 	
 	/**
 	 * 购买超级置顶
@@ -50,7 +50,7 @@ public interface TransactionManager {
 	 * @return
 	 */
 	PayStatusEnum buyZhuangB(Long userId, Integer minutes);
-	void buyZhuangBSuccess(Long topupId, String weixinOrderId, Integer minutes);
+	void buyZhuangBSuccess(Long topupId, String weixinOrderId);
 	
 	/**
 	 * 支付金币
