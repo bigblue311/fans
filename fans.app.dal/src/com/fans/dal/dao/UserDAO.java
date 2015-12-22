@@ -1,5 +1,6 @@
 package com.fans.dal.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.fans.dal.model.UserDO;
@@ -31,7 +32,8 @@ public interface UserDAO {
      * @param userDO
      * @return
      */
-    Boolean topup(UserDO userDO);
+    Boolean topup(Long id, Integer amount);
+    Boolean vipExtend(Long id, Date gmtVipExpire);
     
     /**
      * 根据ID获取

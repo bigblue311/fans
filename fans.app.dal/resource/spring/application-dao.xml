@@ -19,4 +19,12 @@
     <bean id="userDAO" class="com.fans.dal.dao.impl.UserDAOImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>
+    
+    <bean id="topupDAO" class="com.fans.dal.dao.impl.TopupDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient" />
+    </bean>
+    
+    <bean id="coinsDAO" class="com.fans.dal.dao.impl.CoinsDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient" />
+    </bean>
 </beans>

@@ -47,10 +47,7 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public void topup(Long id, Date expire) {
-        UserDO userDO = new UserDO();
-        userDO.setId(id);
-        userDO.setGmtVipExpire(expire);
-        userDAO.topup(userDO);
+        userDAO.vipExtend(id, expire);
     }
 
     @Override

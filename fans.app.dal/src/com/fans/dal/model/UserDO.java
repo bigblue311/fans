@@ -23,6 +23,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String city;                //市
     private String description;         //描述
     private String weixinId;            //微信ID
+    private Integer coins;				//金币
     private Date gmtRefresh;            //置顶刷新时间
     private Date gmtVipExpire;          //vip过期时间
     private Boolean isTest;
@@ -110,8 +111,13 @@ public class UserDO extends EntityDO implements Serializable{
     public void setIsTest(Boolean isTest) {
         this.isTest = isTest;
     }
-    
-    public boolean isVip(){
+    public Integer getCoins() {
+		return coins;
+	}
+	public void setCoins(Integer coins) {
+		this.coins = coins;
+	}
+	public boolean isVip(){
         if(gmtVipExpire == null){
             return false;
         }

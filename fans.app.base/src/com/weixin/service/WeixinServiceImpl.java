@@ -121,6 +121,7 @@ public class WeixinServiceImpl implements WeixinService{
         parameters.put("out_trade_no", UUIDTools.getID());
         parameters.put("total_fee", "1");
         parameters.put("trade_type", "JSAPI");
+        //parameters.put("trade_type", "NATIVE");
         String sign = createSign(parameters);
         System.out.println(sign);
         parameters.put("sign", sign);

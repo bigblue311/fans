@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TopupDO">
+
+  <typeAlias alias="Topup" type="com.fans.dal.model.TopupDO"/>
+
+  <resultMap id="RM" class="Topup">
+    <result property="id" 				column="id"/>
+    <result property="gmtCreate" 		column="gmt_create"/>
+    <result property="gmtModify" 		column="gmt_modify"/>
+    <result property="weixinOrderId" 	column="weixin_order_id"/>
+    <result property="userId" 			column="userId"/>
+    <result property="openId" 			column="open_id"/>
+    <result property="amount" 			column="amount"/>
+    <result property="status" 			column="status"/>
+  </resultMap>
+
+	<insert id="insert" parameterClass="Topup">
+	  <![CDATA[
+	  insert into cl_topup (
+	    gmt_create,
+	    gmt_modify,
+	    weixin_order_id,
+	    user_id,
+	    open_id,
+	    amount,
+	    status
+	  ) values (
+	    now(), now(),
+	    #weixinOrderId#, #userId#, 
+	    #openId#, #amount#, #status#
+	  )
+	  ]]>
+	  <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	  </selectKey>
+	 </insert>
+	 
+	 <update id="update" parameterClass="Topup">
+    	update cl_topup set 
+	    <dynamic>
+	      <isNotEmpty property="weixinOrderId">  
+	         <![CDATA[   
+	           weixin_order_id = #weixinOrderId#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="status">  
+	         <![CDATA[   
+	           status = #status#,
+	         ]]> 
+	      </isNotEmpty>
+	    </dynamic>
+	    	gmt_modify = now()
+	    where
+	      	id = #id#
+	  </update>
+	  
+	  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+	    select * from cl_topup where id = #id#  
+	  </select>
+	  
+	  <sql id="where">
+  		<include refid="validate" />
+  		<dynamic prepend="where">
+	  		<isNotEmpty property="id" prepend="and">
+	        	<![CDATA[ 
+	        	id = #id#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="userId" prepend="and">
+	        	<![CDATA[ 
+	        	user_id = #userId#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="openId" prepend="and">
+	        	<![CDATA[ 
+	        	open_id = #openId#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="status" prepend="and">
+	        	<![CDATA[ 
+	        	status = #status#
+	        	]]>
+		    </isNotEmpty>
+		    <include refid="Common.queryModify" />
+	  	</dynamic>
+  	</sql>
+  
+  <sql id="validate">
+  	<isNull property="id">
+  	<isNull property="userId">
+  	<isNull property="openId">
+  	<isNull property="status">
+        <include refid="Common.validModify" />
+    </isNull>
+   	</isNull>
+    </isNull>
+    </isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_topup 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_topup 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from cl_topup
+	<include refid="where" />
+  </select>
+
+</sqlMap>

@@ -1,5 +1,7 @@
 package com.fans.dal.dao.impl;
 
+import java.util.Date;
+
 import com.fans.dal.dao.UserDAO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
@@ -24,7 +26,18 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
     }
 
     @Override
-    public Boolean topup(UserDO userDO) {
-        return super.updateBySID("topup", userDO);
+    public Boolean topup(Long id, Integer amount) {
+    	UserDO forUpdate = new UserDO();
+    	forUpdate.setId(id);
+    	forUpdate.setCoins(amount);
+        return super.updateBySID("topup", forUpdate);
     }
+
+	@Override
+	public Boolean vipExtend(Long id, Date gmtVipExpire) {
+		UserDO forUpdate = new UserDO();
+    	forUpdate.setId(id);
+    	forUpdate.setGmtVipExpire(gmtVipExpire);
+        return super.updateBySID("vipExtend", forUpdate);
+	}
 }

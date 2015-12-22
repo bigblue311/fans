@@ -13,19 +13,6 @@
         <title>贵圈真乱</title>
     </head>
     <body>
-    <header data-am-widget="header" class="am-header am-header-default">
-      <div class="am-header-left am-header-nav">
-		<a href="/index.htm">
-              <i class="am-header-icon am-icon-angle-left"></i>
-              <span class="am-header-nav-title">
-                返回
-              </span>
-        </a>
-      </div>
-      <h1 class="am-header-title">
-          贵圈真乱
-      </h1>
-  	</header>
 	$screen_placeholder
   	<div data-am-widget="gotop" class="am-gotop am-gotop-fixed" >
 	  <a href="#top" title="">

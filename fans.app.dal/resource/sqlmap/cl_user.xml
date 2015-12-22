@@ -23,6 +23,7 @@
     <result property="city" 		column="city"/>
     <result property="description" 	column="description"/>
     <result property="weixinId" 	column="weixin_id"/>
+    <result property="coins" 		column="coins"/>
     <result property="gmtRefresh" 	column="gmt_refresh"/>
     <result property="gmtVipExpire" column="gmt_vip_expire"/>
     <result property="isTest" 		column="is_test"/>
@@ -44,6 +45,7 @@
 	    city,
 	    description,
 	    weixin_id,
+	    coins,
 	    gmt_refresh,
 	    gmt_vip_expire,
 	    is_test
@@ -51,7 +53,7 @@
 	    now(), now(),
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
-	    #weixinId#, now(), now(), #isTest#
+	    #weixinId#, #coins#, now(), now(), #isTest#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -112,6 +114,11 @@
 	           weixin_id = #weixinId#,
 	         ]]> 
 	      </isNotEmpty>
+	      <isNotEmpty property="coins">  
+	         <![CDATA[   
+	           coins = #coins#,
+	         ]]> 
+	      </isNotEmpty>
 	    </dynamic>
 	    	gmt_modify = now()
 	    where
@@ -124,6 +131,11 @@
 	  </update>
 	  
 	  <update id="topup" parameterClass="User">
+    	update cl_user set coins = coins + #coins#
+	    where id = #id#
+	  </update>
+	  
+	  <update id="vipExtend" parameterClass="User">
     	update cl_user set gmt_vip_expire = #gmtVipExpire#
 	    where id = #id#
 	  </update>

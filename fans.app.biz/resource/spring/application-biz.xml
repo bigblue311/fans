@@ -14,6 +14,8 @@
     
     <bean id="userManager" class="com.fans.biz.manager.impl.UserManagerImpl"/>
     
+    <bean id="transactionManager" class="com.fans.biz.manager.impl.TransactionManagerImpl"/>
+    
     <bean id="recycleTempFilesTask" class="com.fans.biz.scheduler.task.RecycleTempFilesTask"/>
     
     <bean id="scheduler" class="com.fans.biz.scheduler.Scheduler" >

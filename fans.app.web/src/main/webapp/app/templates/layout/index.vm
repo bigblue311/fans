@@ -13,27 +13,6 @@
         <title>贵圈真乱</title>
     </head>
     <body>
-    <header data-am-widget="header" class="am-header am-header-default">
-      <div class="am-header-left am-header-nav">
-		<a href="#" onclick="showSearch()">
-              <i class="am-header-icon am-icon-search"></i>
-              <span class="am-header-nav-title">
-                搜索
-              </span>
-        </a>
-      </div>
-      <h1 class="am-header-title">
-          贵圈真乱
-      </h1>
-      <div class="am-header-right am-header-nav">
-          <a href="/my.htm">
-              <i class="am-header-icon am-icon-user"></i>
-              <span class="am-header-nav-title">
-                个人信息
-              </span>
-          </a>
-      </div>
-  	</header>
   	<div class="am-tabs" id="doc-my-tabs">
 	  <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
 	    <li #if($!searchType == '0')class="am-active"#end><a href="/index.htm?searchType=0">个人二维码</a></li>
@@ -43,6 +22,16 @@
 	$screen_placeholder
 	<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
       <ul class="am-navbar-nav am-cf am-avg-sm-4">
+          <li >
+          	<a href="#" onclick="showSearch()">
+               搜索
+      	  	</a>
+          </li>
+          <li>
+	        <a href="/my.htm">
+	           个人信息
+	        </a>
+          </li>
           <li >
             <a href="/index.htm">
                刷新本页
