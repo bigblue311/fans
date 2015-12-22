@@ -1,17 +1,61 @@
 package com.fans.web.webpage.screen;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.weixin.service.WeixinService;
 
 public class WxCallback {
 
     @Autowired
     private HttpServletRequest request;
     
-    public void execute(){
-        String requestUrl = request.getRequestURL().toString();
-        requestUrl+=(request.getQueryString()==null?"":"?"+request.getQueryString());
-        System.out.println(requestUrl);
+    @Autowired
+    private HttpServletResponse response;
+    
+    @Autowired
+    private WeixinService weixinService;
+    
+    public void execute() throws IOException, JDOMException{
+    	try {
+			InputStream inStream = request.getInputStream();
+			ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = inStream.read(buffer)) != -1) {
+				outSteam.write(buffer, 0, len);
+			}
+			System.out.println("~~~~~~~~~~~~~~~~付款成功~~~~~~~~~");
+			outSteam.close();
+			inStream.close();
+			//获取微信调用我们notify_url的返回信息
+			String result = new String(outSteam.toByteArray(), "utf-8");
+			Map<String, String> map = weixinService.doXMLParse(result);
+			for (Object keyValue : map.keySet()) {
+				System.out.println(keyValue + "=" + map.get(keyValue));
+			}
+			if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
+				//TODO 对数据库的操作
+				//告诉微信服务器，我收到信息了，不要在调用回调action了
+				response.getWriter().write(setXML("SUCCESS", "")); 
+			}
+		} catch (Exception e) {
+			//告诉微信服务器，我收到信息了，不要在调用回调action了
+			response.getWriter().write(setXML("SUCCESS", "")); 
+		}
+    }
+    
+    public static String setXML(String return_code, String return_msg) {
+        return "<xml><return_code><![CDATA[" + return_code
+                + "]]></return_code><return_msg><![CDATA[" + return_msg
+                + "]]></return_msg></xml>";
     }
 }

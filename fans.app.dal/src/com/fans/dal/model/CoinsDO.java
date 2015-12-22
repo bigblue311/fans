@@ -15,6 +15,7 @@ public class CoinsDO extends EntityDO implements Serializable{
 	private Long userId;
 	private String openId;
 	private String description;
+	
 	public Integer getType() {
 		return type;
 	}

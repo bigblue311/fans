@@ -1,5 +1,6 @@
 package com.fans.web.webpage.screen.api;
 
+import java.math.BigDecimal;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -7,8 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.citrus.turbine.dataresolver.Param;
+import com.fans.biz.manager.TransactionManager;
+import com.fans.biz.manager.PriceManager;
+import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.enumerate.TopupStatusEnum;
+import com.fans.dal.enumerate.TopupTypeEnum;
+import com.fans.dal.model.TopupDO;
+import com.fans.dal.model.UserDO;
 import com.fans.web.constant.RequestSession;
 import com.fans.web.webpage.RequestSessionBase;
+import com.victor.framework.common.shared.Result;
+import com.victor.framework.common.tools.StringTools;
+import com.weixin.model.WxPayRequest;
 import com.weixin.model.WxPayResponse;
 import com.weixin.service.WeixinService;
 
@@ -29,11 +42,64 @@ public class getPrepay extends RequestSessionBase{
     private WeixinService weixinService;
     
     @Autowired
+    private TransactionManager transactionManager;
+    
+    @Autowired
+    private PriceManager priceManager;
+    
+    @Autowired
     private HttpServletRequest request;
     
-    public WxPayResponse execute(){
-        WxPayResponse wxPay = weixinService.getUnifiedorder(RequestSession.openId());
-        wxPay.setWxVersion(super.getWxVersion(request));
+    @Autowired
+    private SystemConfigCache systemConfigCache;
+    
+    public Result<WxPayResponse> execute(@Param(name="amount", defaultValue="0") Integer amount,
+    							 		 @Param(name="type", defaultValue="0") Integer type,
+    							 		 @Param("data1") Integer data1){
+    	UserDO userDO = RequestSession.userDO();
+    	if(userDO == null || userDO.getId() == null || StringTools.isEmpty(userDO.getOpenId())){
+    		return Result.newInstance(null, "用户不存在", false);
+    	}
+    	
+    	TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
+    	if(topupType == null){
+    		return Result.newInstance(null, "业务类型不存在", false);
+    	}
+    	
+    	amount = getPrice(topupType,data1,amount);
+    	if(amount < 0){
+    		return Result.newInstance(null, "交易金额不能为负数", false);
+    	}
+    	
+    	if(super.getWxVersion(request) < 5){
+    		return Result.newInstance(null, "您的微信版本低于5.0无法使用微信支付", false);
+    	}
+    	
+    	TopupDO topupDO = new TopupDO();
+    	topupDO.setUserId(userDO.getId());
+    	topupDO.setOpenId(userDO.getOpenId());
+    	topupDO.setAmount(amount);
+    	topupDO.setStatus(TopupStatusEnum.待支付.getCode());
+    	topupDO.setType(type);
+    	topupDO.setDescription(topupType.getDesc());
+    	topupDO.setData1(data1+"");
+    	transactionManager.createTopup(topupDO);
+    	
+    	WxPayRequest wxPayRequest = new WxPayRequest();
+    	wxPayRequest.setOpenId(topupDO.getOpenId());
+    	wxPayRequest.setDescription(topupType.getDesc());
+    	wxPayRequest.setNotifyUrl("http://wxt.wetuan.com/wxCallback.htm");
+    	wxPayRequest.setTradeNo(topupDO.getId().toString());
+    	if(systemConfigCache.getSwitch(SystemConfigKeyEnum.SYSTEM_DEBUG_MODE.getCode())){
+    		//测试模式下, 只交易1分钱
+    		wxPayRequest.setTotalFee(new BigDecimal(1));
+    	} else {
+    		//转化成分
+    		BigDecimal totalFee = new BigDecimal(topupDO.getAmount() * 100);
+    		wxPayRequest.setTotalFee(totalFee);
+    	}
+    	
+        WxPayResponse wxPay = weixinService.getUnifiedorder(wxPayRequest);
         
         SortedMap<String,String> parameters = new TreeMap<String,String>();
         parameters.put("appId", wxPay.getAppId());
@@ -41,13 +107,21 @@ public class getPrepay extends RequestSessionBase{
         parameters.put("nonceStr", wxPay.getNonceStr());
         parameters.put("package", wxPay.getPackageValue());
         parameters.put("signType", "MD5");
-        System.out.println("========================");
-        for(String key : parameters.keySet()){
-        	System.out.println(key+":"+parameters.get(key));
-        }
         String paySign = weixinService.createSign(parameters);
         wxPay.setPaySign(paySign);
-        System.out.println(paySign);
-        return wxPay;
+        return Result.newInstance(wxPay, "交易成功", true);
+    }
+    
+    private Integer getPrice(TopupTypeEnum topupType, Integer data1, Integer amount){
+    	if(topupType.getCode() == TopupTypeEnum.充值.getCode()){
+    		return amount;
+    	}
+    	if(topupType.getCode() == TopupTypeEnum.购买VIP.getCode()){
+    		return priceManager.buyVipUseMoney(data1);
+    	}
+    	if(topupType.getCode() == TopupTypeEnum.购买置顶.getCode()){
+    		return priceManager.buyZhuangBUseMoney(data1);
+    	}
+    	return 0;
     }
 }

@@ -201,7 +201,8 @@ public class WeixinServiceImpl implements WeixinService{
         return null;
     }
     
-    public static Map<String,String> doXMLParse(String strxml) throws JDOMException, IOException {
+    @Override
+    public Map<String,String> doXMLParse(String strxml) throws JDOMException, IOException {
         strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
         if(null == strxml || "".equals(strxml)) {
             return null;

@@ -1,6 +1,10 @@
 package com.weixin.service;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.SortedMap;
+
+import org.jdom.JDOMException;
 
 import com.weixin.model.WxPayResponse;
 import com.weixin.model.WxPayRequest;
@@ -26,6 +30,15 @@ public interface WeixinService {
      * @return
      */
     String createSign(SortedMap<String,String> parameters);
+    
+    /**
+     * 解析XML
+     * @param strxml
+     * @return
+     * @throws IOException 
+     * @throws JDOMException 
+     */
+    Map<String,String> doXMLParse(String strxml) throws JDOMException, IOException;
     
     /**
      * 获取用户基本信息

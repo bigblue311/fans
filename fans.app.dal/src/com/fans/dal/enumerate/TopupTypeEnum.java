@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 public enum TopupTypeEnum {
-	充值(0,"充值"),
+	充值(0,"会员充值"),
 	购买VIP(1,"购买VIP"),
 	购买置顶(2,"购买置顶");
 	

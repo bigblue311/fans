@@ -13,7 +13,6 @@ public class WxPayResponse {
     private String returnCode;
     private String tradeType;
     private String timestamp;
-    private Integer wxVersion;
     private String paySign;
     
     public WxPayResponse(){
@@ -80,12 +79,6 @@ public class WxPayResponse {
     }
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
-    }
-    public Integer getWxVersion() {
-        return wxVersion;
-    }
-    public void setWxVersion(Integer wxVersion) {
-        this.wxVersion = wxVersion;
     }
     public String getPackageValue(){
         return "prepay_id="+prepayId;
