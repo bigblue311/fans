@@ -32,11 +32,6 @@
 	           个人信息
 	        </a>
           </li>
-          <li >
-            <a href="/index.htm">
-               刷新本页
-      	  	</a>
-          </li>
           <li>
           	<a href="#" id="refreshBtn">
           	   置顶刷新<font color="white" id="countDown"></font>

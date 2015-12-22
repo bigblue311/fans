@@ -13,7 +13,7 @@
     <result property="gmtCreate" 		column="gmt_create"/>
     <result property="gmtModify" 		column="gmt_modify"/>
     <result property="weixinOrderId" 	column="weixin_order_id"/>
-    <result property="userId" 			column="userId"/>
+    <result property="userId" 			column="user_id"/>
     <result property="openId" 			column="open_id"/>
     <result property="amount" 			column="amount"/>
     <result property="status" 			column="status"/>
@@ -30,7 +30,6 @@
 	  insert into cl_topup (
 	    gmt_create,
 	    gmt_modify,
-	    weixin_order_id,
 	    user_id,
 	    open_id,
 	    amount,
@@ -40,8 +39,7 @@
 	    data1, data2, data3, data4
 	  ) values (
 	    now(), now(),
-	    #weixinOrderId#, #userId#, 
-	    #openId#, #amount#, #status#
+	    #userId#, #openId#, #amount#, #status#
 	    #type#, #description#, #data1#, #data2#, #data3#, #data4#
 	  )
 	  ]]>

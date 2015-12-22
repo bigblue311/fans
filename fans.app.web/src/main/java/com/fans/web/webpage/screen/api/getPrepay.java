@@ -82,7 +82,9 @@ public class getPrepay extends RequestSessionBase{
     	topupDO.setStatus(TopupStatusEnum.待支付.getCode());
     	topupDO.setType(type);
     	topupDO.setDescription(topupType.getDesc());
-    	topupDO.setData1(data1+"");
+    	if(data1!=null){
+    		topupDO.setData1(data1+"");
+    	}
     	transactionManager.createTopup(topupDO);
     	
     	WxPayRequest wxPayRequest = new WxPayRequest();
