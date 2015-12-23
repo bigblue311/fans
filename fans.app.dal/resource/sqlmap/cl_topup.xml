@@ -10,6 +10,7 @@
 
   <resultMap id="RM" class="Topup">
     <result property="id" 				column="id"/>
+    <result property="uuid" 			column="uuid"/>
     <result property="gmtCreate" 		column="gmt_create"/>
     <result property="gmtModify" 		column="gmt_modify"/>
     <result property="weixinOrderId" 	column="weixin_order_id"/>
@@ -30,6 +31,7 @@
 	  insert into cl_topup (
 	    gmt_create,
 	    gmt_modify,
+	    uuid,
 	    user_id,
 	    open_id,
 	    amount,
@@ -38,8 +40,8 @@
 	    description,
 	    data1, data2, data3, data4
 	  ) values (
-	    now(), now(),
-	    #userId#, #openId#, #amount#, #status#
+	    now(), now(), #uuid#,
+	    #userId#, #openId#, #amount#, #status#,
 	    #type#, #description#, #data1#, #data2#, #data3#, #data4#
 	  )
 	  ]]>
@@ -71,12 +73,21 @@
 	    select * from cl_topup where id = #id#  
 	  </select>
 	  
+	  <select id="getByUUId" parameterClass="java.lang.String" resultMap="RM">
+	    select * from cl_topup where uuid = #uuid#  
+	  </select>
+	  
 	  <sql id="where">
   		<include refid="validate" />
   		<dynamic prepend="where">
 	  		<isNotEmpty property="id" prepend="and">
 	        	<![CDATA[ 
 	        	id = #id#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="uuid" prepend="and">
+	        	<![CDATA[ 
+	        	uuid = #uuid#
 	        	]]>
 		    </isNotEmpty>
 		    <isNotEmpty property="userId" prepend="and">
@@ -105,11 +116,13 @@
   
   <sql id="validate">
   	<isNull property="id">
+  	<isNull property="uuid">
   	<isNull property="userId">
   	<isNull property="openId">
   	<isNull property="status">
   	<isNull property="type">
         <include refid="Common.validModify" />
+    </isNull>
     </isNull>
     </isNull>
    	</isNull>

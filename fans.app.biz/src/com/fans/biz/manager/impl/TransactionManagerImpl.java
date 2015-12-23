@@ -16,6 +16,7 @@ import com.fans.dal.model.CoinsDO;
 import com.fans.dal.model.TopupDO;
 import com.fans.dal.model.UserDO;
 import com.victor.framework.common.tools.DateTools;
+import com.victor.framework.common.tools.UUIDTools;
 
 public class TransactionManagerImpl implements TransactionManager{
 
@@ -33,14 +34,15 @@ public class TransactionManagerImpl implements TransactionManager{
 	
 	@Override
 	public TopupDO createTopup(TopupDO topupDO) {
+		topupDO.setUuid(UUIDTools.getID());
 		Long id = topupDao.insert(topupDO);
 		topupDO.setId(id);
 		return topupDO;
 	}
 
 	@Override
-	public void topupSuccess(Long topupId, String weixinOrderId) {
-		TopupDO topupDO = topupDao.getById(topupId);
+	public void topupSuccess(String topupUUId, String weixinOrderId) {
+		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
 		}
@@ -52,22 +54,25 @@ public class TransactionManagerImpl implements TransactionManager{
 			CoinsDO coinsDO = new CoinsDO();
 			coinsDO.setType(CoinsTypeEnum.充值.getCode());
 			coinsDO.setAmount(coins);
-			coinsDO.setTopupId(topupId);
+			coinsDO.setTopupId(topupDO.getId());
 			coinsDO.setUserId(userId);
 			coinsDO.setOpenId(topupDO.getOpenId());
 			coinsDO.setDescription("充值获得金币");
 			coinsDao.insert(coinsDO);
-			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 			return;
 		} else {
-			updateTopup(topupId,weixinOrderId,TopupStatusEnum.业务异常.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
 	}
 
 	@Override
-	public void topupFailed(Long topupId, String weixinOrderId) {
-		updateTopup(topupId,weixinOrderId,TopupStatusEnum.支付失败.getCode());
+	public void topupFailed(String topupUUId, String weixinOrderId) {
+		TopupDO topupDO = topupDao.getByUUId(topupUUId);
+		if(topupDO!=null){
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付失败.getCode());
+		}
 	}
 	
 	private void updateTopup(Long id, String weixinOrderId, Integer status) {
@@ -100,8 +105,8 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
-	public void buyVipSuccess(Long topupId, String weixinOrderId) {
-		TopupDO topupDO = topupDao.getById(topupId);
+	public void buyVipSuccess(String topupUUId, String weixinOrderId) {
+		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
 		}
@@ -111,10 +116,10 @@ public class TransactionManagerImpl implements TransactionManager{
 			Date expire = DateTools.getDayBegin(DateTools.today());
 			DateTools.addMonth(expire, month);
 			userDao.vipExtend(userId, expire);
-			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 			return;
 		} else {
-			updateTopup(topupId,weixinOrderId,TopupStatusEnum.业务异常.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
 	}
@@ -140,8 +145,8 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
-	public void buyZhuangBSuccess(Long topupId, String weixinOrderId) {
-		TopupDO topupDO = topupDao.getById(topupId);
+	public void buyZhuangBSuccess(String topupUUId, String weixinOrderId) {
+		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
 		}
@@ -150,10 +155,10 @@ public class TransactionManagerImpl implements TransactionManager{
 		if(userId!=null){
 			Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
 			userDao.startZhuangB(userId, gmtReserve);
-			updateTopup(topupId,weixinOrderId,TopupStatusEnum.成功.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 			return;
 		} else {
-			updateTopup(topupId,weixinOrderId,TopupStatusEnum.业务异常.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
 	}

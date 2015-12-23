@@ -10,6 +10,7 @@ public class TopupDO extends EntityDO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3396136844250870787L;
+	private String uuid;				//外部订单号
 	private String weixinOrderId;		//微信订单号
 	private Long userId;				//用户ID
 	private String openId;				//用户OPEN_ID
@@ -22,6 +23,12 @@ public class TopupDO extends EntityDO implements Serializable{
 	private String data3;				//附加字段3
 	private String data4;				//附加字段4
 	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 	public String getWeixinOrderId() {
 		return weixinOrderId;
 	}

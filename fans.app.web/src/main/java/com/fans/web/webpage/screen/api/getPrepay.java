@@ -53,7 +53,7 @@ public class getPrepay extends RequestSessionBase{
     @Autowired
     private SystemConfigCache systemConfigCache;
     
-    public Result<WxPayResponse> execute(@Param(name="amount", defaultValue="0") Integer amount,
+    public Result<WxPayResponse> execute(@Param(name="cash", defaultValue="0") Integer cash,
     							 		 @Param(name="type", defaultValue="0") Integer type,
     							 		 @Param("data1") Integer data1){
     	UserDO userDO = RequestSession.userDO();
@@ -66,8 +66,8 @@ public class getPrepay extends RequestSessionBase{
     		return Result.newInstance(null, "业务类型不存在", false);
     	}
     	
-    	amount = getPrice(topupType,data1,amount);
-    	if(amount < 0){
+    	cash = getPrice(topupType,data1,cash);
+    	if(cash < 0){
     		return Result.newInstance(null, "交易金额不能为负数", false);
     	}
     	
@@ -78,7 +78,7 @@ public class getPrepay extends RequestSessionBase{
     	TopupDO topupDO = new TopupDO();
     	topupDO.setUserId(userDO.getId());
     	topupDO.setOpenId(userDO.getOpenId());
-    	topupDO.setAmount(amount);
+    	topupDO.setAmount(cash);
     	topupDO.setStatus(TopupStatusEnum.待支付.getCode());
     	topupDO.setType(type);
     	topupDO.setDescription(topupType.getDesc());
@@ -91,7 +91,7 @@ public class getPrepay extends RequestSessionBase{
     	wxPayRequest.setOpenId(topupDO.getOpenId());
     	wxPayRequest.setDescription(topupType.getDesc());
     	wxPayRequest.setNotifyUrl("http://wxt.wetuan.com/wxCallback.htm");
-    	wxPayRequest.setTradeNo(topupDO.getId().toString());
+    	wxPayRequest.setTradeNo(topupDO.getUuid());
     	if(systemConfigCache.getSwitch(SystemConfigKeyEnum.SYSTEM_DEBUG_MODE.getCode())){
     		//测试模式下, 只交易1分钱
     		wxPayRequest.setTotalFee(new BigDecimal(1));
@@ -114,9 +114,9 @@ public class getPrepay extends RequestSessionBase{
         return Result.newInstance(wxPay, "交易成功", true);
     }
     
-    private Integer getPrice(TopupTypeEnum topupType, Integer data1, Integer amount){
+    private Integer getPrice(TopupTypeEnum topupType, Integer data1, Integer cash){
     	if(topupType.getCode() == TopupTypeEnum.充值.getCode()){
-    		return amount;
+    		return cash;
     	}
     	if(topupType.getCode() == TopupTypeEnum.购买VIP.getCode()){
     		return priceManager.buyVipUseMoney(data1);

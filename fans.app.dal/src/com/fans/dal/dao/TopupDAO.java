@@ -25,6 +25,7 @@ public interface TopupDAO {
      * @return
      */
     TopupDO getById(Long id);
+    TopupDO getByUUId(String uuid);
 
     /**
      * 根据查询条件获取

@@ -1,6 +1,6 @@
-<a class="pay" href="#" type="0" data1="" amount="1">充值</a><br>
-<a class="pay" href="#" type="1" data1="1" amount="1">购买VIP</a><br>
-<a class="pay" href="#" type="2" data1="5" amount="1">购买置顶</a>
+<a class="pay" href="#" type="0" data1="" cash="1">充值</a><br>
+<a class="pay" href="#" type="1" data1="1" cash="1">购买VIP</a><br>
+<a class="pay" href="#" type="2" data1="5" cash="1">购买置顶</a>
 
 <script>
 if (typeof WeixinJSBridge == "undefined"){
@@ -15,10 +15,10 @@ if (typeof WeixinJSBridge == "undefined"){
 function onBridgeReady(){
 	$('.pay').on('click', function() {
 		var type = $(this).attr('type');
-		var amount = $(this).attr('amount');
+		var cash = $(this).attr('cash');
 		var data1 = $(this).attr('data1');
 		$.ajax({
-			  url: '/api/getPrepay.json?type='+type+"&amount="+amount+"&data1="+data1,
+			  url: '/api/getPrepay.json?type='+type+"&cash="+cash+"&data1="+data1,
 			  type: 'POST',
 			  success: function(res){
 				  if(!res.success){

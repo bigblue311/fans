@@ -426,6 +426,21 @@ public class EntityDAO<Entity extends EntityDO, Query extends QueryCondition> {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public Entity getByUUId(String uuid){
+		try {
+			Object obj = getSqlMapClient().queryForObject(namespace+".getByUUId", uuid);
+			if(obj != null) {
+				return (Entity)obj;
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			log.error("SQL执行失败", namespace+":"+uuid, e);
+			return null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Entity> getByIds(Long[] id){
 		List<Entity> list = Lists.newArrayList();
 		try {
