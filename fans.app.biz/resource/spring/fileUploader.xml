@@ -14,11 +14,5 @@
 
     <bean id="fileUploadManager" class="com.fans.biz.manager.impl.FileUploadManagerImpl">
     	<property name="apacheRoot" value="/Users/victorhan/Downloads/pg/upload"/>
-    	<property name="extWhiteList">
-    		 <list>
-                  <value>.JPG</value>
-                  <value>.PNG</value>
-             </list>
-    	</property>
     </bean>
 </beans>

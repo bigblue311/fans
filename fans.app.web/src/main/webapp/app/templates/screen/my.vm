@@ -2,7 +2,7 @@
 #set ($userGroup = $form.user.defaultInstance)
 <form id='form_headImg_uploader' method='post' enctype='multipart/form-data' class="am-form am-form-horizontal">
 	<fieldset>
-		<legend>个人头像<a href="/index.htm" style="float:right;">返回</a></legend>
+		<legend>个人头像<a href="/index.htm" style="float:right;font-size:smaller">返回</a></legend>
 		<img src="$!{user.headImg}" class="am-img-thumbnail" id="headImgShow" style="width:75px;height:75px;float:left;">
 		<div style="float:left;padding-left:10px;width:70%">
 			<div style="clear:both">
@@ -32,7 +32,7 @@
 	<input type="hidden" name="action" value="userAction"/>
 	<input type="hidden" name="event_submit_do_update" value="true"/>
 	<fieldset>
-	  <legend>个人信息<a href="/index.htm" style="float:right;">返回</a></legend>
+	  <legend>个人信息</legend>
 	  <div class="am-form-group">
 	    <input type="text" placeholder="昵称" 
 	    	name="$!userGroup.nickName.key"
@@ -74,7 +74,7 @@
 </form>
 <form id='form_qrcode_uploader' method='post' enctype='multipart/form-data' class='form-horizontal'>
 	<fieldset>
-		<legend>个人二维码<font color="grey" size="3" style="margin-left:20px">空着的话,就无法被搜索到哦</font></legend>
+		<legend>个人二维码<font color="grey" size="3" style="margin-left:20px">#if($!user.qrcode)空着的话,就无法被搜索到哦#else正方形的图片效果最佳#end</font></legend>
 		<img src="$!{user.qrcode}" class="am-img-thumbnail" id="qrcodeShow" style='max-width:200px;max-height:200px;'>
 		<div class="am-form-group am-form-file">
 			<button type="button" class="am-btn am-btn-danger am-btn-sm" id="qrcodeBtn">
@@ -87,7 +87,7 @@
 </form>
 <form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data' class='form-horizontal'>
 	<fieldset>
-		<legend>群聊二维码<font color="grey" size="3" style="margin-left:20px">空着的话,就无法被搜索到哦</font></legend>
+		<legend>群聊二维码<font color="grey" size="3" style="margin-left:20px">#if($!user.qrcode)空着的话,就无法被搜索到哦#else正方形的图片效果最佳#end</font></legend>
 		<img src="$!{user.groupQrcode}" class="am-img-thumbnail" id="groupQrcodeShow" style='max-width:200px;max-height:200px;'>
 		<div class="am-form-group am-form-file">
 			<button type="button" class="am-btn am-btn-danger am-btn-sm" id="groupQrcodeBtn">
