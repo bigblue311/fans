@@ -30,8 +30,11 @@ public enum CoinsTypeEnum {
 	}
 	
 	public static CoinsTypeEnum getByCode(Integer code){
+		if(code == null) {
+			return null;
+		}
 		for(CoinsTypeEnum type : getAll()){
-			if(type.code == code){
+			if(type.code.intValue() == code.intValue()){
 				return type;
 			}
 		}

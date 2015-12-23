@@ -142,10 +142,7 @@ public class WeixinServiceImpl implements WeixinService{
             }
         }
         sb.append("key=" + key);
-        System.out.println(sb.toString());
-        String sign = MD5.getMD5(sb.toString()).toUpperCase();
-        System.out.println(sign);
-        return sign;
+        return MD5.getMD5(sb.toString()).toUpperCase();
     }
     
     private String getRequestXml(SortedMap<String,String> parameters){

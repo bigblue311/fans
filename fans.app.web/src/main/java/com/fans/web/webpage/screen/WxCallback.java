@@ -44,6 +44,10 @@ public class WxCallback {
 			String result = new String(outSteam.toByteArray(), "UTF-8");
 			Map<String, String> map = weixinService.doXMLParse(result);
 			
+			for(String key : map.keySet()){
+				System.out.println(key+":"+map.get(key));
+			}
+			
 			String uuid = map.get("out_trade_no");
 			TopupDO topupDO =  transactionManager.getTopup(uuid);
 			if(topupDO!=null){
@@ -51,7 +55,7 @@ public class WxCallback {
 		        transactionManager.updateTopup(topupDO);
 			}
 			
-			if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
+			if (map.get("result_code").equalsIgnoreCase("SUCCESS")) {
 				String weixinOrderId = map.get("transaction_id");
 				transactionManager.paySuccess(uuid, weixinOrderId);
 				//告诉微信服务器，我收到信息了，不要在调用回调action了

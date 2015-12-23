@@ -37,8 +37,11 @@ public enum PayStatusEnum {
 	}
 	
 	public static PayStatusEnum getByCode(Integer code){
+		if(code == null) {
+			return null;
+		}
 		for(PayStatusEnum pay : getAll()){
-			if(pay.code == code){
+			if(pay.code.intValue() == code.intValue()){
 				return pay;
 			}
 		}

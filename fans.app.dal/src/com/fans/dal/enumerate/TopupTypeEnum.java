@@ -30,8 +30,11 @@ public enum TopupTypeEnum {
 	}
 	
 	public static TopupTypeEnum getByCode(Integer code){
+		if(code == null) {
+			return null;
+		}
 		for(TopupTypeEnum type : getAll()){
-			if(type.code == code){
+			if(type.code.intValue() == code.intValue()){
 				return type;
 			}
 		}

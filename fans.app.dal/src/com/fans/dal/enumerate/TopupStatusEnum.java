@@ -31,8 +31,11 @@ public enum TopupStatusEnum {
 	}
 	
 	public static TopupStatusEnum getByCode(Integer code){
+		if(code == null) {
+			return null;
+		}
 		for(TopupStatusEnum status : getAll()){
-			if(status.code == code){
+			if(status.code.intValue() == code.intValue()){
 				return status;
 			}
 		}

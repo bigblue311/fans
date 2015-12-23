@@ -64,28 +64,31 @@ public class TransactionManagerImpl implements TransactionManager{
 		}
 		Integer type = topupDO.getType();
 		TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
+		System.out.println(type+":"+topupType);
     	if(topupType == null){
     		return;
     	}
-    	if(topupType.getCode() == TopupTypeEnum.充值.getCode()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.充值.getCode().intValue()){
     		topupSuccess(topupUUId,weixinOrderId);
     	}
-    	if(topupType.getCode() == TopupTypeEnum.购买VIP.getCode()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.购买VIP.getCode().intValue()){
     		buyVipSuccess(topupUUId,weixinOrderId);
     	}
-    	if(topupType.getCode() == TopupTypeEnum.充值.getCode()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.充值.getCode().intValue()){
     		buyZhuangBSuccess(topupUUId,weixinOrderId);
     	}
 	}
 
 	@Override
 	public void topupSuccess(String topupUUId, String weixinOrderId) {
+		System.out.println(topupUUId+":"+weixinOrderId);
 		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
 		}
 		Integer money = topupDO.getAmount();
 		Integer coins = priceManager.topupM2C(money);
+		System.out.println(coins);
 		Long userId = topupDO.getUserId();
 		if(userId!=null && coins != null && coins > 0){
 			userDao.topup(userId, coins);
@@ -165,7 +168,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	@Override
 	public PayStatusEnum buyZhuangB(Long userId, Integer minutes) {
 		try {
-			if(minutes == null || minutes < 0){
+			if(minutes == null || minutes <= 0){
 				return PayStatusEnum.支付失败;
 			}
 			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
