@@ -120,7 +120,7 @@ public class WeixinServiceImpl implements WeixinService{
         parameters.put("out_trade_no", 	wxPayRequest.getTradeNo());
         parameters.put("total_fee", 	wxPayRequest.getTotalFee().toPlainString());
         parameters.put("trade_type", 	"JSAPI");
-        parameters.put("trade_type", 	"NATIVE");
+        //parameters.put("trade_type", 	"NATIVE");
         String sign = createSign(parameters);
         parameters.put("sign", sign);
         String postData = getRequestXml(parameters);
@@ -142,7 +142,9 @@ public class WeixinServiceImpl implements WeixinService{
             }
         }
         sb.append("key=" + key);
+        System.out.println(sb.toString());
         String sign = MD5.getMD5(sb.toString()).toUpperCase();
+        System.out.println(sign);
         return sign;
     }
     
@@ -181,7 +183,7 @@ public class WeixinServiceImpl implements WeixinService{
             }
             // 从输入流读取返回内容
             InputStream inputStream = conn.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String str = null;
             StringBuffer buffer = new StringBuffer();

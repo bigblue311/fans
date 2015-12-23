@@ -12,6 +12,7 @@ import com.fans.dal.dao.UserDAO;
 import com.fans.dal.enumerate.CoinsTypeEnum;
 import com.fans.dal.enumerate.PayStatusEnum;
 import com.fans.dal.enumerate.TopupStatusEnum;
+import com.fans.dal.enumerate.TopupTypeEnum;
 import com.fans.dal.model.CoinsDO;
 import com.fans.dal.model.TopupDO;
 import com.fans.dal.model.UserDO;
@@ -38,6 +39,38 @@ public class TransactionManagerImpl implements TransactionManager{
 		Long id = topupDao.insert(topupDO);
 		topupDO.setId(id);
 		return topupDO;
+	}
+	
+	@Override
+	public TopupDO getTopup(String uuid) {
+		return topupDao.getByUUId(uuid);
+	}
+
+	@Override
+	public TopupDO getTopup(Long id) {
+		return topupDao.getById(id);
+	}
+	
+	@Override
+	public void paySuccess(String topupUUId, String weixinOrderId) {
+		TopupDO topupDO = topupDao.getByUUId(topupUUId);
+		if(topupDO==null || topupDO.getType() == null){
+			return;
+		}
+		Integer type = topupDO.getType();
+		TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
+    	if(topupType == null){
+    		return;
+    	}
+    	if(topupType.getCode() == TopupTypeEnum.充值.getCode()){
+    		topupSuccess(topupUUId,weixinOrderId);
+    	}
+    	if(topupType.getCode() == TopupTypeEnum.购买VIP.getCode()){
+    		buyVipSuccess(topupUUId,weixinOrderId);
+    	}
+    	if(topupType.getCode() == TopupTypeEnum.充值.getCode()){
+    		buyZhuangBSuccess(topupUUId,weixinOrderId);
+    	}
 	}
 
 	@Override
@@ -68,7 +101,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 
 	@Override
-	public void topupFailed(String topupUUId, String weixinOrderId) {
+	public void payFailed(String topupUUId, String weixinOrderId) {
 		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO!=null){
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付失败.getCode());
@@ -90,7 +123,7 @@ public class TransactionManagerImpl implements TransactionManager{
 				return PayStatusEnum.支付失败;
 			}
 			Integer coins = priceManager.buyVipUseCoins(month);
-			PayStatusEnum payStatus = pay(userId, coins);
+			PayStatusEnum payStatus = payCoins(userId, coins);
 			if(payStatus.getSuccess()){
 				Date expire = DateTools.getDayBegin(DateTools.today());
 				DateTools.addMonth(expire, month);
@@ -131,7 +164,7 @@ public class TransactionManagerImpl implements TransactionManager{
 				return PayStatusEnum.支付失败;
 			}
 			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
-			PayStatusEnum payStatus = pay(userId, coins);
+			PayStatusEnum payStatus = payCoins(userId, coins);
 			if(payStatus.getSuccess()){
 				Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
 				userDao.startZhuangB(userId, gmtReserve);
@@ -164,7 +197,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 
 	@Override
-	public PayStatusEnum pay(Long userId, Integer coins) {
+	public PayStatusEnum payCoins(Long userId, Integer coins) {
 		try {
 			UserDO userDO = userDao.getById(userId);
 			if(userDO==null){

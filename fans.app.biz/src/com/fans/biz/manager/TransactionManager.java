@@ -18,6 +18,28 @@ public interface TransactionManager {
 	TopupDO createTopup(TopupDO topupDO);
 	
 	/**
+	 * 获取充值记录
+	 * @param uuid
+	 * @return
+	 */
+	TopupDO getTopup(String uuid);
+	TopupDO getTopup(Long id);
+	
+	/**
+	 * 交易成功
+	 * @param topupUUId
+	 * @param weixinOrderId
+	 */
+	void paySuccess(String topupUUId, String weixinOrderId);
+	
+	/**
+	 * 交易失败
+	 * @param topupId
+	 * @param weixinOrderId
+	 */
+	void payFailed(String topupUUId, String weixinOrderId);
+	
+	/**
 	 * 充值成功
 	 * @param id
 	 * @param weixinOrderId
@@ -25,13 +47,6 @@ public interface TransactionManager {
 	 * @return
 	 */
 	void topupSuccess(String topupUUId, String weixinOrderId);
-	
-	/**
-	 * 充值失败
-	 * @param topupId
-	 * @param weixinOrderId
-	 */
-	void topupFailed(String topupUUId, String weixinOrderId);
 	
 	/**
 	 * 购买VIP
@@ -57,5 +72,5 @@ public interface TransactionManager {
 	 * @param userId
 	 * @param coins
 	 */
-	PayStatusEnum pay(Long userId, Integer coins);
+	PayStatusEnum payCoins(Long userId, Integer coins);
 }

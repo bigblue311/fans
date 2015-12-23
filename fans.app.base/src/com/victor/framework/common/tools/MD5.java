@@ -13,8 +13,7 @@ public  class  MD5 {
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 				'a', 'b', 'c', 'd', 'e', 'f' };// 用来将字节转换成16进制表示的字符
 		try {
-			java.security.MessageDigest md = java.security.MessageDigest
-					.getInstance("MD5");
+			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
 			md.update(source);
 			byte tmp[] = md.digest();// MD5 的计算结果是一个 128 位的长整数，
 			// 用字节表示就是 16 个字节
@@ -35,17 +34,5 @@ public  class  MD5 {
 			e.printStackTrace();
 		}
 		return s;
-	}
-	
-	public static void main(String[] args){
-		String superAdmin=MD5.getMD5("SuperAdm1n".getBytes());
-		String admin=MD5.getMD5("haveFun".getBytes());
-		String defaultPsd=MD5.getMD5("123456".getBytes());
-		System.out.println("superAdmin:"+superAdmin);
-		System.out.println("admin:"+admin);
-		System.out.println("defaultPsd:"+defaultPsd);
-		
-		System.out.println(MD5.getMD5("hua63311047".getBytes()));
-		
 	}
 }

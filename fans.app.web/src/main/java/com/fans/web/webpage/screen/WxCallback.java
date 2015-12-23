@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fans.biz.manager.TransactionManager;
 import com.weixin.service.WeixinService;
 
 public class WxCallback {
@@ -24,6 +25,9 @@ public class WxCallback {
     @Autowired
     private WeixinService weixinService;
     
+    @Autowired
+    private TransactionManager transactionManager;
+    
     public void execute() throws IOException, JDOMException{
     	try {
 			InputStream inStream = request.getInputStream();
@@ -33,17 +37,15 @@ public class WxCallback {
 			while ((len = inStream.read(buffer)) != -1) {
 				outSteam.write(buffer, 0, len);
 			}
-			System.out.println("~~~~~~~~~~~~~~~~付款成功~~~~~~~~~");
 			outSteam.close();
 			inStream.close();
 			//获取微信调用我们notify_url的返回信息
-			String result = new String(outSteam.toByteArray(), "utf-8");
+			String result = new String(outSteam.toByteArray(), "UTF-8");
 			Map<String, String> map = weixinService.doXMLParse(result);
-			for (Object keyValue : map.keySet()) {
-				System.out.println(keyValue + "=" + map.get(keyValue));
-			}
 			if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
-				//TODO 对数据库的操作
+				String uuid = map.get("out_trade_no");
+				String weixinOrderId = map.get("transaction_id");
+				transactionManager.paySuccess(uuid, weixinOrderId);
 				//告诉微信服务器，我收到信息了，不要在调用回调action了
 				response.getWriter().write(setXML("SUCCESS", "")); 
 			}
