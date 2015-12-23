@@ -44,10 +44,6 @@ public class WxCallback {
 			String result = new String(outSteam.toByteArray(), "UTF-8");
 			Map<String, String> map = weixinService.doXMLParse(result);
 			
-			for(String key : map.keySet()){
-				System.out.println(key+":"+map.get(key));
-			}
-			
 			String uuid = map.get("out_trade_no");
 			TopupDO topupDO =  transactionManager.getTopup(uuid);
 			if(topupDO!=null){

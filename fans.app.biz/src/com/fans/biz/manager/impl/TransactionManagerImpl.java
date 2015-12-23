@@ -64,31 +64,31 @@ public class TransactionManagerImpl implements TransactionManager{
 		}
 		Integer type = topupDO.getType();
 		TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
-		System.out.println(type+":"+topupType);
     	if(topupType == null){
     		return;
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.充值.getCode().intValue()){
     		topupSuccess(topupUUId,weixinOrderId);
+    		return;
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.购买VIP.getCode().intValue()){
     		buyVipSuccess(topupUUId,weixinOrderId);
+    		return;
     	}
-    	if(topupType.getCode().intValue() == TopupTypeEnum.充值.getCode().intValue()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.购买置顶.getCode().intValue()){
     		buyZhuangBSuccess(topupUUId,weixinOrderId);
+    		return;
     	}
 	}
 
 	@Override
 	public void topupSuccess(String topupUUId, String weixinOrderId) {
-		System.out.println(topupUUId+":"+weixinOrderId);
 		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
 		}
 		Integer money = topupDO.getAmount();
 		Integer coins = priceManager.topupM2C(money);
-		System.out.println(coins);
 		Long userId = topupDO.getUserId();
 		if(userId!=null && coins != null && coins > 0){
 			userDao.topup(userId, coins);
@@ -133,9 +133,14 @@ public class TransactionManagerImpl implements TransactionManager{
 			Integer coins = priceManager.buyVipUseCoins(month);
 			PayStatusEnum payStatus = payCoins(userId, coins);
 			if(payStatus.getSuccess()){
+				UserDO user = userDao.getById(userId);
 				Date expire = DateTools.getDayBegin(DateTools.today());
-				DateTools.addMonth(expire, month);
-				userDao.vipExtend(userId, expire);
+				//如果已经是VIP, 那么再这个时间上续
+				if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
+					expire = user.getGmtVipExpire();
+				}
+				Date vipExpire = DateTools.addMonth(expire, month);
+				userDao.vipExtend(userId, vipExpire);
 				return PayStatusEnum.支付成功;
 			}
 			return payStatus;
@@ -153,16 +158,19 @@ public class TransactionManagerImpl implements TransactionManager{
 		}
 		Long userId = topupDO.getUserId();
 		Integer month = Integer.parseInt(topupDO.getData1());
-		if(userId!=null){
-			Date expire = DateTools.getDayBegin(DateTools.today());
-			DateTools.addMonth(expire, month);
-			userDao.vipExtend(userId, expire);
-			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
-			return;
-		} else {
+		if(month==null || month <= 0 || userId == null){
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
+		UserDO user = userDao.getById(userId);
+		Date expire = DateTools.getDayBegin(DateTools.today());
+		//如果已经是VIP, 那么再这个时间上续
+		if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
+			expire = user.getGmtVipExpire();
+		}
+		Date vipExpire = DateTools.addMonth(expire, month);
+		userDao.vipExtend(userId, vipExpire);
+		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 	}
 	
 	@Override
@@ -193,15 +201,13 @@ public class TransactionManagerImpl implements TransactionManager{
 		}
 		Long userId = topupDO.getUserId();
 		Integer minutes = Integer.parseInt(topupDO.getData1());
-		if(userId!=null){
-			Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
-			userDao.startZhuangB(userId, gmtReserve);
-			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
-			return;
-		} else {
+		if(minutes == null || minutes <= 0 || userId == null){
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
+		Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
+		userDao.startZhuangB(userId, gmtReserve);
+		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 	}
 
 	@Override

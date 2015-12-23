@@ -4,18 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.List;
 
 import com.fans.biz.manager.FileUploadManager;
 import com.victor.framework.common.shared.Result;
 import com.victor.framework.common.tools.DateTools;
-import com.victor.framework.common.tools.StringTools;
 
 public class FileUploadManagerImpl implements FileUploadManager {
 
 	private String apacheRoot;
-	private List<String> extWhiteList;
-	private String allowedExt;
+//	private List<String> extWhiteList;
+//	private String allowedExt;
 
 	@Override
 	public Result<String> uploadImg(String fileName, InputStream in) {
@@ -54,28 +52,30 @@ public class FileUploadManagerImpl implements FileUploadManager {
 	}
 	
 	private Result<String> checkExt(String fileName) {
+		
 		int index = fileName.indexOf(".");
 		String ext = fileName.substring(index);
-		if (StringTools.isAllEmpty(fileName, ext)) {
-			return Result.newInstance("", "文件损坏或者文件后缀为空", false);
-		}
-		if (extWhiteList.contains(ext.toUpperCase()) || extWhiteList.contains("*")) {
-			return Result.newInstance(ext, "文件可用", true);
-		} else {
-			return Result.newInstance("", "文件后缀必须为" + allowedExt, false);
-		}
+		return Result.newInstance(ext, "文件可用", true);
+//		if (StringTools.isAllEmpty(fileName, ext)) {
+//			return Result.newInstance("", "文件损坏或者文件后缀为空", false);
+//		}
+//		if (extWhiteList.contains(ext.toUpperCase()) || extWhiteList.contains("*")) {
+//			return Result.newInstance(ext, "文件可用", true);
+//		} else {
+//			return Result.newInstance("", "文件后缀必须为" + allowedExt, false);
+//		}
 	}
 
 	public void setApacheRoot(String apacheRoot) {
 		this.apacheRoot = apacheRoot;
 	}
 
-	public void setExtWhiteList(List<String> extWhiteList) {
-		this.extWhiteList = extWhiteList;
-		for (String item : extWhiteList) {
-			allowedExt += item + " ";
-		}
-	}
+//	public void setExtWhiteList(List<String> extWhiteList) {
+//		this.extWhiteList = extWhiteList;
+//		for (String item : extWhiteList) {
+//			allowedExt += item + " ";
+//		}
+//	}
 
 	@Override
 	public Result<String> copyTemp(String tempPath) {
