@@ -12,6 +12,8 @@ public class TopupDO extends EntityDO implements Serializable{
 	private static final long serialVersionUID = -3396136844250870787L;
 	private String uuid;				//外部订单号
 	private String weixinOrderId;		//微信订单号
+	private String weixinPrepayResult;	//生成预支付单返回结果
+	private String weixinPayResult;		//支付结果
 	private Long userId;				//用户ID
 	private String openId;				//用户OPEN_ID
 	private Integer amount;				//充值金额
@@ -34,6 +36,18 @@ public class TopupDO extends EntityDO implements Serializable{
 	}
 	public void setWeixinOrderId(String weixinOrderId) {
 		this.weixinOrderId = weixinOrderId;
+	}
+	public String getWeixinPrepayResult() {
+		return weixinPrepayResult;
+	}
+	public void setWeixinPrepayResult(String weixinPrepayResult) {
+		this.weixinPrepayResult = weixinPrepayResult;
+	}
+	public String getWeixinPayResult() {
+		return weixinPayResult;
+	}
+	public void setWeixinPayResult(String weixinPayResult) {
+		this.weixinPayResult = weixinPayResult;
 	}
 	public Long getUserId() {
 		return userId;

@@ -42,6 +42,11 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
+	public void updateTopup(TopupDO topupDO) {
+		topupDao.update(topupDO);
+	}
+	
+	@Override
 	public TopupDO getTopup(String uuid) {
 		return topupDao.getByUUId(uuid);
 	}

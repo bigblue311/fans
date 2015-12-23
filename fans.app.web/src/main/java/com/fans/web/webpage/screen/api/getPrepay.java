@@ -103,6 +103,9 @@ public class getPrepay extends RequestSessionBase{
     	
         WxPayResponse wxPay = weixinService.getUnifiedorder(wxPayRequest);
         
+        topupDO.setWeixinPrepayResult(wxPay.getResultCode());
+        transactionManager.updateTopup(topupDO);
+        
         SortedMap<String,String> parameters = new TreeMap<String,String>();
         parameters.put("appId", wxPay.getAppId());
         parameters.put("timeStamp", wxPay.getTimestamp());

@@ -12,6 +12,7 @@ import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.TransactionManager;
+import com.fans.dal.model.TopupDO;
 import com.weixin.service.WeixinService;
 
 public class WxCallback {
@@ -42,8 +43,15 @@ public class WxCallback {
 			//获取微信调用我们notify_url的返回信息
 			String result = new String(outSteam.toByteArray(), "UTF-8");
 			Map<String, String> map = weixinService.doXMLParse(result);
+			
+			String uuid = map.get("out_trade_no");
+			TopupDO topupDO =  transactionManager.getTopup(uuid);
+			if(topupDO!=null){
+				topupDO.setWeixinPayResult(map.get("result_code"));
+		        transactionManager.updateTopup(topupDO);
+			}
+			
 			if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
-				String uuid = map.get("out_trade_no");
 				String weixinOrderId = map.get("transaction_id");
 				transactionManager.paySuccess(uuid, weixinOrderId);
 				//告诉微信服务器，我收到信息了，不要在调用回调action了

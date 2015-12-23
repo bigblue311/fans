@@ -16,6 +16,7 @@ public interface TransactionManager {
 	 * @return
 	 */
 	TopupDO createTopup(TopupDO topupDO);
+	void updateTopup(TopupDO topupDO);
 	
 	/**
 	 * 获取充值记录

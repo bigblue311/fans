@@ -9,21 +9,23 @@
   <typeAlias alias="Topup" type="com.fans.dal.model.TopupDO"/>
 
   <resultMap id="RM" class="Topup">
-    <result property="id" 				column="id"/>
-    <result property="uuid" 			column="uuid"/>
-    <result property="gmtCreate" 		column="gmt_create"/>
-    <result property="gmtModify" 		column="gmt_modify"/>
-    <result property="weixinOrderId" 	column="weixin_order_id"/>
-    <result property="userId" 			column="user_id"/>
-    <result property="openId" 			column="open_id"/>
-    <result property="amount" 			column="amount"/>
-    <result property="status" 			column="status"/>
-    <result property="type" 			column="type"/>
-    <result property="description" 		column="description"/>
-    <result property="data1" 			column="data1"/>
-    <result property="data2" 			column="data2"/>
-    <result property="data3" 			column="data3"/>
-    <result property="data4" 			column="data4"/>
+    <result property="id" 					column="id"/>
+    <result property="uuid" 				column="uuid"/>
+    <result property="gmtCreate" 			column="gmt_create"/>
+    <result property="gmtModify" 			column="gmt_modify"/>
+    <result property="weixinOrderId" 		column="weixin_order_id"/>
+    <result property="weixinPrepayResult" 	column="weixin_prepay_result"/>
+    <result property="weixinPayResult" 		column="weixin_pay_result"/>
+    <result property="userId" 				column="user_id"/>
+    <result property="openId" 				column="open_id"/>
+    <result property="amount" 				column="amount"/>
+    <result property="status" 				column="status"/>
+    <result property="type" 				column="type"/>
+    <result property="description" 			column="description"/>
+    <result property="data1" 				column="data1"/>
+    <result property="data2" 				column="data2"/>
+    <result property="data3" 				column="data3"/>
+    <result property="data4" 				column="data4"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="Topup">
@@ -56,6 +58,16 @@
 	      <isNotEmpty property="weixinOrderId">  
 	         <![CDATA[   
 	           weixin_order_id = #weixinOrderId#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="weixinPrepayResult">  
+	         <![CDATA[   
+	           weixin_prepay_result = #weixinPrepayResult#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="weixinPayResult">  
+	         <![CDATA[   
+	           weixin_pay_result = #weixinPayResult#,
 	         ]]> 
 	      </isNotEmpty>
 	      <isNotEmpty property="status">  
