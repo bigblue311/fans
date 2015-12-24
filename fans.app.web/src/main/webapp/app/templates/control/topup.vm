@@ -1,0 +1,56 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+	.topupbox{
+	  display: inline-block;
+	  min-height: 50px;
+	  min-width: 80px;
+	  border: 1px solid grey;
+	  text-align: center;
+	  padding-top: 12px;
+	  margin:10px;
+	}
+	
+	.topupboxSelected{
+	  border: 2px solid green;
+	}
+</style>
+<div class="am-popup" id="topup-popup">
+<div class="am-popup-inner">
+   <div class="am-popup-hd">
+     <span data-am-modal-close class="am-close">&times;</span>
+   </div>
+   <div class="am-popup-bd">
+   <form class="am-form am-form-horizontal">
+		<fieldset>
+		  <legend>会员充值</legend>
+		  <div class="am-form-group" style="text-align:center">
+		    <div class="topupbox topupboxSelected" cash="10">10元</div>
+		    <div class="topupbox" cash="20">20元</div>
+		    <div class="topupbox" cash="50">50元</div>
+		    <div class="topupbox " cash="100">100元</div>
+		    <div class="topupbox" cash="200">200元</div>
+		    <div class="topupbox" cash="500">500元</div>
+		  </div>
+		  <div class="am-form-group">
+		    <button type="button" class="am-btn am-btn-primary am-fr pay" id="topupBtn"
+		    	type="0" data1="" cash="10" reUrl="/my.htm">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+		  </div>
+		</fieldset>
+	</form>
+   </div>
+</div>
+</div>
+<script>
+	function showTopup(){
+		jQuery("#topup-popup").modal();
+	}
+	
+	jQuery(function(){
+		jQuery(".topupbox").click(function(){
+			jQuery(".topupbox").removeClass("topupboxSelected");
+			jQuery(this).addClass("topupboxSelected");
+			var cash = jQuery(this).attr("cash");
+			jQuery("#topupBtn").attr("cash",cash);
+		});
+	});
+</script>

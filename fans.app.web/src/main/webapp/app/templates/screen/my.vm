@@ -7,11 +7,11 @@
 		<div style="float:left;padding-left:10px;width:70%">
 			<div style="clear:both">
 				金币<span class="am-badge am-badge-warning am-round" style="margin-left:10px;">$!user.coins</span>
-				<span style="float:right">充值</span>
+				<span style="float:right"><a href="#" onclick="showTopup()">充值</a></span>
 			</div>
 			<div style="clear:both">
 				会员<span class="am-badge #if($!user.isVip()) am-badge-success #else am-badge-danger #end am-round" style="margin-left:10px;">$dateTools.DateToStringSimple($!user.gmtVipExpire)</span>
-				<span style="float:right">续期</span>
+				<span style="float:right"><a href="#" onclick="showMembership()">续期</a></span>
 			</div>
 		</div>
 		<div class="am-form-group am-form-file" style="clear:both">

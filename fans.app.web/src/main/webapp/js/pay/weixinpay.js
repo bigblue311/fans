@@ -1,9 +1,3 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<a class="pay" href="#" type="0" data1="" cash="1">充值</a><br>
-<a class="pay" href="#" type="1" data1="1" cash="1">购买VIP</a><br>
-<a class="pay" href="#" type="2" data1="5" cash="1">购买置顶</a>
-
-<script>
 if (typeof WeixinJSBridge == "undefined"){
    if(document.addEventListener){
        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
@@ -18,6 +12,7 @@ function onBridgeReady(){
 		var type = $(this).attr('type');
 		var cash = $(this).attr('cash');
 		var data1 = $(this).attr('data1');
+		var reUrl = $(this).attr('reUrl');
 		$.ajax({
 			  url: '/api/getPrepay.json?type='+type+"&cash="+cash+"&data1="+data1,
 			  type: 'POST',
@@ -41,19 +36,16 @@ function onBridgeReady(){
 		                "paySign" : data.paySign           //微信签名  
 			          },function(res){      
 		                if(res.err_msg == "get_brand_wcpay_request:ok" ) {  
-		                    window.location.href = "/index.htm";  
+		                    window.location.href = "/index.htm";
 		                }else{  
 		                    alert("支付失败");
-		                    window.location.href="/my.htm";     
 		                }  
 			          });
 				  } catch(e){
 					  alert("支付失败");
-					  window.location.href = "/index.htm";  
 				  }
 			  },
 			  dataType: "json"
 		});
 	});
 }
-</script>

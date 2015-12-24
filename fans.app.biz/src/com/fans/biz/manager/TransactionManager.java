@@ -47,7 +47,7 @@ public interface TransactionManager {
 	 * @param status
 	 * @return
 	 */
-	void topupSuccess(String topupUUId, String weixinOrderId);
+	void payTopup(String topupUUId, String weixinOrderId);
 	
 	/**
 	 * 购买VIP
@@ -55,8 +55,33 @@ public interface TransactionManager {
 	 * @param coins
 	 * @param month
 	 */
+	void payVip(String topupUUId, String weixinOrderId);
+	
+	/**
+	 * 购买超级置顶
+	 * @param userId
+	 * @param coins
+	 * @param minute
+	 * @return
+	 */
+	void payZhuangB(String topupUUId, String weixinOrderId);
+	
+	
+	/**
+	 * 用金币购买
+	 * @param userId
+	 * @param data1
+	 * @param type
+	 * @return
+	 */
+	PayStatusEnum buy(Long userId, Integer data1, Integer type);
+	/**
+	 * 购买VIP
+	 * @param userId
+	 * @param coins
+	 * @param month
+	 */
 	PayStatusEnum buyVip(Long userId, Integer month);
-	void buyVipSuccess(String topupUUId, String weixinOrderId);
 	
 	/**
 	 * 购买超级置顶
@@ -66,12 +91,4 @@ public interface TransactionManager {
 	 * @return
 	 */
 	PayStatusEnum buyZhuangB(Long userId, Integer minutes);
-	void buyZhuangBSuccess(String topupUUId, String weixinOrderId);
-	
-	/**
-	 * 支付金币
-	 * @param userId
-	 * @param coins
-	 */
-	PayStatusEnum payCoins(Long userId, Integer coins);
 }

@@ -68,21 +68,21 @@ public class TransactionManagerImpl implements TransactionManager{
     		return;
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.充值.getCode().intValue()){
-    		topupSuccess(topupUUId,weixinOrderId);
+    		payTopup(topupUUId,weixinOrderId);
     		return;
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.购买VIP.getCode().intValue()){
-    		buyVipSuccess(topupUUId,weixinOrderId);
+    		payVip(topupUUId,weixinOrderId);
     		return;
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.购买置顶.getCode().intValue()){
-    		buyZhuangBSuccess(topupUUId,weixinOrderId);
+    		payZhuangB(topupUUId,weixinOrderId);
     		return;
     	}
 	}
 
 	@Override
-	public void topupSuccess(String topupUUId, String weixinOrderId) {
+	public void payTopup(String topupUUId, String weixinOrderId) {
 		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
@@ -107,51 +107,9 @@ public class TransactionManagerImpl implements TransactionManager{
 			return;
 		}
 	}
-
-	@Override
-	public void payFailed(String topupUUId, String weixinOrderId) {
-		TopupDO topupDO = topupDao.getByUUId(topupUUId);
-		if(topupDO!=null){
-			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付失败.getCode());
-		}
-	}
-	
-	private void updateTopup(Long id, String weixinOrderId, Integer status) {
-		TopupDO topupDO = new TopupDO();
-		topupDO.setId(id);
-		topupDO.setWeixinOrderId(weixinOrderId);
-		topupDO.setStatus(status);
-		topupDao.update(topupDO);
-	}
-
-	@Override
-	public PayStatusEnum buyVip(Long userId, Integer month) {
-		try {
-			if(month==null || month <= 0){
-				return PayStatusEnum.支付失败;
-			}
-			Integer coins = priceManager.buyVipUseCoins(month);
-			PayStatusEnum payStatus = payCoins(userId, coins);
-			if(payStatus.getSuccess()){
-				UserDO user = userDao.getById(userId);
-				Date expire = DateTools.getDayBegin(DateTools.today());
-				//如果已经是VIP, 那么再这个时间上续
-				if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
-					expire = user.getGmtVipExpire();
-				}
-				Date vipExpire = DateTools.addMonth(expire, month);
-				userDao.vipExtend(userId, vipExpire);
-				return PayStatusEnum.支付成功;
-			}
-			return payStatus;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return PayStatusEnum.支付失败;
-		}
-	}
 	
 	@Override
-	public void buyVipSuccess(String topupUUId, String weixinOrderId) {
+	public void payVip(String topupUUId, String weixinOrderId) {
 		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
@@ -174,27 +132,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
-	public PayStatusEnum buyZhuangB(Long userId, Integer minutes) {
-		try {
-			if(minutes == null || minutes <= 0){
-				return PayStatusEnum.支付失败;
-			}
-			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
-			PayStatusEnum payStatus = payCoins(userId, coins);
-			if(payStatus.getSuccess()){
-				Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
-				userDao.startZhuangB(userId, gmtReserve);
-				return PayStatusEnum.支付成功;
-			}
-			return payStatus;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return PayStatusEnum.支付失败;
-		}
-	}
-	
-	@Override
-	public void buyZhuangBSuccess(String topupUUId, String weixinOrderId) {
+	public void payZhuangB(String topupUUId, String weixinOrderId) {
 		TopupDO topupDO = topupDao.getByUUId(topupUUId);
 		if(topupDO==null){
 			return;
@@ -211,7 +149,83 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 
 	@Override
-	public PayStatusEnum payCoins(Long userId, Integer coins) {
+	public void payFailed(String topupUUId, String weixinOrderId) {
+		TopupDO topupDO = topupDao.getByUUId(topupUUId);
+		if(topupDO!=null){
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付失败.getCode());
+		}
+	}
+	
+	private void updateTopup(Long id, String weixinOrderId, Integer status) {
+		TopupDO topupDO = new TopupDO();
+		topupDO.setId(id);
+		topupDO.setWeixinOrderId(weixinOrderId);
+		topupDO.setStatus(status);
+		topupDao.update(topupDO);
+	}
+	
+	@Override
+	public PayStatusEnum buy(Long userId, Integer data1, Integer type) {
+		TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
+    	if(topupType == null){
+    		return PayStatusEnum.支付失败;
+    	}
+    	if(topupType.getCode().intValue() == TopupTypeEnum.购买VIP.getCode().intValue()){
+    		return buyVip(userId,data1);
+    	}
+    	if(topupType.getCode().intValue() == TopupTypeEnum.购买置顶.getCode().intValue()){
+    		return buyZhuangB(userId,data1);
+    	}
+    	return PayStatusEnum.支付失败;
+	}
+
+	@Override
+	public PayStatusEnum buyVip(Long userId, Integer month) {
+		try {
+			if(month==null || month <= 0){
+				return PayStatusEnum.支付失败;
+			}
+			Integer coins = priceManager.buyVipUseCoins(month);
+			PayStatusEnum payStatus = useCoins(userId, coins);
+			if(payStatus.getSuccess()){
+				UserDO user = userDao.getById(userId);
+				Date expire = DateTools.getDayBegin(DateTools.today());
+				//如果已经是VIP, 那么再这个时间上续
+				if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
+					expire = user.getGmtVipExpire();
+				}
+				Date vipExpire = DateTools.addMonth(expire, month);
+				userDao.vipExtend(userId, vipExpire);
+				return PayStatusEnum.支付成功;
+			}
+			return payStatus;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return PayStatusEnum.支付失败;
+		}
+	}
+	
+	@Override
+	public PayStatusEnum buyZhuangB(Long userId, Integer minutes) {
+		try {
+			if(minutes == null || minutes <= 0){
+				return PayStatusEnum.支付失败;
+			}
+			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
+			PayStatusEnum payStatus = useCoins(userId, coins);
+			if(payStatus.getSuccess()){
+				Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
+				userDao.startZhuangB(userId, gmtReserve);
+				return PayStatusEnum.支付成功;
+			}
+			return payStatus;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return PayStatusEnum.支付失败;
+		}
+	}
+	
+	private PayStatusEnum useCoins(Long userId, Integer coins) {
 		try {
 			UserDO userDO = userDao.getById(userId);
 			if(userDO==null){
