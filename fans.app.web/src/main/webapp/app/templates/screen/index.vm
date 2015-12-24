@@ -5,11 +5,8 @@
 		<img src="$!each.headImg" class='am-img-thumbnail' style="width:70px;height:70px;"/>
 	</div>
 	<div style="padding-left:5px; float:left;">
-		<p>
-			$!each.nickName
-			<br>
-			$!each.description
-		</p>
+		<div style="color:#if($user.isZhuangB())red #else black #end">$!each.nickName</div>
+		<div style="size:smaller">$!each.description</div>
 	</div>
 	<div style="float:right">
 		#if($!searchType == '0')

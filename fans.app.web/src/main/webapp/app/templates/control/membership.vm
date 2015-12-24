@@ -3,7 +3,7 @@
 	.memberbox{
 	  display: inline-block;
 	  min-height: 50px;
-	  min-width: 80px;
+	  min-width: 280px;
 	  border: 1px solid grey;
 	  text-align: center;
 	  padding: 12px;
@@ -30,9 +30,9 @@
 		  </div>
 		  <div class="am-form-group">
 		    <button type="button" class="am-btn am-btn-primary am-fl buy" id="memberBtn"
-		    	type="1" data1="1" reUrl="/my.htm">&nbsp;&nbsp;金币购买&nbsp;&nbsp;</button>
+		    	_type="1" _data1="1" _reUrl="/my.htm" _msg="确定购买会员吗?">&nbsp;&nbsp;金币购买&nbsp;&nbsp;</button>
 		    <a href="#" id="memberLnk" class="am-fr pay" 
-		    	type="1" data1="1" cash="0" reUrl="/my.htm">&nbsp;&nbsp;微信支付&nbsp;&nbsp;</a>
+		    	_type="1" _data1="1" _cash="0" _reUrl="/my.htm">&nbsp;&nbsp;微信支付&nbsp;&nbsp;</a>
 		  </div>
 		</fieldset>
 	</form>

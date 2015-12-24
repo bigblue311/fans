@@ -9,10 +9,10 @@ if (typeof WeixinJSBridge == "undefined"){
 
 function onBridgeReady(){
 	$('.pay').on('click', function() {
-		var type = $(this).attr('type');
-		var cash = $(this).attr('cash');
-		var data1 = $(this).attr('data1');
-		var reUrl = $(this).attr('reUrl');
+		var type = $(this).attr('_type');
+		var cash = $(this).attr('_cash');
+		var data1 = $(this).attr('_data1');
+		var reUrl = $(this).attr('_reUrl');
 		$.ajax({
 			  url: '/api/getPrepay.json?type='+type+'&cash='+cash+'&data1='+data1,
 			  type: 'POST',

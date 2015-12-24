@@ -18,7 +18,6 @@ public class Paycoins {
 	public Result<Integer> execute(@Param(name="type", defaultValue="1") Integer type,
 								   @Param(name="data1", defaultValue="0")Integer data1){
 		
-		System.out.println(type+":"+data1);
 		UserDO userDO = RequestSession.userDO();
     	if(userDO == null || userDO.getId() == null || StringTools.isEmpty(userDO.getOpenId())){
     		return Result.newInstance(null, "用户不存在", false);
