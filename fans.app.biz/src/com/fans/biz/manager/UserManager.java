@@ -26,8 +26,6 @@ public interface UserManager {
 	 */
 	void refresh(Long id);
 	
-	void stopZhuangB();
-	
 	/**
 	 * 根据ID获取
 	 * @param id

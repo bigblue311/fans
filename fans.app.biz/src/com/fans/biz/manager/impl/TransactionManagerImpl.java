@@ -143,8 +143,13 @@ public class TransactionManagerImpl implements TransactionManager{
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
-		Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
-		userDao.startZhuangB(userId, gmtReserve);
+		UserDO user = userDao.getById(userId);
+		Date expire = DateTools.today();
+		if(user!=null && user.getGmtRefresh()!=null && user.getGmtRefresh().after(expire)){
+			expire = user.getGmtRefresh();
+		}
+		Date gmtRefresh = DateTools.addMinute(expire, minutes);
+		userDao.startZhuangB(userId, gmtRefresh);
 		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 	}
 
@@ -214,8 +219,13 @@ public class TransactionManagerImpl implements TransactionManager{
 			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
 			PayStatusEnum payStatus = useCoins(userId, coins);
 			if(payStatus.getSuccess()){
-				Date gmtReserve = DateTools.addMinute(DateTools.today(), minutes);
-				userDao.startZhuangB(userId, gmtReserve);
+				UserDO user = userDao.getById(userId);
+				Date expire = DateTools.today();
+				if(user!=null && user.getGmtRefresh()!=null && user.getGmtRefresh().after(expire)){
+					expire = user.getGmtRefresh();
+				}
+				Date gmtRefresh = DateTools.addMinute(expire, minutes);
+				userDao.startZhuangB(userId, gmtRefresh);
 				return PayStatusEnum.支付成功;
 			}
 			return payStatus;

@@ -92,10 +92,4 @@ public class UserManagerImpl implements UserManager{
         countDown = countDown / 1000;
         return countDown <= 0 ? 0 : countDown.intValue();
     }
-
-	@Override
-	public void stopZhuangB() {
-		userDAO.stopZhuangB();
-	}
-    
 }

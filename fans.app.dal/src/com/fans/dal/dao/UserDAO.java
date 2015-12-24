@@ -27,8 +27,7 @@ public interface UserDAO {
      */
     Boolean refresh(Long id);
     
-    Boolean startZhuangB(Long id, Date gmtReserve);
-    Boolean stopZhuangB();
+    Boolean startZhuangB(Long id, Date gmtRefresh);
     
     /**
      * 充值

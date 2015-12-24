@@ -14,7 +14,7 @@ function onBridgeReady(){
 		var data1 = $(this).attr('data1');
 		var reUrl = $(this).attr('reUrl');
 		$.ajax({
-			  url: '/api/getPrepay.json?type='+type+"&cash="+cash+"&data1="+data1,
+			  url: '/api/getPrepay.json?type='+type+'&cash='+cash+'&data1='+data1,
 			  type: 'POST',
 			  success: function(res){
 				  if(!res.success){

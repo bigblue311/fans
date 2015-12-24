@@ -5,7 +5,6 @@ import java.util.Date;
 import com.fans.dal.dao.UserDAO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
-import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.dal.basic.EntityDAO;
 
 public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements UserDAO{
@@ -43,16 +42,10 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
 	}
 
 	@Override
-	public Boolean startZhuangB(Long id, Date gmtReserve) {
+	public Boolean startZhuangB(Long id, Date gmtRefresh) {
 		UserDO forUpdate = new UserDO();
 		forUpdate.setId(id);
-		forUpdate.setGmtReserve(gmtReserve);
-		forUpdate.setGmtRefresh(DateTools.forever());
+		forUpdate.setGmtRefresh(gmtRefresh);
 		return super.updateBySID("startZhuangB", forUpdate);
-	}
-
-	@Override
-	public Boolean stopZhuangB() {
-		return super.update("stopZhuangB");
 	}
 }

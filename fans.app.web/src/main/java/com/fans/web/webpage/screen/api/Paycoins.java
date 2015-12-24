@@ -16,7 +16,7 @@ public class Paycoins {
     private TransactionManager transactionManager;
 	
 	public Result<Integer> execute(@Param(name="type", defaultValue="1") Integer type,
-								  @Param(name="data1", defaultValue="0")Integer data1){
+								   @Param(name="data1", defaultValue="0")Integer data1){
 		
 		System.out.println(type+":"+data1);
 		UserDO userDO = RequestSession.userDO();
