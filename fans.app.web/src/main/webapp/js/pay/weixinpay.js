@@ -36,7 +36,7 @@ function onBridgeReady(){
 		                "paySign" : data.paySign           //微信签名  
 			          },function(res){      
 		                if(res.err_msg == "get_brand_wcpay_request:ok" ) {  
-		                    window.location.href = "/index.htm";
+		                    window.location.href = reUrl;
 		                }else{  
 		                    alert("支付失败");
 		                }  

@@ -8,7 +8,7 @@ jQuery(function(){
 			  type: 'POST',
 			  success: function(res){
 				  alert(res.message);
-				  if(res.res.success){
+				  if(res.success){
 					  window.location.href = reUrl;
 				  }
 				  return;
