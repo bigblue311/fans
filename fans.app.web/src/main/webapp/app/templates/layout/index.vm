@@ -10,6 +10,8 @@
         <script src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
 		<script src="http://cdn.amazeui.org//amazeui/2.5.0/js/amazeui.min.js"></script>
 		<script type="text/javascript" src="/js/Location/location.js"></script>
+		<script type="text/javascript" src="/js/pay/weixinpay.js"></script>
+		<script type="text/javascript" src="/js/pay/coinspay.js"></script>
         <title>贵圈真乱</title>
     </head>
     <body>
@@ -45,7 +47,7 @@
           	</form>
           </li>
           <li>
-          	<a href="#">
+          	<a href="#" onclick="showRocket()">
           	   刷火箭
           	</a>
           </li>
@@ -123,5 +125,6 @@
 	<!-- popups -->
 	$control.setTemplate('qrcode.vm')
 	$control.setTemplate('search.vm')
+	$control.setTemplate('rocket.vm')
 </body>
 </html>

@@ -85,7 +85,7 @@ public class DateTools {
 	
 	public static Date forever(){
 		try {
-			return StringToDate("9999-12-31 23:59:59");
+			return StringToDate("2200-12-31 23:59:59");
 		} catch (ParseException e) {
 			return null;
 		}

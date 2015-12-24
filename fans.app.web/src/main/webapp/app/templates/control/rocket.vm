@@ -1,0 +1,61 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+	.rocketbox{
+	  display: inline-block;
+	  min-height: 50px;
+	  min-width: 80px;
+	  border: 1px solid grey;
+	  text-align: center;
+	  padding: 12px;
+	  margin:10px;
+	}
+	
+	.rocketboxSelected{
+	  border: 2px solid green;
+	}
+</style>
+<div class="am-popup" id="rocket-popup">
+<div class="am-popup-inner">
+   <div class="am-popup-hd">
+     <span data-am-modal-close class="am-close">&times;</span>
+   </div>
+   <div class="am-popup-bd">
+   <form class="am-form am-form-horizontal">
+		<fieldset>
+		  <legend>超级置顶</legend>
+		  <div class="am-form-group" style="text-align:center">
+		    <div class="rocketbox rocketboxSelected" data1="5">05分钟 价格:100金币或10元</div>
+		    <div class="rocketbox" data1="10">10分钟 价格:200金币或20元</div>
+		    <div class="rocketbox" data1="15">15分钟 价格:300金币或30元</div>
+		    <div class="rocketbox" data1="20">20分钟 价格:400金币或40元</div>
+		    <div class="rocketbox" data1="30">30分钟 价格:600金币或60元</div>
+		    <div class="rocketbox" data1="40">40分钟 价格:800金币或80元</div>
+		    <div class="rocketbox" data1="50">50分钟 价格:1000金币或100元</div>
+		    <div class="rocketbox" data1="60">60分钟 价格:1200金币或120元</div>
+		  </div>
+		  <div class="am-form-group">
+		    <button type="button" class="am-btn am-btn-primary am-fl buy" id="rocketBtn"
+		    	type="2" data1="1" reUrl="/index.htm">&nbsp;&nbsp;金币购买&nbsp;&nbsp;</button>
+		    <a href="#" id="rocketLnk" class="am-fr pay" 
+		    	type="2" data1="1" cash="0" reUrl="/index.htm">&nbsp;&nbsp;微信支付&nbsp;&nbsp;</a>
+		  </div>
+		</fieldset>
+	</form>
+   </div>
+</div>
+</div>
+<script>
+	function showRocket(){
+		jQuery("#rocket-popup").modal();
+	}
+	
+	jQuery(function(){
+		jQuery(".rocketbox").click(function(){
+			jQuery(".rocketbox").removeClass("rocketboxSelected");
+			jQuery(this).addClass("rocketboxSelected");
+			var data1 = jQuery(this).attr("data1");
+			jQuery("#rocketBtn").attr("data1",data1);
+			jQuery("#rocketLnk").attr("data1",data1);
+		});
+	});
+</script>
