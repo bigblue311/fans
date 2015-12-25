@@ -101,7 +101,7 @@
 <form class="am-form am-form-horizontal">
 	<fieldset>
 	  <div class="am-form-group">
-	    <button type="button" id="submitBtn" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;更新&nbsp;&nbsp;</button>
+	    <button type="button" id="submitBtn" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
 	    <a href="/index.htm" class="am-fr">&nbsp;&nbsp;取消&nbsp;&nbsp;</a>
 	  </div>
 	</fieldset>

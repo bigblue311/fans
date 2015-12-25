@@ -6,7 +6,7 @@
 	</div>
 	<div style="padding-left:5px; float:left;">
 		<div style="color:#if($each.isZhuangB())red #else black #end">$!each.nickName</div>
-		<div style="font-size:smaller;color:grey">$!each.description</div>
+		<div style="font-size:smaller;color:grey;max-width:230px;">$!each.description</div>
 	</div>
 	<div style="float:right">
 		#if($!searchType == '0')
@@ -75,7 +75,7 @@
 		 						msg += "	<div style='color:black'>";
 		 						msg += 		nickName;
 		 						msg += "	</div>";
-		 						msg += "	<div style='font-size:smaller;color:grey'>";
+		 						msg += "	<div style='font-size:smaller;color:grey;max-width:230px;'>";
 		 						msg += 		description;
 		 						msg += "	</div>";
 		 						msg += "</div>";
