@@ -3,6 +3,10 @@ package com.fans.web.webpage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.alibaba.citrus.turbine.Context;
+import com.fans.biz.manager.PriceManager;
 import com.fans.dal.enumerate.SearchTypeEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
@@ -12,6 +16,15 @@ import com.victor.framework.common.tools.StringTools;
 
 public abstract class RequestSessionBase extends CookieBase{
     
+	@Autowired
+    private PriceManager priceManager;
+	
+	public void loadPriceSet(Context context){
+		context.put("topupSet", priceManager.getTopupSet());
+		context.put("vipSet", priceManager.getVipSet());
+		context.put("rocketSet", priceManager.getZhuangBSet());
+	}
+	
     public String getOpenId(HttpServletRequest request) {
         return super.getCookie(request, CookieKey.OPEN_ID);
     }

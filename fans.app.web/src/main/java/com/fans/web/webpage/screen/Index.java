@@ -42,6 +42,7 @@ public class Index extends RequestSessionBase{
         Paging<UserDO> paging = userManager.getPage(userQueryCondition);
         UserDO userDO = RequestSession.userDO();
         
+        loadPriceSet(context);
         context.put("searchType", userQueryCondition.getSearchType());
         context.put("query", userQueryCondition);
         context.put("list", paging.getData());

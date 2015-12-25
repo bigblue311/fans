@@ -5,8 +5,8 @@
 		<img src="$!each.headImg" class='am-img-thumbnail' style="width:70px;height:70px;"/>
 	</div>
 	<div style="padding-left:5px; float:left;">
-		<div style="color:#if($user.isZhuangB())red #else black #end">$!each.nickName</div>
-		<div style="size:smaller">$!each.description</div>
+		<div style="color:#if($each.isZhuangB())red #else black #end">$!each.nickName</div>
+		<div style="font-size:smaller;color:grey">$!each.description</div>
 	</div>
 	<div style="float:right">
 		#if($!searchType == '0')
@@ -34,7 +34,7 @@
     		var provinceName = location.findProvince(provinceCode);
     		var cityName = location.findCity(provinceCode,cityCode);
 			
-			jQuery(this).empty().append("["+provinceName+" "+cityName+"]");
+			jQuery(this).empty().append(provinceName+" "+cityName);
 		});
 		
 		$(window).scroll(function() {
@@ -71,11 +71,12 @@
 		 						msg += "<img src='"+headImg+"' class='am-img-thumbnail' style='width:70px;height:70px;'/>";
 		 						msg += "</div>";
 		 						msg += "<div style='padding-left:5px; float:left;'>";
-		 						msg += "<p>";
-		 						msg += nickName;
-		 						msg += "<br>";
-		 						msg += description;
-		 						msg += "</p>";
+		 						msg += "	<div style='color:black'>";
+		 						msg += 		nickName;
+		 						msg += "	</div>";
+		 						msg += "	<div style='font-size:smaller;color:grey'>";
+		 						msg += 		description;
+		 						msg += "	</div>";
 		 						msg += "</div>";
 		 						msg += "<div style='border:0px;float:right'>";
 		 						#if($!searchType == '0')
@@ -84,7 +85,7 @@
 		 						msg += "<button type='button' class='am-btn am-btn-danger am-btn-sm' style='margin-top:5px;' onclick='qrcodeShow(\""+nickName+"\",\""+groupQrcode+"\")'>加群聊</button>";	
 		 						#end
 		 						msg += "<br>";
-		 						msg += "<font color='grey'>["+provinceName+" "+cityName+"]</font>";
+		 						msg += "<font color='grey'>"+provinceName+" "+cityName+"</font>";
 		 						msg += "</div>";
 		 						msg += "</div>";
 		 						$("#more").append(msg);

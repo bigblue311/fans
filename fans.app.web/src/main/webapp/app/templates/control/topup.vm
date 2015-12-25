@@ -3,7 +3,7 @@
 	.topupbox{
 	  display: inline-block;
 	  min-height: 50px;
-	  min-width: 80px;
+	  min-width: 120px;
 	  border: 1px solid grey;
 	  text-align: center;
 	  padding-top: 12px;
@@ -24,16 +24,19 @@
 		<fieldset>
 		  <legend>会员充值</legend>
 		  <div class="am-form-group" style="text-align:center">
-		    <div class="topupbox topupboxSelected" cash="10">10元</div>
-		    <div class="topupbox" cash="20">20元</div>
-		    <div class="topupbox" cash="50">50元</div>
-		    <div class="topupbox " cash="100">100元</div>
-		    <div class="topupbox" cash="200">200元</div>
-		    <div class="topupbox" cash="500">500元</div>
+		  	#foreach($item in $!topupSet) 
+		  		<div class="topupbox #if($velocityCount ==1) topupboxSelected #end" 
+		  		cash="$item.value"
+		  		cashMsg="$!item.cashMsg">$item.text</div>
+		  	#end
 		  </div>
 		  <div class="am-form-group">
 		    <button type="button" class="am-btn am-btn-primary am-fr pay" id="topupBtn"
-		    	type="0" data1="" cash="10" reUrl="/my.htm">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+		    	_type="0" 
+		    	_data1="" 
+		    	_cash="10" 
+		    	_msg="确定充值吗?" 
+		    	_reUrl="/my.htm">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
 		  </div>
 		</fieldset>
 	</form>
@@ -50,7 +53,10 @@
 			jQuery(".topupbox").removeClass("topupboxSelected");
 			jQuery(this).addClass("topupboxSelected");
 			var cash = jQuery(this).attr("cash");
-			jQuery("#topupBtn").attr("cash",cash);
+			var cashMsg = jQuery(this).attr("cashMsg");
+			
+			jQuery("#topupBtn").attr("_cash",cash);
+			jQuery("#topupBtn").attr("_msg",cashMsg);
 		});
 	});
 </script>
