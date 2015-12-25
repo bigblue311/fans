@@ -41,7 +41,8 @@
 	        if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
 	        	var timestamp = currentTime();
 		 	    var para = "?timestamp="+timestamp;
-		 	    para += "&page=" + $("#more").attr("page");
+		 	    var page = $("#more").attr("page");
+		 	    para += "&page=" + page;
 				jQuery.ajax({
 		 			type: "get",
 		 			url: '/api/userService.json'+ para,
