@@ -28,6 +28,8 @@ public class FileStorageRepositoryAliyunImpl implements FileStorageRepository {
     private String bucketName = "";
     private String prefix = "";
     private String httpHead = "";
+    
+    private static final String TEMP_PATH = "temp/";
 
     private OSSClient client = null;
 
@@ -48,7 +50,7 @@ public class FileStorageRepositoryAliyunImpl implements FileStorageRepository {
     	if(StringTools.isEmpty(fileName)){
     		return Result.newInstance("", "文件不存在", false);
     	}
-    	fileName = "temp/"+generateRelativePath(fileName);
+    	fileName = TEMP_PATH+generateRelativePath(fileName);
     	try {
 			put(fileName, in);
 		} catch (IOException e) {
@@ -62,7 +64,7 @@ public class FileStorageRepositoryAliyunImpl implements FileStorageRepository {
 	@Override
 	public Result<String> copyTemp(String tempPath) {
 		init();
-		if(StringTools.isNotEmpty(tempPath)){
+		if(StringTools.isEmpty(tempPath)){
 			return Result.newInstance("", "文件不存在", false);
 		}
 		
@@ -71,7 +73,7 @@ public class FileStorageRepositoryAliyunImpl implements FileStorageRepository {
 		if(tempPath.startsWith(httpHead)){
 			sourceKey = tempPath.replace(httpHead, "");
 		}
-		destinationKey = sourceKey.replace("temp/", "");
+		destinationKey = sourceKey.replace(TEMP_PATH, "");
 		
 		try {
 			client.copyObject(bucketName, sourceKey, bucketName, destinationKey);
@@ -86,7 +88,14 @@ public class FileStorageRepositoryAliyunImpl implements FileStorageRepository {
 
 	@Override
 	public void recycleTemp() {
-		//never delete
+//		try {
+//			client.deleteObject(bucketName, TEMP_PATH);
+//		} catch (OSSException e) {
+//			e.printStackTrace();
+//		} catch (ClientException e) {
+//			e.printStackTrace();
+//		}
+		//先不删除了.
 		return;
 	}
 
