@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.dataresolver.FormGroup;
-import com.fans.biz.manager.FileUploadManager;
+import com.aliyun.service.FileStorageRepository;
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.model.UserDO;
 import com.fans.web.constant.RequestSession;
@@ -20,7 +20,7 @@ public class UserAction extends RequestSessionBase{
     private UserManager userManager;
     
     @Autowired
-    private FileUploadManager fileUploadManager;
+    private FileStorageRepository fileStorageRepository;
     
     @Autowired
     private HttpServletRequest request;
@@ -37,7 +37,7 @@ public class UserAction extends RequestSessionBase{
     
     public void doUpdate(@FormGroup("user") UserDO userDO){
         if(StringTools.isNotEmpty(userDO.getHeadImg()) && userDO.getHeadImg().contains("temp/")){
-            Result<String> result = fileUploadManager.copyTemp(userDO.getHeadImg());
+            Result<String> result = fileStorageRepository.copyTemp(userDO.getHeadImg());
             if(result.isSuccess()){
                 userDO.setHeadImg(result.getDataObject());
             } else {
@@ -45,7 +45,7 @@ public class UserAction extends RequestSessionBase{
             }
         }
         if(StringTools.isNotEmpty(userDO.getQrcode()) && userDO.getQrcode().contains("temp/")){
-            Result<String> result = fileUploadManager.copyTemp(userDO.getQrcode());
+            Result<String> result = fileStorageRepository.copyTemp(userDO.getQrcode());
             if(result.isSuccess()){
                 userDO.setQrcode(result.getDataObject());
             } else {
@@ -53,7 +53,7 @@ public class UserAction extends RequestSessionBase{
             }
         }
         if(StringTools.isNotEmpty(userDO.getGroupQrcode()) && userDO.getGroupQrcode().contains("temp/")){
-            Result<String> result = fileUploadManager.copyTemp(userDO.getGroupQrcode());
+            Result<String> result = fileStorageRepository.copyTemp(userDO.getGroupQrcode());
             if(result.isSuccess()){
                 userDO.setGroupQrcode(result.getDataObject());
             } else {

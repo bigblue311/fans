@@ -135,4 +135,22 @@ public class StringTools {
 		}
 		return false;
 	}
+	
+	/**
+	 * 获取文件的后缀
+	 * @param file
+	 * @return
+	 */
+	public static String getFileExtName(String file) {
+		if(isEmpty(file)) {
+			return null;
+		}
+		
+		int idx = file.lastIndexOf(".");
+		if(idx < 0 ) {
+			return file;
+		}
+		
+		return file.substring(idx + 1);
+	}
 }

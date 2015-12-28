@@ -12,7 +12,12 @@
     	http://www.springframework.org/schema/context
     	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
 
-    <bean id="fileUploadManager" class="com.fans.biz.manager.impl.FileUploadManagerImpl">
-    	<property name="apacheRoot" value="/Users/victorhan/Downloads/pg/upload"/>
+    <bean id="fileStorageRepository" class="com.aliyun.service.FileStorageRepositoryAliyunImpl">
+    	<property name="accessId" 	value="ztw4QMZcLhluNJ6h" 				/>
+    	<property name="accessKey" 	value="m2PZU9Bwg3t3cfWBDT8WPe4MpYpRxk" 	/>
+    	<property name="endPoint" 	value="http://oss.aliyuncs.com/" 		/>
+    	<property name="bucketName" value="wetuan123" 						/>
+    	<property name="prefix" 	value="fans" 							/>
+    	<property name="httpHead" 	value="http://wetuan123.oss-cn-hangzhou.aliyuncs.com/" />
     </bean>
 </beans>

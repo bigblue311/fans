@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<group>
-		<property name="apache.root" defaultValue="/Users/victorhan/Downloads/pg/upload" description="阿帕奇根路径"/>
+		<property name="oss.accessId" 	defaultValue="ztw4QMZcLhluNJ6h" 				description="OSS访问ID"/>
+    	<property name="oss.accessKey" 	defaultValue="m2PZU9Bwg3t3cfWBDT8WPe4MpYpRxk" 	description="OSS访问key"/>
+    	<property name="oss.endPoint" 	defaultValue="http://oss.aliyuncs.com/" 		description="OSS终端"/>
+    	<property name="oss.bucketName" defaultValue="wetuan123" 						description="OSS Bucket"/>
+    	<property name="oss.prefix" 	defaultValue="fans" 							description="文件夹前缀"/>
+    	<property name="oss.httpHead" 	defaultValue="http://wetuan123.oss-cn-hangzhou.aliyuncs.com/" description="图片文件HTTP头"/>
 	</group>
 	<script>
 		<generate template="config/fileUploader.xml" destfile="spring/fileUploader.xml"/>

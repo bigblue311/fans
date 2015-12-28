@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 public class DateTools {
 	private static DateFormat simpleFull = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static DateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
+	private static DateFormat simpleCompact = new SimpleDateFormat("yyyyMMdd");
 	
 	public static Date today(){
 		return new Date();
@@ -175,6 +176,13 @@ public class DateTools {
 			return "";
 		}
 		return simpleDate.format(date);
+	}
+	
+	public static String DateToStringCompact(Date date){
+		if(date == null){
+			return "";
+		}
+		return simpleCompact.format(date);
 	}
 	
 	public static Date StringToDate(String date) throws ParseException{

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.service.requestcontext.parser.ParameterParser;
 import com.alibaba.citrus.turbine.TurbineRunDataInternal;
-import com.fans.biz.manager.FileUploadManager;
+import com.aliyun.service.FileStorageRepository;
 import com.victor.framework.common.shared.Result;
 
 public class FileService {
@@ -20,7 +20,7 @@ public class FileService {
     private HttpServletRequest request;
 	
 	@Autowired
-	private FileUploadManager fileUploadManager;
+	private FileStorageRepository fileStorageRepository;
 	
 	public Result<String> execute() throws IOException {
 		TurbineRunDataInternal rundata = (TurbineRunDataInternal) getTurbineRunData(request);
@@ -30,7 +30,7 @@ public class FileService {
 			return Result.newInstance("", "文件未找到", false);
 		}
 		InputStream in = uploadFile.getInputStream();
-		Result<String> result = fileUploadManager.uploadImg(uploadFile.getName(), in);
+		Result<String> result = fileStorageRepository.uploadImg(uploadFile.getName(), in);
 		return result;
 	}
 }
