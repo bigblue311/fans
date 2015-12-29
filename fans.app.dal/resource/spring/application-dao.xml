@@ -20,6 +20,10 @@
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>
     
+    <bean id="topListDAO" class="com.fans.dal.dao.impl.TopListDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient" />
+    </bean>
+    
     <bean id="topupDAO" class="com.fans.dal.dao.impl.TopupDAOImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>

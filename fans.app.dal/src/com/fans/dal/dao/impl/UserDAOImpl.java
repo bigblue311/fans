@@ -40,12 +40,4 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
     	forUpdate.setGmtVipExpire(gmtVipExpire);
         return super.updateBySID("vipExtend", forUpdate);
 	}
-
-	@Override
-	public Boolean startZhuangB(Long id, Date gmtRefresh) {
-		UserDO forUpdate = new UserDO();
-		forUpdate.setId(id);
-		forUpdate.setGmtRefresh(gmtRefresh);
-		return super.updateBySID("startZhuangB", forUpdate);
-	}
 }

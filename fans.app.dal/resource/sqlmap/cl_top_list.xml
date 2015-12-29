@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TopListDO">
+
+  <typeAlias alias="TopList" type="com.fans.dal.model.TopListDO"/>
+
+  <resultMap id="RM" class="TopList">
+    <result property="id" 					column="id"/>
+    <result property="gmtCreate" 			column="gmt_create"/>
+    <result property="gmtModify" 			column="gmt_modify"/>
+    <result property="userId" 				column="user_id"/>
+    <result property="openId" 				column="open_id"/>
+    <result property="position" 			column="position"/>
+    <result property="gmtStart" 			column="gmt_start"/>
+    <result property="gmtEnd" 				column="gmt_end"/>
+  </resultMap>
+
+	<insert id="insert" parameterClass="TopList">
+	  <![CDATA[
+	  insert into cl_top_list (
+	    gmt_create,
+	    gmt_modify,
+	    user_id,
+	    open_id,
+	    position,
+	    gmt_start,
+	    gmt_end
+	  ) values (
+	    now(), now(), #userId#, #openId#, 
+	    #position#, #gmtStart#, #gmtEnd#
+	  )
+	  ]]>
+	  <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	  </selectKey>
+	 </insert>
+	 
+	 <update id="extend" parameterClass="TopList">
+    	update cl_top_list set gmt_end = #gmtEnd#
+	    where id = #id# and position = "position"
+	 </update>
+	  
+	 <update id="expire" parameterClass="TopList">
+	 	<![CDATA[ 
+    	update cl_top_list set gmt_end = now() , gmt_modify = now() 
+    		where 
+    	gmt_end > now() and gmt_start < now() and user_id = #userId#
+    	]]>
+	 </update>
+	  
+	  <sql id="where">
+  		<include refid="validate" />
+  		<dynamic prepend="where">
+		    <isNotEmpty property="userId" prepend="and">
+	        	<![CDATA[ 
+	        	user_id = #userId#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="openId" prepend="and">
+	        	<![CDATA[ 
+	        	open_id = #openId#
+	        	]]>
+		    </isNotEmpty>
+	    	<isEqual property="valid" compareValue="0">
+	    		<![CDATA[ 
+	        	gmt_end > now() and gmt_start < now()
+	        	]]>
+	    	</isEqual>
+		    <isNotEmpty property="position" prepend="and">
+	        	<![CDATA[ 
+	        	position = #position#
+	        	]]>
+		    </isNotEmpty>
+		    <include refid="Common.queryModify" />
+	  	</dynamic>
+  	</sql>
+  
+	<sql id="validate">
+		<isNull property="userId">
+		<isNull property="openId">
+		<isNull property="valid">
+		<isNull property="position">
+	      <include refid="Common.validModify" />
+	  	</isNull>
+	 	</isNull>
+	  	</isNull>
+	  	</isNull>
+	</sql>
+  
+	<sql id="orderByEnd">
+		order by gmt_end desc
+	</sql>
+  
+  	<select id="getValidByUserId" parameterClass="java.util.HashMap" resultMap="RM">
+  		<![CDATA[ 
+	    select * from cl_top_list where 
+	    	user_id = #userId# and position=#position#  
+	    	and gmt_end > now() and gmt_start < now() 
+		]]>
+		<include refid="orderByEnd" />
+		 limit 1
+	</select>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_top_list 
+    <include refid="where" />
+    <include refid="orderByEnd" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_top_list 
+    <include refid="where" />
+    <include refid="orderByEnd" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from cl_top_list
+	<include refid="where" />
+  </select>
+
+</sqlMap>

@@ -125,13 +125,6 @@
 	      	id = #id#
 	  </update>
 	  
-	  <update id="startZhuangB" parameterClass="User">
-		  <![CDATA[
-	    	update cl_user set gmt_refresh = #gmtRefresh#
-		    where id = #id#
-		  ]]>
-	  </update>
-	  
 	  <update id="refresh" parameterClass="User">
     	update cl_user set gmt_refresh = now()
 	    where id = #id#

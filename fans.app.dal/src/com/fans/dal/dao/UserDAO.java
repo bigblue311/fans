@@ -27,8 +27,6 @@ public interface UserDAO {
      */
     Boolean refresh(Long id);
     
-    Boolean startZhuangB(Long id, Date gmtRefresh);
-    
     /**
      * 充值
      * @param userDO
