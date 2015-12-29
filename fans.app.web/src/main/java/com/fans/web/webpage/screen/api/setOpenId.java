@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Navigator;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
+import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
 import com.weixin.model.WxUser;
@@ -18,24 +20,34 @@ public class setOpenId extends RequestSessionBase{
     private HttpServletResponse response;
     
     @Autowired
+    private SystemConfigCache systemConfigCache;
+    
+    @Autowired
     private WeixinService weixinService;
     
     @Autowired
     private UserManager userManager;
     
     public void execute(@Param("code")String code, Navigator nav){
-        WxUser wxUser = weixinService.getUserInfo(code);
-        String openId = wxUser.getOpenId();
-        UserDO userDO = userManager.getByOpenId(openId);
-        if(userDO == null){
-            userDO = new UserDO();
-            userDO.setOpenId(openId);
-            userDO.setNickName(wxUser.getNickName());
-            userDO.setHeadImg(wxUser.getHeadImgUrl());
-            userDO.setGender(getSex(wxUser.getSex()));
-            userManager.create(userDO);
-        }
-        super.setOpenId(response, wxUser.getOpenId());
+    	
+    	String openId = "";
+    	
+    	if(systemConfigCache.getSwitch(SystemConfigKeyEnum.SYSTEM_DEBUG_MODE.getCode())){
+    		openId = "ogOTHwaJi6KDLOjDu-59Nze0YW8M";
+    	} else {
+    		WxUser wxUser = weixinService.getUserInfo(code);
+            openId = wxUser.getOpenId();
+            UserDO userDO = userManager.getByOpenId(openId);
+            if(userDO == null){
+                userDO = new UserDO();
+                userDO.setOpenId(openId);
+                userDO.setNickName(wxUser.getNickName());
+                userDO.setHeadImg(wxUser.getHeadImgUrl());
+                userDO.setGender(getSex(wxUser.getSex()));
+                userManager.create(userDO);
+            }
+    	}
+        super.setOpenId(response, openId);
         nav.forwardTo("index");
     }
     
