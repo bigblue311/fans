@@ -115,8 +115,8 @@ public class TransactionManagerImpl implements TransactionManager{
 			return;
 		}
 		Long userId = topupDO.getUserId();
-		Integer month = Integer.parseInt(topupDO.getData1());
-		if(month==null || month <= 0 || userId == null){
+		Integer date = Integer.parseInt(topupDO.getData1());
+		if(date==null || date <= 0 || userId == null){
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
@@ -126,7 +126,7 @@ public class TransactionManagerImpl implements TransactionManager{
 		if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
 			expire = user.getGmtVipExpire();
 		}
-		Date vipExpire = DateTools.addMonth(expire, month);
+		Date vipExpire = DateTools.addDate(expire, date);
 		userDao.vipExtend(userId, vipExpire);
 		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
 	}
@@ -185,12 +185,12 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 
 	@Override
-	public PayStatusEnum buyVip(Long userId, Integer month) {
+	public PayStatusEnum buyVip(Long userId, Integer date) {
 		try {
-			if(month==null || month <= 0){
+			if(date==null || date <= 0){
 				return PayStatusEnum.支付失败;
 			}
-			Integer coins = priceManager.buyVipUseCoins(month);
+			Integer coins = priceManager.buyVipUseCoins(date);
 			PayStatusEnum payStatus = useCoins(userId, coins);
 			if(payStatus.getSuccess()){
 				UserDO user = userDao.getById(userId);
@@ -199,7 +199,7 @@ public class TransactionManagerImpl implements TransactionManager{
 				if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
 					expire = user.getGmtVipExpire();
 				}
-				Date vipExpire = DateTools.addMonth(expire, month);
+				Date vipExpire = DateTools.addDate(expire, date);
 				userDao.vipExtend(userId, vipExpire);
 				return PayStatusEnum.支付成功;
 			}

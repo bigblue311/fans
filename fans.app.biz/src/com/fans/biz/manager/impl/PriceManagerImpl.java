@@ -128,14 +128,14 @@ public class PriceManagerImpl implements PriceManager{
 				//设置优惠信息
 				for(PromteBO promteBO : promteList){
 					if(promteBO.match(month)){
-						priceSetBO.setText(month+"个月 "+coins+"金币或"+cash+"元 "+promteBO.getText());
+						priceSetBO.setText(month+"天 "+coins+"金币或"+cash+"元 "+promteBO.getText());
 					}
 				}
 				if(StringTools.isEmpty(priceSetBO.getText())){
-					priceSetBO.setText(month+"个月 "+coins+"金币或"+cash+"元");
+					priceSetBO.setText(month+"天 "+coins+"金币或"+cash+"元");
 				}
-				priceSetBO.setCoinsMsg("确定花费"+coins+"金币 购买会员"+month+"个月?");
-				priceSetBO.setCashMsg("确定花费"+cash+"元 购买会员"+month+"个月?");
+				priceSetBO.setCoinsMsg("确定花费"+coins+"金币 购买会员"+month+"天?");
+				priceSetBO.setCashMsg("确定花费"+cash+"元 购买会员"+month+"天?");
 				list.add(priceSetBO);
 			}
 		}
@@ -166,8 +166,8 @@ public class PriceManagerImpl implements PriceManager{
 				if(StringTools.isEmpty(priceSetBO.getText())){
 					priceSetBO.setText(minute+"分钟 "+coins+"金币或"+cash+"元");
 				}
-				priceSetBO.setCoinsMsg("确定花费"+coins+"金币 购买超级置顶"+minute+"个月?");
-				priceSetBO.setCashMsg("确定花费"+cash+"元 购买超级置顶"+minute+"个月?");
+				priceSetBO.setCoinsMsg("确定花费"+coins+"金币 购买超级置顶"+minute+"分钟?");
+				priceSetBO.setCashMsg("确定花费"+cash+"元 购买超级置顶"+minute+"分钟?");
 				list.add(priceSetBO);
 			}
 		}

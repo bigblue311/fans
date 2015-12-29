@@ -135,6 +135,13 @@ public class DateTools {
 		return cal.getTime();
 	}
 	
+	public static Date addDate(Date date, int dateToAdd){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.DATE, cal.get(Calendar.DATE)+dateToAdd);
+		return cal.getTime();
+	}
+	
 	public static Date addMonth(Date date, int monthToAdd){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);

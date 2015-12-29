@@ -78,10 +78,9 @@ public interface TransactionManager {
 	/**
 	 * 购买VIP
 	 * @param userId
-	 * @param coins
 	 * @param month
 	 */
-	PayStatusEnum buyVip(Long userId, Integer month);
+	PayStatusEnum buyVip(Long userId, Integer date);
 	
 	/**
 	 * 购买超级置顶
