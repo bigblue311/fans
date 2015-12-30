@@ -254,12 +254,12 @@ public class TransactionManagerImpl implements TransactionManager{
 					}
 					Date gmtEnd = DateTools.addMinute(expire, minutes);
 					TopListDO forCreate = new TopListDO();
-					forCreate.setGmtStart(DateTools.today());
+					forCreate.setGmtStart(expire);
 					forCreate.setGmtEnd(gmtEnd);
 					forCreate.setUserId(userId);
 					forCreate.setOpenId(user.getOpenId());
 					forCreate.setPosition(TopListPositionEnum.充值.getCode());
-					topListDao.insert(topListDO);
+					topListDao.insert(forCreate);
 				}
 				return PayStatusEnum.支付成功;
 			}
