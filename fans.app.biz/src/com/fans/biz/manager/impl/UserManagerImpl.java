@@ -7,10 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.dao.TopListDAO;
 import com.fans.dal.dao.UserDAO;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.enumerate.TopListPositionEnum;
+import com.fans.dal.model.TopListDO;
 import com.fans.dal.model.UserDO;
+import com.fans.dal.query.TopListQueryCondition;
 import com.fans.dal.query.UserQueryCondition;
+import com.google.common.collect.Lists;
+import com.victor.framework.common.tools.CollectionTools;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.dal.basic.Paging;
@@ -19,6 +25,9 @@ public class UserManagerImpl implements UserManager{
 
     @Autowired
     private UserDAO userDAO;
+    
+    @Autowired
+    private TopListDAO topListDAO;
     
     @Autowired
     private SystemConfigCache systemConfigCache;
@@ -91,5 +100,42 @@ public class UserManagerImpl implements UserManager{
         Long countDown = cal.getTime().getTime() - DateTools.today().getTime();
         countDown = countDown / 1000;
         return countDown <= 0 ? 0 : countDown.intValue();
+    }
+
+    @Override
+    public List<UserDO> getTopUsers(String openId) {
+        UserDO top1 = getRandom(openId, TopListPositionEnum.充值.getCode());
+        UserDO top2 = getRandom("", TopListPositionEnum.充值.getCode());
+        List<UserDO> result = Lists.newArrayList();
+        if(top1!=null){
+            result.add(top1);
+        }
+        if(top2!=null && top2.getId() != top1.getId()){
+            result.add(top2);
+        }
+        return result;
+    }
+    
+    private UserDO getRandom(String openId, Integer position){
+        TopListQueryCondition queryCondition = new TopListQueryCondition();
+        queryCondition.setValid(0).setPosition(position);
+        List<TopListDO> list = topListDAO.getByCondition(queryCondition);
+        if(CollectionTools.isEmpty(list)){
+            return null;
+        }
+        for(TopListDO topListDO : list){
+            if(topListDO.getOpenId().equals(openId)){
+                if(topListDO.getUserId() == null){
+                    continue;
+                }
+                return userDAO.getById(topListDO.getUserId());
+            }
+        }
+        int num = (int)(Math.random() * list.size());
+        TopListDO topListDO = list.get(num);
+        if(topListDO.getUserId() == null){
+            return null;
+        }
+        return userDAO.getById(topListDO.getUserId());
     }
 }

@@ -45,6 +45,7 @@ public class Index extends RequestSessionBase{
         loadPriceSet(context);
         context.put("searchType", userQueryCondition.getSearchType());
         context.put("query", userQueryCondition);
+        context.put("topList", userManager.getTopUsers(RequestSession.openId()));
         context.put("list", paging.getData());
         context.put("user", userDO);
         context.put("nextRefresh", userManager.nextRefresh(userDO));

@@ -56,6 +56,13 @@ public interface UserManager {
 	List<UserDO> getByCondition(UserQueryCondition queryCondition);
 	
 	/**
+	 * 获取排行榜前三名
+	 * @param openId
+	 * @return
+	 */
+	List<UserDO> getTopUsers(String openId);
+	
+	/**
 	 * 获取分页数据
 	 * @param queryCondition
 	 * @return

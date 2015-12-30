@@ -1,11 +1,31 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+#foreach($each in $topList)
+<div class="am-g doc-am-g" style="padding:5px;">
+	<div style="border:0px;float:left;">
+		<img src="$!each.headImg" class='am-img-thumbnail' style="width:70px;height:70px;"/>
+	</div>
+	<div style="padding-left:5px; float:left;">
+		<div style="color:red">$!each.nickName</div>
+		<div style="font-size:smaller;color:grey;max-width:190px;">$!each.description</div>
+	</div>
+	<div style="float:right">
+		#if($!searchType == '0')
+		<button type="button" class="am-btn am-btn-success am-btn-sm" style="margin-top:5px;" onclick="qrcodeShow('$!each.nickName','$!each.qrcode')">加好友</button>
+		#else
+		<button type="button" class="am-btn am-btn-danger am-btn-sm" style="margin-top:5px;" onclick="qrcodeShow('$!each.nickName','$!each.groupQrcode')">加群聊</button>
+		#end
+		<br>
+		<font color="grey" class="location" province="$!{each.province}" city="$!{each.city}"></font>
+	</div>
+</div>
+#end
 #foreach($each in $list)
 <div class="am-g doc-am-g" style="padding:5px;">
 	<div style="border:0px;float:left;">
 		<img src="$!each.headImg" class='am-img-thumbnail' style="width:70px;height:70px;"/>
 	</div>
 	<div style="padding-left:5px; float:left;">
-		<div style="color:#if($each.isZhuangB())red #else black #end">$!each.nickName</div>
+		<div style="color:black">$!each.nickName</div>
 		<div style="font-size:smaller;color:grey;max-width:190px;">$!each.description</div>
 	</div>
 	<div style="float:right">

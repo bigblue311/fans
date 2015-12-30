@@ -65,9 +65,11 @@
 	        	open_id = #openId#
 	        	]]>
 		    </isNotEmpty>
-	    	<isEqual property="valid" compareValue="0">
+	    	<isEqual property="valid" compareValue="0" prepend="and">
 	    		<![CDATA[ 
-	        	gmt_end > now() and gmt_start < now()
+	        	(
+	        		gmt_end > now() and gmt_start < now()
+	        	)
 	        	]]>
 	    	</isEqual>
 		    <isNotEmpty property="position" prepend="and">

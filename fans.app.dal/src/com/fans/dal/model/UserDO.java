@@ -118,13 +118,6 @@ public class UserDO extends EntityDO implements Serializable{
 		this.coins = coins;
 	}
 	
-	public boolean isZhuangB(){
-		if(gmtRefresh == null){
-            return false;
-        }
-        return DateTools.today().before(gmtRefresh);
-	}
-	
 	public boolean isVip(){
         if(gmtVipExpire == null){
             return false;
