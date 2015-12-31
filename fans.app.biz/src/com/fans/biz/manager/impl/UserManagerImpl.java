@@ -107,13 +107,28 @@ public class UserManagerImpl implements UserManager{
         UserDO top1 = getRandom(openId, TopListPositionEnum.充值.getCode());
         UserDO top2 = getRandom("", TopListPositionEnum.充值.getCode());
         List<UserDO> result = Lists.newArrayList();
-        if(top1!=null){
+        if(!contains(result, top1)){
             result.add(top1);
         }
-        if(top2!=null && top2.getId() != top1.getId()){
+        if(!contains(result, top2)){
             result.add(top2);
         }
         return result;
+    }
+    
+    private Boolean contains(List<UserDO> list, UserDO userDO){
+        if(userDO == null){
+            return true;
+        }
+        if(CollectionTools.isEmpty(list)){
+            return false;
+        }
+        for(UserDO user : list){
+            if(user.getId().intValue() == userDO.getId().intValue()){
+                return true;
+            }
+        }
+        return false;
     }
     
     private UserDO getRandom(String openId, Integer position){
