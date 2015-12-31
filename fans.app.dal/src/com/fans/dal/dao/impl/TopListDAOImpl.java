@@ -16,9 +16,10 @@ public class TopListDAOImpl extends EntityDAO<TopListDO,TopListQueryCondition> i
 	}
 
 	@Override
-	public void expire(Long userId) {
+	public void expire(Long userId, Integer position) {
 		TopListDO forUpdate = new TopListDO();
 		forUpdate.setUserId(userId);
+		forUpdate.setPosition(position);
 		super.updateBySID("expire", forUpdate);
 	}
 
@@ -29,7 +30,6 @@ public class TopListDAOImpl extends EntityDAO<TopListDO,TopListQueryCondition> i
 		forUpdate.setPosition(position);
 		forUpdate.setGmtEnd(gmtEnd);
 		super.updateBySID("extend", forUpdate);
-		
 	}
 
 	@Override

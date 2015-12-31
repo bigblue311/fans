@@ -49,6 +49,13 @@ public interface UserManager {
 	Integer nextRefresh(UserDO userDO);
 	
 	/**
+	 * 分享置顶
+	 * @param userId
+	 * @param minutes
+	 */
+	void share(Long userId, Integer minutes);
+	
+	/**
 	 * 根据查询条件获取
 	 * @param queryCondition
 	 * @return

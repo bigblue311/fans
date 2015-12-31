@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,10 +25,14 @@ import org.jdom.input.SAXBuilder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.JsonTools;
 import com.victor.framework.common.tools.MD5;
+import com.victor.framework.common.tools.SHA1;
 import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.common.tools.UUIDTools;
+import com.victor.framework.dal.cache.GuavaCache;
+import com.weixin.model.JsApiConfig;
 import com.weixin.model.WxConfig;
 import com.weixin.model.WxPayResponse;
 import com.weixin.model.WxPayRequest;
@@ -37,8 +40,10 @@ import com.weixin.model.WxUser;
 
 public class WeixinServiceImpl implements WeixinService{
 
+    private static GuavaCache cache = new GuavaCache(7000);  
+    
     private String appId="wx65bcca07aa8b4a53";
-    private String appSecret;
+    private String appSecret="8ab8cbbdada8cb78f4f4a0d44e23709d";
     private String mchId="1290486501";
     private String reUrl;
     private String key = "wtHp80kLn7xG78uoEhkgCC5HaS2rAhOe";
@@ -67,7 +72,7 @@ public class WeixinServiceImpl implements WeixinService{
 
     @Override
     public WxPayResponse getUnifiedorder(WxPayRequest wxPayRequest) {
-        String result = httpRequest(WxConfig.UNIFILED_ORDER, getPostData(wxPayRequest));
+        String result = httpRequest(WxConfig.getUnifiledOrderUrl(), getPostData(wxPayRequest));
         WxPayResponse wxPay = new WxPayResponse();
         try {
             Map<String,String> map = doXMLParse(result);
@@ -121,14 +126,14 @@ public class WeixinServiceImpl implements WeixinService{
         parameters.put("total_fee", 	wxPayRequest.getTotalFee().toPlainString());
         parameters.put("trade_type", 	"JSAPI");
         //parameters.put("trade_type", 	"NATIVE");
-        String sign = createSign(parameters);
+        String sign = createSignMD5(parameters);
         parameters.put("sign", sign);
         String postData = getRequestXml(parameters);
         return postData;
     }
     
     @Override
-    public String createSign(SortedMap<String,String> parameters){
+    public String createSignMD5(SortedMap<String,String> parameters){
         StringBuffer sb = new StringBuffer();
         
         List<String> keys = new ArrayList<String>(parameters.keySet());
@@ -232,6 +237,54 @@ public class WeixinServiceImpl implements WeixinService{
         return m;
     }
     
+    private String getJsApiAccessToken(){
+        String accessToken = cache.get("getJsApiAccessToken");
+        if(StringTools.isEmpty(accessToken)){
+            String result = httpRequest(WxConfig.getJSAPIAccessToken(appId, appSecret), null);
+            JSONObject json = JSON.parseObject(result);
+            
+            accessToken = json.getString("access_token");
+            cache.put("getJsApiAccessToken", accessToken);
+        }
+        return accessToken;
+    }
+    
+    @Override
+    public String getJsApiTicket() {
+        String ticket = cache.get("getJsApiTicket");
+        if(StringTools.isEmpty(ticket)){
+            String accessToken = getJsApiAccessToken();
+            String result = httpRequest(WxConfig.getJSAPITicket(accessToken), null);
+            JSONObject json = JSON.parseObject(result);
+            String errmsg = json.getString("errmsg");
+            if("ok".equals(errmsg)){
+                ticket = json.getString("ticket");
+                cache.put("getJsApiTicket", ticket);
+            } else {
+                System.out.println("failed to get jsapi ticket =" + errmsg);
+                return null;
+            }
+        }
+        return ticket;
+    }
+    
+    @Override
+    public JsApiConfig getJsApiConfig(String url) {
+        String ticket = getJsApiTicket();
+        String nonceStr = UUIDTools.getID();
+        String ts = Long.toString(DateTools.today().getTime()/1000);
+        
+        String str = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp="+ ts +"&url=" + url;
+        String sign = new SHA1().getDigestOfString(str.getBytes()); 
+        
+        JsApiConfig config = new JsApiConfig();
+        config.setAppId(appId);
+        config.setNonceStr(nonceStr);
+        config.setTimestamp(ts);
+        config.setSign(sign);
+        return config;
+    }
+    
     /**
      * 获取子结点的xml
      * @param children
@@ -281,12 +334,6 @@ public class WeixinServiceImpl implements WeixinService{
 
     public static void main(String[] args){
         WeixinServiceImpl test = new WeixinServiceImpl();
-        WxPayRequest wxPayRequest = new WxPayRequest();
-        wxPayRequest.setDescription("test");
-        wxPayRequest.setNotifyUrl("http://wxt.wetuan.com/wxCallback.htm");
-        wxPayRequest.setOpenId("ogOTHwaJi6KDLOjDu-59Nze0YW8M");
-        wxPayRequest.setTradeNo(UUIDTools.getID());
-        wxPayRequest.setTotalFee(new BigDecimal(1));
-        test.getUnifiedorder(wxPayRequest);
+        System.out.println(test.getJsApiConfig("http://wxt.wetuan.com/my.htm").getSign());
     }
 }

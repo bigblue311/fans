@@ -75,6 +75,7 @@ public interface TransactionManager {
 	 * @return
 	 */
 	PayStatusEnum buy(Long userId, Integer data1, Integer type);
+	
 	/**
 	 * 购买VIP
 	 * @param userId

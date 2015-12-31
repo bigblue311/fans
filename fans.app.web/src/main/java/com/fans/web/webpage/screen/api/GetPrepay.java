@@ -36,7 +36,7 @@ import com.weixin.service.WeixinService;
  * @author victorhan
  *
  */
-public class getPrepay extends RequestSessionBase{
+public class GetPrepay extends RequestSessionBase{
     
     @Autowired
     private WeixinService weixinService;
@@ -112,7 +112,7 @@ public class getPrepay extends RequestSessionBase{
         parameters.put("nonceStr", wxPay.getNonceStr());
         parameters.put("package", wxPay.getPackageValue());
         parameters.put("signType", "MD5");
-        String paySign = weixinService.createSign(parameters);
+        String paySign = weixinService.createSignMD5(parameters);
         wxPay.setPaySign(paySign);
         return Result.newInstance(wxPay, "交易成功", true);
     }

@@ -6,6 +6,7 @@ import java.util.SortedMap;
 
 import org.jdom.JDOMException;
 
+import com.weixin.model.JsApiConfig;
 import com.weixin.model.WxPayResponse;
 import com.weixin.model.WxPayRequest;
 import com.weixin.model.WxUser;
@@ -29,7 +30,7 @@ public interface WeixinService {
      * @param parameters
      * @return
      */
-    String createSign(SortedMap<String,String> parameters);
+    String createSignMD5(SortedMap<String,String> parameters);
     
     /**
      * 解析XML
@@ -45,4 +46,15 @@ public interface WeixinService {
      * @return
      */
     WxUser getUserInfo(String code);
+    
+    /**
+     * 获取JSAPI_TICKET
+     * @return
+     */
+    String getJsApiTicket();
+    /**
+     * 获取JSAPIconfig
+     * @return
+     */
+    JsApiConfig getJsApiConfig(String url);
 }

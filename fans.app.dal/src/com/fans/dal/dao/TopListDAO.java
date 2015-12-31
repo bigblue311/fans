@@ -18,7 +18,7 @@ public interface TopListDAO {
      * 过期一个用户的置顶
      * @param userId
      */
-    void expire(Long userId);
+    void expire(Long userId, Integer position);
     
     /**
      * 增加VIP的时间

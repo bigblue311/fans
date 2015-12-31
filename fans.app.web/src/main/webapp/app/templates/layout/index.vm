@@ -51,6 +51,11 @@
           	   刷火箭
           	</a>
           </li>
+          <li>
+          	<a href="/share.htm">
+          	   分享
+          	</a>
+          </li>
       </ul>
   	</div>
   	<div data-am-widget="gotop" class="am-gotop am-gotop-fixed" >

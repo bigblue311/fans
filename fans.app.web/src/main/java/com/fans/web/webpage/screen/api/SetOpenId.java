@@ -12,7 +12,7 @@ import com.fans.web.webpage.RequestSessionBase;
 import com.weixin.model.WxUser;
 import com.weixin.service.WeixinService;
 
-public class setOpenId extends RequestSessionBase{
+public class SetOpenId extends RequestSessionBase{
     
     @Autowired
     private HttpServletResponse response;

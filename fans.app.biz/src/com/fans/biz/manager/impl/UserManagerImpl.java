@@ -1,6 +1,7 @@
 package com.fans.biz.manager.impl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,27 @@ public class UserManagerImpl implements UserManager{
         Long countDown = cal.getTime().getTime() - DateTools.today().getTime();
         countDown = countDown / 1000;
         return countDown <= 0 ? 0 : countDown.intValue();
+    }
+    
+    @Override
+    public void share(Long userId, Integer minutes) {
+        TopListDO topListDO = topListDAO.getValidByUserId(userId, TopListPositionEnum.分享.getCode());
+        UserDO user = getById(userId);
+        if(user == null) {
+            return;
+        }
+        Date expire = DateTools.today();
+        if(topListDO!=null && topListDO.getGmtEnd()!=null && topListDO.getGmtEnd().after(expire)){
+            topListDAO.expire(userId, TopListPositionEnum.分享.getCode());
+        }
+        Date gmtEnd = DateTools.addMinute(expire, minutes);
+        TopListDO forCreate = new TopListDO();
+        forCreate.setGmtStart(expire);
+        forCreate.setGmtEnd(gmtEnd);
+        forCreate.setUserId(userId);
+        forCreate.setOpenId(user.getOpenId());
+        forCreate.setPosition(TopListPositionEnum.分享.getCode());
+        topListDAO.insert(forCreate);
     }
 
     @Override
