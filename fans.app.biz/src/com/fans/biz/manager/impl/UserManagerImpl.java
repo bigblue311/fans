@@ -136,12 +136,14 @@ public class UserManagerImpl implements UserManager{
     public List<UserDO> getTopUsers(String openId) {
         UserDO top1 = getRandom(openId, TopListPositionEnum.充值.getCode());
         UserDO top2 = getRandom("", TopListPositionEnum.充值.getCode());
+        UserDO top3 = getRandom(openId, TopListPositionEnum.分享.getCode());
+        UserDO top4 = getRandom("", TopListPositionEnum.分享.getCode());
+        List<UserDO> list = Lists.newArrayList(top1,top2,top3,top4);
         List<UserDO> result = Lists.newArrayList();
-        if(!contains(result, top1)){
-            result.add(top1);
-        }
-        if(!contains(result, top2)){
-            result.add(top2);
+        for(UserDO userDO : list){
+            if(!contains(result, userDO)){
+                result.add(userDO);
+            }
         }
         return result;
     }
