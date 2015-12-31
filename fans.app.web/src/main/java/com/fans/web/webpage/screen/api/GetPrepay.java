@@ -92,7 +92,7 @@ public class GetPrepay extends RequestSessionBase{
     	wxPayRequest.setDescription(topupType.getDesc());
     	wxPayRequest.setNotifyUrl("http://wxt.wetuan.com/wxCallback.htm");
     	wxPayRequest.setTradeNo(topupDO.getUuid());
-    	if(systemConfigCache.getSwitch(SystemConfigKeyEnum.SYSTEM_DEBUG_MODE.getCode())){
+    	if(systemConfigCache.getSwitch(SystemConfigKeyEnum.DEBUG_MODE.getCode())){
     		//测试模式下, 只交易1分钱
     		wxPayRequest.setTotalFee(new BigDecimal(1));
     	} else {

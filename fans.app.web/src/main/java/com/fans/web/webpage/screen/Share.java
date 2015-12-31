@@ -29,11 +29,11 @@ public class Share extends RequestSessionBase{
     public void execute(Context context){
         UserDO userDO = RequestSession.userDO();
         
-        String shareTitle = systemConfigCache.getCacheString(SystemConfigKeyEnum.SYSTEM_CONFIG_SHARE_TITLE.getCode(), "[name]躺着把粉加了");
+        String shareTitle = systemConfigCache.getCacheString(SystemConfigKeyEnum.SHARE_TITLE.getCode(), "[name]躺着把粉加了");
         if(userDO != null && shareTitle.contains("[name]")){
             shareTitle = shareTitle.replace("[name]", userDO.getNickName());
         }
-        String shareImg = systemConfigCache.getCacheString(SystemConfigKeyEnum.SYSTEM_CONFIG_SHARE_IMG.getCode(), defaultImg);
+        String shareImg = systemConfigCache.getCacheString(SystemConfigKeyEnum.SHARE_IMG.getCode(), defaultImg);
         context.put("shareTitle", shareTitle);
         context.put("shareImg", shareImg);
         

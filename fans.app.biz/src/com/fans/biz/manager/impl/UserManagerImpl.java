@@ -85,7 +85,7 @@ public class UserManagerImpl implements UserManager{
         if(userDO == null || userDO.getGmtRefresh() == null){
             return false;
         }
-        Integer interval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_REFRESH_INTERVAL.getCode(),10);
+        Integer interval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.REFRESH_INTERVAL.getCode(),10);
         return DateTools.canRefresh(interval, userDO.getGmtRefresh());
     }
 
@@ -94,7 +94,7 @@ public class UserManagerImpl implements UserManager{
         if(userDO == null || userDO.getGmtRefresh() == null){
             return 0;
         }
-        Integer interval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_REFRESH_INTERVAL.getCode(),10);
+        Integer interval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.REFRESH_INTERVAL.getCode(),10);
         Calendar cal = Calendar.getInstance();
         cal.setTime(userDO.getGmtRefresh());
         cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + interval);
@@ -122,6 +122,14 @@ public class UserManagerImpl implements UserManager{
         forCreate.setOpenId(user.getOpenId());
         forCreate.setPosition(TopListPositionEnum.分享.getCode());
         topListDAO.insert(forCreate);
+    }
+    
+    @Override
+    public Integer getTodayShareCount(Long userId) {
+        TopListQueryCondition queryCondition = new TopListQueryCondition();
+        queryCondition.setUserId(userId).setGmtModifyStart(DateTools.getDayBegin(DateTools.today()))
+        .setGmtModifyEnd(DateTools.getDayEnd(DateTools.today())).setPosition(TopListPositionEnum.分享.getCode());
+        return topListDAO.getCount(queryCondition);
     }
 
     @Override

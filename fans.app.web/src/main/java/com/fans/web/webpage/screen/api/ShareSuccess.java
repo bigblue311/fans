@@ -34,7 +34,14 @@ public class ShareSuccess extends RequestSessionBase{
             return Result.newInstance("用户不存在", "用户不存在", false);
         }
         
-        Integer minutes = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_CONFIG_SHARE_INTERVAL.getCode(), 30);
+        Integer max = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_MAX.getCode(), 3);
+        
+        Integer shareCount = userManager.getTodayShareCount(userDO.getId());
+        if(shareCount!=null && shareCount >= max){
+            return Result.newInstance("一天最多只能分享置顶"+max+"次哦", "分享置顶成功", false);
+        }
+        
+        Integer minutes = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_INTERVAL.getCode(), 30);
         userManager.share(userDO.getId(), minutes);
         
         return Result.newInstance("成功分享, 获得置顶"+minutes+"分钟", "分享置顶成功", true);

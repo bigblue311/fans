@@ -35,7 +35,7 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 		try {
 		    
 		    String openId = super.getOpenId(request);
-		    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.SYSTEM_DEBUG_MODE.getCode())){
+		    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.DEBUG_MODE.getCode())){
 		        if(StringTools.isEmpty(openId)){
 		            openId = "ogOTHwaJi6KDLOjDu-59Nze0YW8M";
 		            super.setOpenId(response, openId);

@@ -54,6 +54,7 @@ public interface UserManager {
 	 * @param minutes
 	 */
 	void share(Long userId, Integer minutes);
+	Integer getTodayShareCount(Long userId);
 	
 	/**
 	 * 根据查询条件获取

@@ -22,9 +22,9 @@ public class PriceManagerImpl implements PriceManager{
 	
 	@Override
 	public Integer topupM2C(Integer money) {
-		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_MONEY_COINS_RATIO.getCode(),11);
+		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.MONEY_COINS_RATIO.getCode(),11);
 		Integer price = money * ratio;
-		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.SYSTEM_TOPUP_PROMOTE);
+		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.TOPUP_PROMOTE);
 		for(PromteBO promteBO : list){
 			if(promteBO.match(money)){
 				return promteBO.afterDiscount(price);
@@ -35,9 +35,9 @@ public class PriceManagerImpl implements PriceManager{
 	
 	@Override
 	public Integer buyVipUseCoins(Integer month) {
-		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_VIP_COINS_PER_MONTH.getCode(),200);
+		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.VIP_COINS_PER_MONTH.getCode(),200);
 		Integer price = month * ratio;
-		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.SYSTEM_MEMBER_PROMOTE);
+		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.MEMBER_PROMOTE);
 		for(PromteBO promteBO : list){
 			if(promteBO.match(month)){
 				return promteBO.afterDiscount(price);
@@ -48,9 +48,9 @@ public class PriceManagerImpl implements PriceManager{
 
 	@Override
 	public Integer buyVipUseMoney(Integer month) {
-		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_VIP_MONEY_PER_MONTH.getCode(),20);
+		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.VIP_MONEY_PER_MONTH.getCode(),20);
 		Integer price = month * ratio;
-		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.SYSTEM_MEMBER_PROMOTE);
+		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.MEMBER_PROMOTE);
 		for(PromteBO promteBO : list){
 			if(promteBO.match(month)){
 				return promteBO.afterDiscount(price);
@@ -61,9 +61,9 @@ public class PriceManagerImpl implements PriceManager{
 
 	@Override
 	public Integer buyZhuangBUseCoins(Integer minute) {
-		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_TOP_COINS_PER_MINUTE.getCode(),20);
+		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.TOP_COINS_PER_MINUTE.getCode(),20);
 		Integer price = minute * ratio;
-		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.SYSTEM_ROCKET_PROMOTE);
+		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.ROCKET_PROMOTE);
 		for(PromteBO promteBO : list){
 			if(promteBO.match(minute)){
 				return promteBO.afterDiscount(price);
@@ -74,9 +74,9 @@ public class PriceManagerImpl implements PriceManager{
 
 	@Override
 	public Integer buyZhuangBUseMoney(Integer minute) {
-		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SYSTEM_TOP_MONEY_PER_MINUTE.getCode(),20);
+		Integer ratio = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.TOP_MONEY_PER_MINUTE.getCode(),20);
 		Integer price = minute * ratio;
-		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.SYSTEM_ROCKET_PROMOTE);
+		List<PromteBO> list = getPromteList(SystemConfigKeyEnum.ROCKET_PROMOTE);
 		for(PromteBO promteBO : list){
 			if(promteBO.match(minute)){
 				return promteBO.afterDiscount(price);
@@ -88,8 +88,8 @@ public class PriceManagerImpl implements PriceManager{
 	@Override
 	public List<PriceSetBO> getTopupSet() {
 		List<PriceSetBO> list = Lists.newArrayList();
-		List<Integer> topupList = getSetList(SystemConfigKeyEnum.SYSTEM_TOPUP_SET);
-		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.SYSTEM_TOPUP_PROMOTE);
+		List<Integer> topupList = getSetList(SystemConfigKeyEnum.TOPUP_SET);
+		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.TOPUP_PROMOTE);
 		if(CollectionTools.isNotEmpty(topupList)){
 			for(Integer topupCash : topupList){
 				PriceSetBO priceSetBO = new PriceSetBO();
@@ -114,8 +114,8 @@ public class PriceManagerImpl implements PriceManager{
 	@Override
 	public List<PriceSetBO> getVipSet() {
 		List<PriceSetBO> list = Lists.newArrayList();
-		List<Integer> vipList = getSetList(SystemConfigKeyEnum.SYSTEM_MEMBER_SET);
-		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.SYSTEM_MEMBER_PROMOTE);
+		List<Integer> vipList = getSetList(SystemConfigKeyEnum.MEMBER_SET);
+		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.MEMBER_PROMOTE);
 		if(CollectionTools.isNotEmpty(vipList)){
 			for(Integer month : vipList){
 				Integer cash = buyVipUseMoney(month);
@@ -145,8 +145,8 @@ public class PriceManagerImpl implements PriceManager{
 	@Override
 	public List<PriceSetBO> getZhuangBSet() {
 		List<PriceSetBO> list = Lists.newArrayList();
-		List<Integer> rocketList = getSetList(SystemConfigKeyEnum.SYSTEM_ROCKET_SET);
-		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.SYSTEM_ROCKET_PROMOTE);
+		List<Integer> rocketList = getSetList(SystemConfigKeyEnum.ROCKET_SET);
+		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.ROCKET_PROMOTE);
 		if(CollectionTools.isNotEmpty(rocketList)){
 			for(Integer minute : rocketList){
 				Integer cash = buyZhuangBUseMoney(minute);
