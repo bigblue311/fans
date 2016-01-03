@@ -67,6 +67,7 @@ function shareSuccess(){
 				  return;
 			  } else {
 				  alert(res.dataObject);
+				  window.location.href="/index.htm";
 				  return;
 			  }
 		  }
