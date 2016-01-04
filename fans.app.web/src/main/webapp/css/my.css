@@ -1,0 +1,78 @@
+.order_box {
+	background: #fff;
+}
+
+.table_box2 i.tx {
+	-webkit-transform: rotate(-45deg);
+	right: 4px;
+	top: 40px;
+}
+
+.table_box2 i {
+	-webkit-transform: rotate(-45deg);
+	right: 4px;
+}
+
+.mar_rt {
+	margin-right: 20px;
+}
+
+.hg {
+	line-height: 2.5rem;
+}
+
+.hg input {
+	vertical-align: middle;
+	width: auto;
+}
+
+.pe_detail {
+	padding: 0px 10px;
+}
+
+.pe_detail  h2 {
+	color: #000;
+	margin-bottom: 10px;
+}
+
+body {
+	background: #F6F6F6;
+}
+
+.protocol {
+	padding: 15px 10px 0px 10px;
+}
+
+.protocol  span {
+	color: #E5247C;
+}
+
+.suc {
+	color: #E5006C;
+}
+
+.gary {
+	color: #9E9E9E;
+}
+
+.file input {
+	position: absolute;
+	font-size: 100px;
+	right: 0;
+	top: 0;
+	opacity: 0;
+	width: 100px;
+	height: 24px;
+}
+/*.table_box2 .dd1 { width: auto;}*/
+.head_portraits_file input {
+	height: 100px;
+}
+
+.choose {
+	color: #333;
+}
+
+.padded1 {
+	padding: 10px 0px;
+}

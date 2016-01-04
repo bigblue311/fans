@@ -1,141 +1,233 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="css/new_pro.css">
+		<link rel="stylesheet" href="css/ectouch.css">
+		<link rel="stylesheet" href="css/layer.css" />
+		<link rel="stylesheet" href="css/my.css" />
+</head>
 #set ($userGroup = $form.user.defaultInstance)
-<form id='form_headImg_uploader' method='post' enctype='multipart/form-data' class="am-form am-form-horizontal">
-	<fieldset>
-		<legend>个人头像<a href="/index.htm" style="float:right;font-size:smaller">返回</a></legend>
-		<img src="$!{user.headImg}" class="am-img-thumbnail" id="headImgShow" style="width:75px;height:75px;float:left;">
-		<div style="float:left;padding-left:10px;width:70%">
-			<div style="clear:both">
-				金币<span class="am-badge am-badge-warning am-round" style="margin-left:10px;">$!user.coins</span>
-				<span style="float:right"><a href="#" onclick="showTopup()">充值</a></span>
+<body>
+	<section class="order_box padd1" style="padding-top: 0; padding-bottom: 0;">
+		<div class="table_box table_box2">
+			<dl>
+				<dd class="right">
+					<a href="/index.htm">取消</a>
+				</dd>
+			</dl>
+			<dl>
+				<dd class="dd1">修改头像</dd>
+				<dd class="padded">
+					<form id='form_headImg_uploader' method='post' enctype='multipart/form-data'>
+					<img src="$!{user.headImg}" class="head_portraits" id="headImgShow" /> 
+					<a href="javascript:;" class="file head_portraits_file">
+						<input type="file" class="imgUploader" name="Filedata"
+						show="headImgShow" text="headImgText" form="form_headImg_uploader" multiple="multiple"/>
+					</a>
+					</form>
+				</dd>
+			</dl>
+			<dl>
+				<dd class="dd1">微信二维码</dd>
+				<dd class="padded">
+				<form id='form_qrcode_uploader' method='post' enctype='multipart/form-data'>
+					<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
+					<a href="javascript:;" class="mar_rt suc file">
+						<input type="file" class="imgUploader" name="Filedata"
+						show="qrcodeShow" text="qrcodeText" form="form_qrcode_uploader" multiple="multiple"/>
+					</a>
+				</form>
+				</dd>
+			</dl>
+			<dl>
+				<dd class="dd1" style="width: auto;">
+					微信群二维码 <span class="gary">[可选项]</span>
+				</dd>
+				<dd class="padded">
+				<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data' s>
+					<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />
+					<a href="javascript:;" class="mar_rt suc file">
+						<input type="file" class="imgUploader" name="Filedata"
+						show="groupQrcodeShow" text="groupQrcodeText" form="form_groupQrcode_uploader" multiple="multiple"/>
+					</a>
+				</form>
+				</dd>
+			</dl>
+		</div>
+	</section>
+	<div class="blank3"></div>
+	<form action="/my.htm" method="post" id="myForm">
+		$csrfToken.hiddenField
+		<input type="hidden" name="$!userGroup.id.key" value="$!{user.id}"/>
+		<input type="hidden" name="$!userGroup.headImg.key" value="$!{user.headImg}" id="headImgText"/>
+		<input type="hidden" name="$!userGroup.qrcode.key" value="$!{user.qrcode}" id="qrcodeText"/>
+		<input type="hidden" name="$!userGroup.groupQrcode.key" value="$!{user.groupQrcode}" id="groupQrcodeText"/>
+		<input type="hidden" name="action" value="userAction"/>
+		<input type="hidden" name="event_submit_do_update" value="true"/>
+		<section class="order_box padd1 " style="padding-top: 0; padding-bottom: 0;">
+			<div class="table_box table_box2">
+				<dl>
+					<dd class="dd1">ID</dd>
+					<dd>
+						<input type="text"
+				    	size="25" 
+				    	class="dd2 form-control"
+				    	value="$!{user.id}" disabled/>
+					</dd>
+				</dl>
+				<dl>
+					<dd class="dd1">昵称</dd>
+					<dd>
+						<input type="text" placeholder="昵称" 
+				    	name="$!userGroup.nickName.key"
+				    	size="25" 
+				    	class="dd2 form-control"
+				    	value="$!{user.nickName}"/>
+					</dd>
+				</dl>
+				#if($!user.isVip())
+				<dl>
+					<dd class="dd1">会员</dd>
+					<dd>
+						<input type="text" 
+					    	size="25" 
+					    	class="dd2 form-control"
+					    	value="$dateTools.DateToStringSimple($!user.gmtVipExpire)" disabled/>
+					</dd>
+				</dl>
+				<dl>
+					<dd class="dd1">积分</dd>
+					<dd>
+						<input type="text" 
+					    	size="25" 
+					    	class="dd2 form-control"
+					    	value="$!user.coins" disabled/>
+					</dd>
+				</dl>
+				#end
+				<dl>
+					<dd class="dd1">电话</dd>
+					<dd>
+						<input type="text" placeholder="联系电话" 
+				    	name="$!userGroup.phone.key"
+				    	size="25" 
+				    	class="dd2 form-control"
+				    	value="$!{user.phone}"/>
+				    </dd>
+				</dl>
+				<dl>
+					<dd class="dd1">微信</dd>
+					<dd>
+						<input type="text" placeholder="微信" 
+				    	name="$!userGroup.weixinId.key"
+				    	size="25" 
+				    	class="dd2 form-control"
+				    	value="$!{user.weixinId}"/>
+				    </dd>
+				</dl>
+				<dl>
+					<dd class="dd1">性别</dd>
+					<dd class="hg">
+						<input type="radio" name="$!userGroup.gender.key" value="0" #if($!user.gender == "0")checked#end> 男 
+						<input type="radio" name="$!userGroup.gender.key" value="1" #if($!user.gender == "1")checked#end> 女
+					</dd>
+				</dl>
 			</div>
-			<div style="clear:both">
-				会员<span class="am-badge #if($!user.isVip()) am-badge-success #else am-badge-danger #end am-round" style="margin-left:10px;">$dateTools.DateToStringSimple($!user.gmtVipExpire)</span>
-				<span style="float:right"><a href="#" onclick="showMembership()">续期</a></span>
+		</section>
+
+		<!--  -->
+		<div class="padded1" style="background: #fff;">
+			<div class="form-group" style="margin-bottom: 0px;">
+				<label for="exampleInputName2" class="choose"
+					style="vertical-align: bottom; padding: 0px 5px;">地区筛选</label>
+				<div class="dropdown verticals">
+					<div class="dropdown">
+						<select id="q_province" name="$!userGroup.province.key" class="dropdown-select"></select>
+					</div>
+				</div>
+				&nbsp;&nbsp;
+				<div class="dropdown verticals">
+					<div class="dropdown">
+						<select id="q_city" name="$!userGroup.city.key" class="dropdown-select"></select>&nbsp;&nbsp;
+						<select id="q_twon" style="display:none;"></select>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="am-form-group am-form-file" style="clear:both">
-			<button type="button" class="am-btn am-btn-danger am-btn-sm" id="headImgBtn">
-				<i class="am-icon-cloud-upload"></i> 上传
-			</button>
-			<input type="file" class="imgUploader" name="Filedata"
-			show="headImgShow" text="headImgText" form="form_headImg_uploader" multiple="multiple"/>
-	  	</div>
-  	</fieldset>
-</form>
-<form action="/my.htm" method="post" class="am-form am-form-horizontal" id="myForm">
-	$csrfToken.hiddenField
-	<input type="hidden" name="$!userGroup.id.key" value="$!{user.id}"/>
-	<input type="hidden" name="$!userGroup.headImg.key" value="$!{user.headImg}" id="headImgText"/>
-	<input type="hidden" name="$!userGroup.qrcode.key" value="$!{user.qrcode}" id="qrcodeText"/>
-	<input type="hidden" name="$!userGroup.groupQrcode.key" value="$!{user.groupQrcode}" id="groupQrcodeText"/>
-	<input type="hidden" name="action" value="userAction"/>
-	<input type="hidden" name="event_submit_do_update" value="true"/>
-	<fieldset>
-	  <legend>个人信息</legend>
-	  <div class="am-form-group">
-	    <input type="text" placeholder="昵称" 
-	    	name="$!userGroup.nickName.key"
-	    	class="am-form-field" style="width:200px; float:left;"
-	    	value="$!{user.nickName}"/>
-	    <select name="$!userGroup.gender.key" style="width:112px; float:left; margin-left:10px;">
-	    	<option #if($!user.gender == "")selected#end value="">性别</option>
-	    	<option #if($!user.gender == "0")selected#end value="0">男</option>
-	    	<option #if($!user.gender == "1")selected#end value="1">女</option>
-	    </select>
-	  </div>
-	  <div class="am-form-group">
-	    	<select id="q_province" name="$!userGroup.province.key" style="width:200px; float:left;"></select>
-         	<select id="q_city" name="$!userGroup.city.key" style="width:112px; float:left; margin-left:10px;"></select>
-         	<select id="q_twon" style="display:none;"></select>
-	  </div>
-	  <div class="am-form-group">
-	  	<label>联系电话</label>
-	    <input type="text" placeholder="联系电话" 
-	    	name="$!userGroup.phone.key"
-	    	class="am-form-field" 
-	    	value="$!{user.phone}"/>
-	  </div>
-	  <div class="am-form-group">
-	  	<label>微信ID</label>
-	    <input type="text" placeholder="微信ID" 
-	    	name="$!userGroup.weixinId.key"
-	    	class="am-form-field" 
-	    	value="$!{user.weixinId}"/>
-	  </div>
-	  <div class="am-form-group">
-	  	<label>个人签名</label>
-	    <input type="text" placeholder="个人签名,描述信息" 
-	    	name="$!userGroup.description.key"
-	    	class="am-form-field" 
-	    	value="$!{user.description}"/>
-	  </div>
-	</fieldset>
-</form>
-<form id='form_qrcode_uploader' method='post' enctype='multipart/form-data' class='form-horizontal'>
-	<fieldset>
-		<legend>个人二维码<font color="grey" size="3" style="margin-left:20px">#if($!user.qrcode)空着的话,就无法被搜索到哦#else正方形的图片效果最佳#end</font></legend>
-		<img src="$!{user.qrcode}" class="am-img-thumbnail" id="qrcodeShow" style='max-width:200px;max-height:200px;'>
-		<div class="am-form-group am-form-file">
-			<button type="button" class="am-btn am-btn-danger am-btn-sm" id="qrcodeBtn">
-				<i class="am-icon-cloud-upload"></i> 上传
-			</button>
-			<input type="file" class="imgUploader" name="Filedata"
-			show="qrcodeShow" text="qrcodeText" form="form_qrcode_uploader" multiple="multiple"/>
-	  	</div>
-  	</fieldset>
-</form>
-<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data' class='form-horizontal'>
-	<fieldset>
-		<legend>群聊二维码<font color="grey" size="3" style="margin-left:20px">#if($!user.qrcode)空着的话,就无法被搜索到哦#else正方形的图片效果最佳#end</font></legend>
-		<img src="$!{user.groupQrcode}" class="am-img-thumbnail" id="groupQrcodeShow" style='max-width:200px;max-height:200px;'>
-		<div class="am-form-group am-form-file">
-			<button type="button" class="am-btn am-btn-danger am-btn-sm" id="groupQrcodeBtn">
-				<i class="am-icon-cloud-upload"></i> 上传
-			</button>
-			<input type="file" class="imgUploader" name="Filedata"
-			show="groupQrcodeShow" text="groupQrcodeText" form="form_groupQrcode_uploader" multiple="multiple"/>
-	  	</div>
-  	</fieldset>
-</form>
-<form class="am-form am-form-horizontal">
-	<fieldset>
-	  <div class="am-form-group">
-	    <button type="button" id="submitBtn" class="am-btn am-btn-primary am-fl">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
-	    <a href="/index.htm" class="am-fr">&nbsp;&nbsp;取消&nbsp;&nbsp;</a>
-	  </div>
-	</fieldset>
-</form>
-<script>
-	jQuery(function(){
-		showLocation('q_province','q_city','q_twon','$!{user.province}','$!{user.city}','');
-		
-		$('#submitBtn').click(function(){
-			$('#myForm').submit();
-		});
-		
-		$('.imgUploader').on('change', function() {
-			var form = jQuery(this).attr("form");
-			var show = jQuery(this).attr("show");
-			var text = jQuery(this).attr("text");
-			$.ajax({
-				  url: '/api/fileService.json',
-				  type: 'POST',
-				  data: new FormData($('#'+form)[0]),
-				  async: false,
-				  cache: false,
-				  contentType: false,
-				  processData: false,
-				  success: function(data){
-					  if(data.success){
-						jQuery("#"+show).attr("src", data.dataObject);
-						jQuery("#"+text).val(data.dataObject);
-					  }else{
-						alert(data.message);
-					  }
-				  },
-				  dataType: "json"
+		<!--  -->
+		<div class="blank3"></div>
+		<input name="act" type="hidden" value="act_edit_profile" />
+
+		<div class="pe_detail">
+			<h2>
+				个人微信描述 <span class="gary">[必填项]</span>
+			</h2>
+			<textarea class="form-control" name="$!userGroup.description.key" cols="30" rows="4"
+				placeholder="请填写个人微信描述信息">$!{user.description}</textarea>
+			<div class="blank2"></div>
+			<h2>
+				微信群描述 <span class="gary">[可选项]</span>
+			</h2>
+			<textarea class="form-control" name="$!userGroup.groupDescription.key" cols="30" rows="4"
+				placeholder="请填写微信群描述">$!{user.groupDescription}</textarea>
+		</div>
+
+		<p class="protocol">
+			提交即接受<span>《VIP会员服务协议》和《平台许可及服务协议》</span>
+		</p>
+
+		<div class="blank1"></div>
+
+		<div style="padding: 10px 36px 0px 36px;">
+			<button id="submitBtn" class="btn btn-pink btn-lg">立&nbsp;即&nbsp;上&nbsp;传</button>
+		</div>
+
+		<div class="blank3"></div>
+		<div class="blank3"></div>
+	</form>
+	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="js/layer.m.js"></script>
+	<script type="text/javascript" src="/js/Location/location.js"></script>
+	<script>
+		jQuery(function(){
+			showLocation('q_province','q_city','q_twon','$!{user.province}','$!{user.city}','');
+			
+			$('#submitBtn').click(function(){
+				$('#myForm').submit();
 			});
-	    });
-	});
-</script>
+			
+			$('.imgUploader').on('change', function() {
+				var form = jQuery(this).attr("form");
+				var show = jQuery(this).attr("show");
+				var text = jQuery(this).attr("text");
+				$.ajax({
+					  url: '/api/fileService.json',
+					  type: 'POST',
+					  data: new FormData($('#'+form)[0]),
+					  async: false,
+					  cache: false,
+					  contentType: false,
+					  processData: false,
+					  success: function(data){
+						  if(data.success){
+							jQuery("#"+show).attr("src", data.dataObject);
+							jQuery("#"+text).val(data.dataObject);
+						  }else{
+							alert(data.message);
+						  }
+					  },
+					  dataType: "json"
+				});
+		    });
+		});
+	</script>
+</body>
+</html>

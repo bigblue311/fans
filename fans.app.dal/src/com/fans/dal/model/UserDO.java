@@ -22,6 +22,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String province;            //省
     private String city;                //市
     private String description;         //描述
+    private String groupDescription;    //群描述
     private String weixinId;            //微信ID
     private Integer coins;				//金币
     private Date gmtRefresh;            //置顶刷新时间
@@ -86,6 +87,12 @@ public class UserDO extends EntityDO implements Serializable{
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public String getGroupDescription() {
+        return groupDescription;
+    }
+    public void setGroupDescription(String groupDescription) {
+        this.groupDescription = groupDescription;
     }
     public String getWeixinId() {
         return weixinId;

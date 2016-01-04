@@ -9,24 +9,25 @@
   <typeAlias alias="User" type="com.fans.dal.model.UserDO"/>
 
   <resultMap id="RM" class="User">
-    <result property="id" 			column="id"/>
-    <result property="gmtCreate" 	column="gmt_create"/>
-    <result property="gmtModify" 	column="gmt_modify"/>
-    <result property="openId" 		column="open_id"/>
-    <result property="nickName" 	column="nick_name"/>
-    <result property="phone" 		column="phone"/>
-    <result property="headImg" 		column="head_img"/>
-    <result property="gender" 		column="gender"/>
-    <result property="qrcode" 		column="qrcode"/>
-    <result property="groupQrcode" 	column="group_qrcode"/>
-    <result property="province" 	column="province"/>
-    <result property="city" 		column="city"/>
-    <result property="description" 	column="description"/>
-    <result property="weixinId" 	column="weixin_id"/>
-    <result property="coins" 		column="coins"/>
-    <result property="gmtRefresh" 	column="gmt_refresh"/>
-    <result property="gmtVipExpire" column="gmt_vip_expire"/>
-    <result property="isTest" 		column="is_test"/>
+    <result property="id" 					column="id"/>
+    <result property="gmtCreate" 			column="gmt_create"/>
+    <result property="gmtModify" 			column="gmt_modify"/>
+    <result property="openId" 				column="open_id"/>
+    <result property="nickName" 			column="nick_name"/>
+    <result property="phone" 				column="phone"/>
+    <result property="headImg" 				column="head_img"/>
+    <result property="gender" 				column="gender"/>
+    <result property="qrcode" 				column="qrcode"/>
+    <result property="groupQrcode" 			column="group_qrcode"/>
+    <result property="province" 			column="province"/>
+    <result property="city" 				column="city"/>
+    <result property="description" 			column="description"/>
+    <result property="groupDescription" 	column="group_description"/>
+    <result property="weixinId" 			column="weixin_id"/>
+    <result property="coins" 				column="coins"/>
+    <result property="gmtRefresh" 			column="gmt_refresh"/>
+    <result property="gmtVipExpire" 		column="gmt_vip_expire"/>
+    <result property="isTest" 				column="is_test"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="User">
@@ -44,6 +45,7 @@
 	    province,
 	    city,
 	    description,
+	    group_description,
 	    weixin_id,
 	    coins,
 	    gmt_refresh,
@@ -53,7 +55,7 @@
 	    now(), now(),
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
-	    #weixinId#, #coins#, now(), now(), #isTest#
+	    #groupDescription#, #weixinId#, #coins#, now(), now(), #isTest#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -107,6 +109,11 @@
 	      <isNotEmpty property="description">  
 	         <![CDATA[   
 	           description = #description#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="groupDescription">  
+	         <![CDATA[   
+	           group_description = #groupDescription#,
 	         ]]> 
 	      </isNotEmpty>
 	      <isNotEmpty property="weixinId">  
@@ -176,19 +183,19 @@
 	           city = #city#
 	         ]]> 
 	      	</isNotNull>
-	      	<isNotNull property="description" prepend="and">  
-	         <![CDATA[   
-	           (description like concat('%',#description#,'%') 
-	           		or 
-	           	nick_name like concat('%',#description#,'%'))
-	         ]]> 
-	      	</isNotNull>
 	      	<isEqual property="searchType" compareValue="0">
 	      		<isNotNull property="valid" prepend="and">
 			    	<![CDATA[
-		        	qrcode is not null 
+		        		qrcode is not null 
 		        	 ]]>
 	        	</isNotNull>
+	        	<isNotNull property="description" prepend="and">  
+			         <![CDATA[   
+			           (description like concat('%',#description#,'%') 
+			           		or 
+			           	nick_name like concat('%',#description#,'%'))
+			         ]]> 
+			     </isNotNull>
 	      	</isEqual>
 	      	<isEqual property="searchType" compareValue="1">
 	      		<isNotNull property="valid" prepend="and">
@@ -196,6 +203,13 @@
 		        	group_qrcode is not null 
 		        	 ]]>
 	        	</isNotNull>
+	        	<isNotNull property="description" prepend="and">  
+			         <![CDATA[   
+			           (group_description like concat('%',#description#,'%') 
+			           		or 
+			           	nick_name like concat('%',#description#,'%'))
+			         ]]> 
+			    </isNotNull>
 	      	</isEqual>
 		    <isNotNull property="gmtCreateStart" prepend="and">
 		    	<![CDATA[

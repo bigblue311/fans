@@ -1,0 +1,160 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	text-decoration: none;
+}
+
+body {
+	background: #f7f7f6;
+	font-family: "Hiragino Sans GB", "Microsoft Yahei", arial, \5b8b\4f53,
+		"Helvetica Neue", Helvetica, STHeiTi, sans-serif !important;
+	max-width: 640px;
+	margin: 0px auto;
+	font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
+}
+
+del {
+	text-decoration: line-through !important;
+}
+
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.sjdp {
+	padding: 0px;
+}
+
+.btn {
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.btn-pink {
+	background-color: #E6247D;
+	border-color: #E6247D;
+	color: #fff;
+}
+
+.ele_inline {
+	display: inline-block;
+}
+
+.pink {
+	color: #E7247D;
+}
+
+.house_img {
+	width: 30px !important;
+	height: auto !important;
+}
+
+.padded {
+	padding: 10px 15px 0px 15px;
+}
+
+.btn {
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px
+}
+
+.btn-pink {
+	color: #fff;
+	background: #E5006C;
+	border-color: #E5006C;
+}
+
+.btn-lg {
+	width: 100%;
+	font-weight: bold;
+}
+
+.blank1 {
+	height: 0.3rem;
+	line-height: 0.3rem;
+	clear: both;
+	visibility: hidden;
+	background: #fff;
+}
+
+.blank2 {
+	height: 0.6rem;
+	line-height: 0.6rem;
+	clear: both;
+	visibility: hidden;
+}
+
+.blank3 {
+	height: 1rem;
+	line-height: 1rem;
+	clear: both;
+	visibility: hidden;
+}
+
+.member {
+	color: #B4181E;
+}
+
+.time_out {
+	color: #299FB8;
+}
+
+.line_h {
+	border: 0;
+	background-color: #ddd;
+	height: 1px;
+}
+
+.center {
+	text-align: center;
+}
+
+.padded10 {
+	padding: 0px 10px;
+}

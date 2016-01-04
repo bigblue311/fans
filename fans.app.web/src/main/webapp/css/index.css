@@ -1,0 +1,48 @@
+body {
+	max-width: 640px;
+	margin: 0px auto;
+}
+
+.iconfont {
+	font-size: 40px;
+	color: #fff;
+}
+
+div.icon {
+	height: 22px;
+	width: 22px;
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+	border-radius: 50%;
+	background: #E6257D;
+	vertical-align: middle;
+}
+
+div.icon div.plus {
+	width: 16px;
+	height: 2px;
+	background: #fff;
+	position: absolute;
+	left: 3px;
+	top: 11px;
+}
+
+div.icon div.plus:after {
+	content: '';
+	position: absolute;
+	width: 2px;
+	height: 18px;
+	background: #fff;
+	left: 7px;
+	top: -9px;
+}
+
+.add_fri {
+	color: #E5247C;
+	margin-top: 5px;
+}
+
+#top_don {
+	color: #ccc;
+}
