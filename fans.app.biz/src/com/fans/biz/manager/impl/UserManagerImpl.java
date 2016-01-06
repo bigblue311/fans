@@ -185,4 +185,9 @@ public class UserManagerImpl implements UserManager{
         }
         return userDAO.getById(topListDO.getUserId());
     }
+
+    @Override
+    public TopListDO getValidTop(Long userId,TopListPositionEnum position) {
+        return topListDAO.getValidByUserId(userId, position.getCode());
+    }
 }

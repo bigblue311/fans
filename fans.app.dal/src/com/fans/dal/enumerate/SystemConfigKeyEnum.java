@@ -21,7 +21,8 @@ public enum SystemConfigKeyEnum {
 	SHARE_INTERVAL("SHARE_INTERVAL","分享置顶时间"),
 	SHARE_TITLE("SHARE_TITLE","分享标题"),
 	SHARE_IMG("SHARE_IMG","分享图标"),
-	SHARE_MAX("SHARE_MAX","一天内最多分享置顶次数");
+	SHARE_MAX("SHARE_MAX","一天内最多分享置顶次数"),
+	WEIXIN_PAY("WEIXIN_PAY","微信支付开关 值ON/OFF 一旦开启将微信支付");
 	
 	private String code;
 	private String desc;

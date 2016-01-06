@@ -2,6 +2,8 @@ package com.fans.biz.manager;
 
 import java.util.List;
 
+import com.fans.dal.enumerate.TopListPositionEnum;
+import com.fans.dal.model.TopListDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.victor.framework.dal.basic.Paging;
@@ -69,6 +71,7 @@ public interface UserManager {
 	 * @return
 	 */
 	List<UserDO> getTopUsers(String openId);
+	TopListDO getValidTop(Long userId, TopListPositionEnum position);
 	
 	/**
 	 * 获取分页数据

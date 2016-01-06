@@ -93,26 +93,6 @@
 				    	value="$!{user.nickName}"/>
 					</dd>
 				</dl>
-				#if($!user.isVip())
-				<dl>
-					<dd class="dd1">会员</dd>
-					<dd>
-						<input type="text" 
-					    	size="25" 
-					    	class="dd2 form-control"
-					    	value="$dateTools.DateToStringSimple($!user.gmtVipExpire)" disabled/>
-					</dd>
-				</dl>
-				<dl>
-					<dd class="dd1">积分</dd>
-					<dd>
-						<input type="text" 
-					    	size="25" 
-					    	class="dd2 form-control"
-					    	value="$!user.coins" disabled/>
-					</dd>
-				</dl>
-				#end
 				<dl>
 					<dd class="dd1">电话</dd>
 					<dd>

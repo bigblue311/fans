@@ -139,10 +139,16 @@ del {
 
 .member {
 	color: #B4181E;
+	min-width: 100px;
+  	display: inline-block;
 }
 
-.time_out {
+.link_btn {
 	color: #299FB8;
+}
+
+.radio_item{
+	padding:10px;
 }
 
 .line_h {

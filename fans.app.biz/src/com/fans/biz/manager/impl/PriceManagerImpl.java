@@ -98,13 +98,13 @@ public class PriceManagerImpl implements PriceManager{
 				//设置优惠信息
 				for(PromteBO promteBO : promteList){
 					if(promteBO.match(topupCash)){
-						priceSetBO.setText(topupCash+"元 "+promteBO.getText());
+						priceSetBO.setText(topupCash+"元 "+topupM2C(topupCash)+"积分 "+promteBO.getText());
 					}
 				}
 				if(StringTools.isEmpty(priceSetBO.getText())){
-					priceSetBO.setText(topupCash+"元");
+					priceSetBO.setText(topupCash+"元 "+topupM2C(topupCash)+"积分 ");
 				}
-				priceSetBO.setCashMsg("确定充值"+topupCash+"元购买"+topupM2C(topupCash)+"金币?");
+				priceSetBO.setCashMsg("确定充值"+topupCash+"元购买"+topupM2C(topupCash)+"积分?");
 				list.add(priceSetBO);
 			}
 		}
@@ -128,13 +128,13 @@ public class PriceManagerImpl implements PriceManager{
 				//设置优惠信息
 				for(PromteBO promteBO : promteList){
 					if(promteBO.match(month)){
-						priceSetBO.setText(month+"天 "+coins+"金币或"+cash+"元 "+promteBO.getText());
+						priceSetBO.setText(month+"天 "+coins+"积分或"+cash+"元 "+promteBO.getText());
 					}
 				}
 				if(StringTools.isEmpty(priceSetBO.getText())){
-					priceSetBO.setText(month+"天 "+coins+"金币或"+cash+"元");
+					priceSetBO.setText(month+"天 "+coins+"积分或"+cash+"元");
 				}
-				priceSetBO.setCoinsMsg("确定花费"+coins+"金币 购买会员"+month+"天?");
+				priceSetBO.setCoinsMsg("确定花费"+coins+"积分 购买会员"+month+"天?");
 				priceSetBO.setCashMsg("确定花费"+cash+"元 购买会员"+month+"天?");
 				list.add(priceSetBO);
 			}
@@ -160,13 +160,13 @@ public class PriceManagerImpl implements PriceManager{
 				//设置优惠信息
 				for(PromteBO promteBO : promteList){
 					if(promteBO.match(minute)){
-						priceSetBO.setText(minute+"分钟 "+coins+"金币或"+cash+"元 "+promteBO.getText());
+						priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元 "+promteBO.getText());
 					}
 				}
 				if(StringTools.isEmpty(priceSetBO.getText())){
-					priceSetBO.setText(minute+"分钟 "+coins+"金币或"+cash+"元");
+					priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元");
 				}
-				priceSetBO.setCoinsMsg("确定花费"+coins+"金币 购买超级置顶"+minute+"分钟?");
+				priceSetBO.setCoinsMsg("确定花费"+coins+"积分 购买超级置顶"+minute+"分钟?");
 				priceSetBO.setCashMsg("确定花费"+cash+"元 购买超级置顶"+minute+"分钟?");
 				list.add(priceSetBO);
 			}

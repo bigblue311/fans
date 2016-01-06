@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="css/super_style.css" />
+</head>
+<body>
+	<div>
+		<img src="images/vip.jpg" alt="" width="100%">
+	</div>
+	<div class="padded">
+		<h2>VIP服务</h2>
+		<div class="blank2"></div>
+		#if($user.isVip())
+		<p>你已成功开通VIP。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
+		#else
+		<p>开通VIP。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
+		#end
+		<div class="blank2"></div>
+		<hr class="line_h">
+		<div class="blank2"></div>
+		<p>
+			会员ID ：<span class="member">$!user.id</span>
+		</p>
+		<div class="blank2"></div>
+		<div class="blank2"></div>
+		<p>
+			#if($user.isVip())
+			当前状态 ：<span class="member">VIP会员</span>
+			#else
+			当前状态 ：普通会员
+			#end
+		</p>
+		<div class="blank2"></div>
+		<div class="blank2"></div>
+		<p>
+			会员积分 ：<span class="member">$!user.coins</span> <span class="link_btn" for="topupDetail">购买积分</span>
+		</p>
+		<div class="blank2"></div>
+		<div id="topupDetail" style="display:none">
+			<ul>
+				#foreach($item in $!topupSet) 
+				<li class="radio_item" bind="topup">
+					<input type="radio" name="topupship"
+					#if($velocityCount ==1) checked #end
+					data1=""
+					cash="$item.value"
+			  		cashMsg="$!item.cashMsg"
+			  		coinsMsg="$!item.coinsMsg"> $item.text 
+			  	</li>
+				#end
+			</ul>
+			#if($!weixinSwitch)
+			<div class="padded10">
+			    <button class="btn btn-pink btn-lg pay" 
+			    	id="topupPayBtn"
+					_type="0" 
+			    	_data1="" 
+			    	_cash="10" 
+			    	_reUrl="/vip.htm" 
+			    	_msg="确定充值吗?">充值</button>
+			</div>
+			#else
+			<p>联系微信XXX客服,发送您的会员ID和金额</p>
+			#end
+		</div>
+		<div class="blank2"></div>
+		<p>
+			#if($user.isVip())
+			有效期至 ：<span class="member">$dateTools.DateToStringSimple($!user.gmtVipExpire)</span> <span class="link_btn" for="vipDetail">延长时间</span>
+			#else
+			有效期至 ：<span class="member">已过期</span> <span class="link_btn" for="vipDetail">开通VIP</span>
+			#end
+		</p>
+		<div class="blank2"></div>
+		<div id="vipDetail" style="display:none">
+			<ul>
+				#foreach($item in $!vipSet) 
+				<li class="radio_item" bind="vip">
+					<input type="radio" name="vipship"
+					#if($velocityCount ==1) checked #end
+					data1="$item.value"
+			  		cashMsg="$!item.cashMsg"
+			  		coinsMsg="$!item.coinsMsg"> $item.text 
+			  	</li>
+				#end
+				<li class="radio_item" show="vipBuyBtn" hide="vipPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
+				#if($!weixinSwitch)
+				<li class="radio_item" show="vipPayBtn" hide="vipBuyBtn"><input type="radio" name="payType"> 使用微信支付</li>
+				#end
+			</ul>
+			<div class="padded10">
+				<button class="btn btn-pink btn-lg buy" 
+					id="vipBuyBtn"
+					_type="1" 
+			    	_data1="1" 
+			    	_cash="" 
+			    	_reUrl="/vip.htm" 
+			    	_msg="确定购买会员吗?">开启VIP</button>
+			    #if($!weixinSwitch)
+			    <button class="btn btn-pink btn-lg pay" 
+			    	id="vipPayBtn"
+			    	style="display:none"
+					_type="1" 
+			    	_data1="1" 
+			    	_cash="" 
+			    	_reUrl="/vip.htm" 
+			    	_msg="确定购买会员吗?">开启VIP</button>
+			    #end
+			</div>
+		</div>
+		<div class="blank2"></div>
+		<hr class="line_h">
+		<div class="blank2"></div>
+		#if($user.isVip())
+		<h2>开启超级VIP固定置顶首位服务</h2>
+		<div class="blank2"></div> 
+ 		<p>1.在全国相应地区持续置顶第一条</p>
+ 		<div class="blank2"></div> 
+ 		<p>2.必须购买VIP会员</p>
+ 		<div class="blank2"></div> 
+ 		<p>3.名片置顶开始时间支付成功开始计算</p>
+ 		<div class="blank2"></div> 
+ 		<p>4.在置顶时间内继续购买,时间将累加</p>
+ 		<div class="blank2"></div> 
+ 		<p>5.数量有限，下单后不可退款</p>
+ 		<div class="blank2"></div> 
+ 		<hr class="line_h">
+ 		<div class="blank2"></div>
+ 		#if($!vipTop)
+ 		<p>当前状态 ：<span class="member">正在置顶中</span><span class="link_btn" for="rocketDetail">开启置顶</span></p>
+ 		<div class="blank2"></div>
+ 		<p>开始时间 ：$dateTools.DateToString($!vipTop.gmtStart)</p>
+ 		<div class="blank2"></div> 
+ 		<p>结束时间 ：$dateTools.DateToString($!vipTop.gmtEnd)</p>
+ 		<div class="blank2"></div> 
+ 		#else
+ 		<p>当前状态 ：<span class="member">尚未开始</span><span class="link_btn" for="rocketDetail">开启置顶</span></p>
+ 		<div class="blank2"></div>
+ 		#end
+ 		<div id="rocketDetail" style="display:none">
+			<ul>
+				#foreach($item in $!rocketSet) 
+				<li class="radio_item" bind="rocket">
+					<input type="radio" name="rocketship"
+					#if($velocityCount ==1) checked #end
+					data1="$item.value"
+			  		cashMsg="$!item.cashMsg"
+			  		coinsMsg="$!item.coinsMsg"> $item.text 
+			  	</li>
+				#end
+				<li class="radio_item" show="rocketBuyBtn" hide="rocketPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
+				#if($!weixinSwitch)
+				<li class="radio_item" show="rocketPayBtn" hide="rocketBuyBtn"><input type="radio" name="payType"> 使用微信支付</li>
+				#end
+			</ul>
+			<div class="padded10">
+				<button class="btn btn-pink btn-lg buy" 
+					id="rocketBuyBtn"
+					_type="2" 
+			    	_data1="1" 
+			    	_cash="" 
+			    	_reUrl="/index.htm" 
+			    	_msg="确定购买超级置顶吗?">开启VIP</button>
+			    #if($!weixinSwitch)
+			    <button class="btn btn-pink btn-lg pay" 
+			    	id="rocketPayBtn"
+			    	style="display:none"
+					_type="2" 
+			    	_data1="1" 
+			    	_cash="" 
+			    	_reUrl="/index.htm" 
+			    	_msg="确定购买超级置顶吗?">开启VIP</button>
+			    #end
+			</div>
+		</div>
+ 		<hr class="line_h">
+ 		<div class="blank2"></div> 
+		#end
+		<h2>分享置顶</h2>
+		<div class="blank2"></div> 
+ 		<p>1.在全国相应地区持续置顶第二条</p>
+ 		<div class="blank2"></div> 
+ 		<p>2.不购买VIP也可以</p>
+ 		<div class="blank2"></div> 
+ 		<p>3.一天最多分享$!shareMax次</p>
+ 		<div class="blank2"></div> 
+ 		<p>4.在置顶时间内继续分享,时间将累加</p>
+ 		<div class="blank2"></div> 
+ 		<p>今天分享 ：<span class="member">$!shareCount次</span><span class="link_btn"><a href="/share.htm">我要分享</a></span></p>
+ 		<div class="blank2"></div> 
+ 		<hr class="line_h">
+ 		<div class="blank2"></div>
+		<p class="center">超级VIP可以帮您短时间获取大量粉丝</p>
+		<div class="blank2"></div>
+	</div>
+	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="js/pay/coinspay.js"></script>
+	<script type="text/javascript" src="js/pay/weixinpay.js"></script>
+	<script>
+		$(function(){
+			$(".link_btn").click(function(){
+				var forItem = $(this).attr("for");
+				if(forItem!=null){
+					$("#"+forItem).toggle();
+				}
+			});
+			
+			$(".radio_item").click(function(){
+				var bind = $(this).attr("bind");
+				var show = $(this).attr("show");
+				var hide = $(this).attr("hide");
+				
+				var input = $(this).find("input");
+				input.attr("checked","true");
+				
+				if(show != ""){
+					$("#"+show).show();
+				}
+				if(hide != ""){
+					$("#"+hide).hide();
+				}
+				
+				if(bind != ""){
+					var data1 = $(input).attr("data1");
+					var coinsMsg = $(input).attr("coinsMsg");
+					var cashMsg = $(input).attr("cashMsg");
+					var cash = $(input).attr("cash");
+					$("#"+bind+"BuyBtn").attr("_data1",data1);
+					$("#"+bind+"BuyBtn").attr("_msg",coinsMsg);
+					$("#"+bind+"BuyBtn").attr("_cash",cash);
+					
+					$("#"+bind+"PayBtn").attr("_data1",data1);
+					$("#"+bind+"PayBtn").attr("_msg",cashMsg);
+					$("#"+bind+"PayBtn").attr("_cash",cash);
+				}
+			})
+		})
+	</script>
+</body>
+</html>
