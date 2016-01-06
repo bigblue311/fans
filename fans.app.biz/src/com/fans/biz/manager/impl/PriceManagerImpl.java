@@ -117,25 +117,33 @@ public class PriceManagerImpl implements PriceManager{
 		List<Integer> vipList = getSetList(SystemConfigKeyEnum.MEMBER_SET);
 		List<PromteBO> promteList = getPromteList(SystemConfigKeyEnum.MEMBER_PROMOTE);
 		if(CollectionTools.isNotEmpty(vipList)){
-			for(Integer month : vipList){
-				Integer cash = buyVipUseMoney(month);
-				Integer coins = buyVipUseCoins(month);
+			for(Integer day : vipList){
+				Integer cash = buyVipUseMoney(day);
+				Integer coins = buyVipUseCoins(day);
 				
 				PriceSetBO priceSetBO = new PriceSetBO();
-				priceSetBO.setValue(month);
+				priceSetBO.setValue(day);
 				priceSetBO.setCash(cash);
 				priceSetBO.setCoins(coins);
 				//设置优惠信息
 				for(PromteBO promteBO : promteList){
-					if(promteBO.match(month)){
-						priceSetBO.setText(month+"天 "+coins+"积分或"+cash+"元 "+promteBO.getText());
+					if(promteBO.match(day)){
+					    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode())){
+					        priceSetBO.setText(day+"天 "+coins+"积分或"+cash+"元 "+promteBO.getText());
+					    } else {
+					        priceSetBO.setText(day+"天 "+coins+"积分 "+promteBO.getText());
+					    }
 					}
 				}
 				if(StringTools.isEmpty(priceSetBO.getText())){
-					priceSetBO.setText(month+"天 "+coins+"积分或"+cash+"元");
+				    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode())){
+				        priceSetBO.setText(day+"天 "+coins+"积分或"+cash+"元");
+				    } else {
+				        priceSetBO.setText(day+"天 "+coins+"积分");
+				    }
 				}
-				priceSetBO.setCoinsMsg("确定花费"+coins+"积分 购买会员"+month+"天?");
-				priceSetBO.setCashMsg("确定花费"+cash+"元 购买会员"+month+"天?");
+				priceSetBO.setCoinsMsg("确定花费"+coins+"积分 购买会员"+day+"天?");
+				priceSetBO.setCashMsg("确定花费"+cash+"元 购买会员"+day+"天?");
 				list.add(priceSetBO);
 			}
 		}
@@ -160,11 +168,19 @@ public class PriceManagerImpl implements PriceManager{
 				//设置优惠信息
 				for(PromteBO promteBO : promteList){
 					if(promteBO.match(minute)){
-						priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元 "+promteBO.getText());
+					    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode())){
+					        priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元 "+promteBO.getText());
+					    } else {
+					        priceSetBO.setText(minute+"分钟 "+coins+"积分 "+promteBO.getText());
+					    }
 					}
 				}
 				if(StringTools.isEmpty(priceSetBO.getText())){
-					priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元");
+				    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode())){
+				        priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元");
+				    } else {
+                        priceSetBO.setText(minute+"分钟 "+coins+"积分");
+                    }
 				}
 				priceSetBO.setCoinsMsg("确定花费"+coins+"积分 购买超级置顶"+minute+"分钟?");
 				priceSetBO.setCashMsg("确定花费"+cash+"元 购买超级置顶"+minute+"分钟?");
