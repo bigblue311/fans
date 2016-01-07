@@ -1,0 +1,63 @@
+#help p {
+	margin-left: 20px;
+}
+
+#help ul li {
+	list-style: circle;
+	margin-left: 40px;
+}
+
+#help .sign {
+	color: red;
+}
+
+#help .question {
+	color: darkgreen;
+}
+
+#help .answer {
+	color: brown;
+	margin-bottom: 20px;
+}
+
+#help .good {
+	color: darkblue;
+}
+
+#help .warn {
+	color: darkorange;
+}
+
+#help i {
+	margin-right: 5px;
+}
+
+#help .auxiliary-text {
+}
+
+#help blockquote {
+	margin-left: 22px;
+}
+
+#help blockquote p {
+	font-size: 12px;
+}
+
+#help h1 {
+	background: #f8f0db;
+	border: 1px solid #eee;
+	padding: 5px;
+	padding-left: 10px;
+	margin-top: 50px;
+}
+
+#help h2 {
+	margin-top: 50px;
+}
+
+#help h1 i {
+	float: right;
+	position: relative;
+	top: 4px;
+	cursor: pointer;
+}

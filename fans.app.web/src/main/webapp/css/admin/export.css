@@ -1,0 +1,40 @@
+table{
+	width:100%;
+	padding:10px;
+	font-size:14px;
+	border-collapse:collapse;
+	border-spacing:0;
+}
+
+.head{
+}
+
+.head td{
+	border:1px solid lightgrey;
+	background: blue;
+	color:white;
+	text-align: center;
+	padding: 2px;
+	letter-spacing:8px;
+}
+
+.odd{
+	background: aliceblue;
+}
+
+.row:hover{
+	background: lightblue;
+}
+
+.row td{
+	border:1px solid lightgrey;
+	text-align:left;
+	padding: 5px;
+	font-size: 13px;
+	vertical-align: top;
+}
+
+div{
+	padding:10px 0px 10px 0px;
+	font-size:13px;
+}

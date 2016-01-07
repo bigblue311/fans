@@ -1,0 +1,70 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<link href="/css/comboxList.css" rel="stylesheet">
+<table>
+	<tr>
+		<td class="comboList">
+			<h2>未开通的权限
+				<span class="selectAll"><i class="icon-check"></i>全选</span>
+				<input type="text" placeholder="可输入名称来过滤" class="filter">
+			</h2>
+			<div id="box1" class="box">
+			#foreach($exclude in $excludeList)
+			<div class="item">
+				<label>$exclude.name</label><input type="hidden" value="${exclude.id}"/>
+			</div>
+			#end
+			</div>
+		</td>
+		<td>
+			&nbsp;<a class="linkBtn" id="btnDel">&lt;</a> <a class="linkBtn" id="btnAdd">&gt;</a>&nbsp;
+		</td>
+		<td class="comboList">
+			<h2>已开通的权限
+				<span class="selectAll"><i class="icon-check"></i>全选</span>
+				<input type="text" placeholder="可输入名称来过滤" class="filter">
+			</h2>
+			<div id="box2" class="box">
+			#foreach($include in $includeList)
+			<div class="item">
+				<label>$include.name</label><input type="hidden" value="${include.id}"/>
+			</div>
+			#end
+			</div>
+		</td>
+	</tr>
+</table>
+#set ($group = $form.resourceRole.defaultInstance)
+<form method="post" id="actionFrom">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="resourceRoleAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_update" value="true"/>
+	<input type="hidden" id="roleId" name="$group.roleId.key" value="$!{roleId}"/>
+	<input type="hidden" id="resourceIds" name="$group.resourceIds.key" value=""/>
+</form>
+<script type="text/javascript" src="/js/comboxList.js"></script>
+<script type="text/javascript">
+jQuery(function(){
+
+	jQuery("#btnAdd").click(function(){
+		var ids = "";
+    	jQuery("#box1 .selected input").each(function(){
+    		ids += jQuery(this).val()+",";
+    	});
+    	var event = "event_submit_do_update";
+    	jQuery("#resourceIds").val(ids);
+    	jQuery("#event").attr("name",event);
+    	jQuery("#actionFrom").submit();
+	});
+	
+	jQuery("#btnDel").click(function(){
+		var ids = "";
+    	jQuery("#box2 .selected input").each(function(){
+    		ids += jQuery(this).val()+",";
+    	});
+    	var event = "event_submit_do_delete";
+    	jQuery("#resourceIds").val(ids);
+    	jQuery("#event").attr("name",event);
+    	jQuery("#actionFrom").submit();
+	});
+});
+</script>

@@ -19,6 +19,10 @@
             <componentPath>/</componentPath>
         </uris:turbine-uri>
         
+        <uris:turbine-uri id="admin" exposed="true" extends="server">
+            <componentPath>/admin</componentPath>
+        </uris:turbine-uri>
+        
         <uris:turbine-content-uri id="fansContent" exposed="true" extends="fans" />
 
     </services:uris>

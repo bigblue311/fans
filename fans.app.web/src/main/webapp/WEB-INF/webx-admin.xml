@@ -15,7 +15,7 @@
 
     <!-- 支持${xxx}替换。 -->
     <services:property-placeholder>
-        <property key="component">app</property>
+        <property key="component">admin</property>
     </services:property-placeholder>
 
     <!-- 共享配置。 -->
@@ -23,15 +23,15 @@
     <beans:import resource="common/webx-component.xml" />
 
     <!-- 执行管道。 -->
-    <beans:import resource="common/pipeline-app.xml" />
+    <beans:import resource="common/pipeline-admin.xml" />
 
-	<!-- 表单验证。 -->
-    <beans:import resource="forms/app/form.xml" />
+    <!-- 表单验证。 -->
+    <beans:import resource="forms/admin/form.xml" />
 
     <!-- 装载模块。 -->
     <services:module-loader>
         <ml-factories:class-modules>
-            <search-packages type="$1" packages="com.fans.web.webpage.*" />
+            <search-packages type="$1" packages="com.fans.web.admin.*" />
         </ml-factories:class-modules>
     </services:module-loader>
 

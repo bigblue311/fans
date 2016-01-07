@@ -31,4 +31,12 @@
     <bean id="coinsDAO" class="com.fans.dal.dao.impl.CoinsDAOImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>
+    
+    <bean id="employeeDAO" class="com.fans.dal.dao.impl.EmployeeDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient"/>
+    </bean>
+    
+    <bean id="resourceRoleDAO" class="com.fans.dal.dao.impl.ResourceRoleDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient"/>
+    </bean>
 </beans>

@@ -1,0 +1,43 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div id="m2"></div>
+<script type="text/javascript">
+	var Menu = BUI.Menu;
+	var sideMenu = new Menu.SideMenu({
+		render : '#m2',
+		width : 130,
+		items : #if($!{menus})#noescape()$!{menus}#end#else null #end
+	});
+	
+	function currentDate(){
+		var d = new Date(),str = '';
+		 str += d.getFullYear()+'-';
+		 str += getTimeStr(d.getMonth() + 1)+'-';
+		 str += getTimeStr(d.getDate());
+		return str;
+	}
+
+	function currentTime(){
+		var d = new Date(),str = '';
+		 str += d.getFullYear()+'-';
+		 str += getTimeStr(d.getMonth() + 1)+'-';
+		 str += getTimeStr(d.getDate())+' ';
+		 str += getTimeStr(d.getHours())+':'; 
+		 str += getTimeStr(d.getMinutes())+':'; 
+		 str += getTimeStr(d.getSeconds()); 
+		return str;
+	}
+
+	function getTimeStr(t){
+		if(t < 10){
+			return "0"+t;
+		} else {
+			return t;
+		}
+	}
+
+	sideMenu.render();
+	
+	sideMenu.on('menuclick', function(e) {
+		window.location.replace(e.item.get('href'));
+	});
+</script>

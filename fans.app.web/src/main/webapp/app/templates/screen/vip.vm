@@ -100,16 +100,26 @@
 				<button class="btn btn-pink btn-lg buy" 
 					id="vipBuyBtn"
 					_type="1" 
-			    	_data1="1" 
+			    	#foreach($item in $!vipSet) 
+						#if($velocityCount ==1) 
+						_data1="$item.value" 
+						_msg="$!item.coinsMsg"
+						#end
+			    	#end
 			    	_cash="" 
 			    	_reUrl="/vip.htm" 
-			    	_msg="确定购买会员吗?">开启VIP</button>
+			    	>开启VIP</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg pay" 
 			    	id="vipPayBtn"
 			    	style="display:none"
 					_type="1" 
-			    	_data1="1" 
+			    	#foreach($item in $!vipSet) 
+						#if($velocityCount ==1) 
+						_data1="$item.value" 
+						_msg="$!item.cashMsg"
+						#end
+			    	#end
 			    	_cash="" 
 			    	_reUrl="/vip.htm" 
 			    	_msg="确定购买会员吗?">开启VIP</button>
@@ -165,7 +175,12 @@
 				<button class="btn btn-pink btn-lg buy" 
 					id="rocketBuyBtn"
 					_type="2" 
-			    	_data1="1" 
+					#foreach($item in $!rocketSet) 
+						#if($velocityCount ==1) 
+						_data1="$item.value" 
+						_msg="$!item.coinsMsg"
+						#end
+			    	#end
 			    	_cash="" 
 			    	_reUrl="/index.htm" 
 			    	_msg="确定购买超级置顶吗?">开启VIP</button>
@@ -174,7 +189,12 @@
 			    	id="rocketPayBtn"
 			    	style="display:none"
 					_type="2" 
-			    	_data1="1" 
+			    	#foreach($item in $!rocketSet) 
+						#if($velocityCount ==1) 
+						_data1="$item.value" 
+						_msg="$!item.cashMsg"
+						#end
+			    	#end
 			    	_cash="" 
 			    	_reUrl="/index.htm" 
 			    	_msg="确定购买超级置顶吗?">开启VIP</button>

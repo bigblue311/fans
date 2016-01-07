@@ -19,4 +19,8 @@
 	<bean id="systemConfigCache" class="com.fans.dal.cache.impl.SystemConfigCacheImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient" />
     </bean>
+    
+    <bean id="roleCache" class="com.fans.dal.cache.impl.RoleCacheImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient" />
+    </bean>
 </beans>

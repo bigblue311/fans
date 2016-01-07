@@ -1,0 +1,181 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<div id="grid"></div>
+#set ($group = $form.employee.defaultInstance)
+<form method="post" id="actionFrom">
+	$csrfToken.hiddenField
+	<input type="hidden" name="action" value="employeeAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_update" value="true"/>
+	<input type="hidden" id="id" name="$group.id.key" value=""/>
+	<input type="hidden" id="name" name="$group.name.key" value=""/>
+	<input type="hidden" id="password" name="$group.password.key" value=""/>
+	<input type="hidden" id="phone" name="$group.phone.key" value=""/>
+	<input type="hidden" id="roleId" name="$group.roleId.key" value=""/>
+	<input type="hidden" id="enable" name="$group.enable.key" value="0"/>
+</form>
+<script type="text/javascript">
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      roleObj = #if($!{roleEnum})#noescape()$!{roleEnum}#end#else null #end,
+      columns = [
+		{
+			title : 'ID',
+			elCls: 'center',
+			dataIndex : 'id',
+			width:'5%'
+		},{
+          title : '姓名',
+          elCls: 'left',
+          dataIndex :'name',
+          editor : {
+				xtype : 'text',
+				validator : validFn,
+				rules : {required : true}
+		  },
+          width:'20%'
+        },{
+          title : '密码',
+          elCls: 'left',
+          dataIndex :'password',
+          width:'20%'
+        },{
+            title : '联系电话',
+            elCls: 'left',
+            dataIndex :'phone',
+            width:'20%',
+            editor : {
+				xtype : 'text',
+				rules : {required : true}
+		  },
+        },{
+            title : '角色',
+            elCls: 'left',
+            dataIndex : 'roleId',
+            editor : {
+				xtype : 'select',
+				items : roleObj,
+				rules : {required : true}
+			},
+			renderer : Grid.Format.enumRenderer(roleObj),
+            width:'20%'
+       	},{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				if(obj != null && obj.roleId == '1'){
+					return '无法被编辑';
+				}
+				var reset = '<span class="grid-command" onclick="resetPwdFunction('+index+')">重置密码</span>';
+				var edit = '<span class="grid-command btn-edit">编辑</span>';
+				var del = '<span class="grid-command" onclick="deleteFunction('+index+')">删除</span>';
+				return reset + edit + del;
+			},
+       		width: '15%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data,
+        listeners : {
+        	'update' : updateFunction
+        }
+      }),
+      editing = new Grid.Plugins.RowEditing({
+			triggerCls : 'btn-edit',
+			triggerSelected : false
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        bbar : {
+        	items : [
+			{
+				btnCls : 'button button-small',
+				text : '<i class="icon-plus"></i>添加',
+				listeners : {
+					'click' : addFunction
+				}
+			}
+			]
+        },
+        plugins : [editing],
+        store : store
+      });
+
+    grid.render();
+    
+    function validFn(value,obj,origin) {
+        var records = store.getResult(),
+          rst = '';
+        BUI.each(records,function (record) {
+          if(record.name == value && origin != record){
+            rst = '用户名不能重复';
+            return false;
+          }
+        });
+        return rst;
+    }
+
+    //添加记录
+	function addFunction() {
+		var newData = {};
+		store.addAt(newData, 0);
+		editing.edit(newData, 'name'); //添加记录后，直接编辑
+	}
+    
+    function updateFunction(e){
+    	var id = e.record.id;
+    	var name = e.record.name;
+    	var password = e.record.password;
+    	var phone = e.record.phone;
+    	var roleId = e.record.roleId;
+    	var event = "event_submit_do_update";
+    	jQuery("#id").val(id);
+    	jQuery("#name").val(name);
+    	jQuery("#password").val(password);
+    	jQuery("#phone").val(phone);
+    	jQuery("#roleId").val(roleId);
+    	jQuery("#event").attr("name",event);
+    	jQuery("#actionFrom").submit();
+    }
+    
+    function deleteFunction(index){
+    	BUI.Message.Confirm("确定删除该用户吗?", function() {
+    		var record = grid.getItemAt(index);
+    		var id = record.id;
+        	var name = record.name;
+        	var password = record.password;
+        	var phone = e.record.phone;
+        	var roleId = record.roleId;
+        	var event = "event_submit_do_delete";
+        	jQuery("#id").val(id);
+        	jQuery("#name").val(name);
+        	jQuery("#password").val(password);
+        	jQuery("#phone").val(phone);
+        	jQuery("#roleId").val(roleId);
+        	jQuery("#event").attr("name",event);
+        	jQuery("#actionFrom").submit();
+		}, 'question');
+    }
+    
+    function resetPwdFunction(index){
+    	BUI.Message.Confirm("确定重置用户密码吗?", function() {
+    		var record = grid.getItemAt(index);
+       		var id = record.id;
+           	var name = record.name;
+           	var password = "123456";
+           	var roleId = record.roleId;
+           	var phone = record.phone;
+           	var event = "event_submit_do_resetPwd";
+           	jQuery("#id").val(id);
+           	jQuery("#name").val(name);
+           	jQuery("#password").val(password);
+           	jQuery("#phone").val(phone);
+           	jQuery("#roleId").val(roleId);
+           	jQuery("#event").attr("name",event);
+           	jQuery("#actionFrom").submit();
+		}, 'question');
+    }
+</script>

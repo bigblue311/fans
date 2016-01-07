@@ -18,6 +18,10 @@
     
     <bean id="priceManager" class="com.fans.biz.manager.impl.PriceManagerImpl"/>
     
+    <bean id="employeeManager" class="com.fans.biz.manager.impl.EmployeeManagerImpl" />
+    
+    <bean id="securityManager" class="com.fans.biz.manager.impl.SecurityManagerImpl" />
+    
     <bean id="recycleTempFilesTask" class="com.fans.biz.scheduler.task.RecycleTempFilesTask"/>
     
     <bean id="scheduler" class="com.fans.biz.scheduler.Scheduler" >

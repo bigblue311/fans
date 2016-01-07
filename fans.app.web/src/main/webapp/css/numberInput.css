@@ -1,0 +1,19 @@
+.numbericLeft{
+	border: 1px solid #c3c3d6;
+	border-right:0px;
+	padding: 3px;
+	position: relative;
+	left: 4px;
+	cursor:pointer;
+	background: white;
+}
+
+.numbericRight{
+	border: 1px solid #c3c3d6;
+	border-left:0px;
+	padding: 3px;
+	position: relative;
+	left: -4px;
+	cursor:pointer;
+	background: white;
+}

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EmployeeDO">
+
+  <typeAlias alias="Employee" type="com.fans.dal.model.EmployeeDO"/>
+
+  <resultMap id="RM" class="Employee">
+    <result property="id" column="id"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtModify" column="gmt_modify"/>
+    <result property="name" column="name"/>
+    <result property="roleId" column="role_id"/>
+    <result property="password" column="password"/>
+    <result property="phone" column="phone"/>
+    <result property="enable" column="enable"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="Employee">
+    <![CDATA[
+    insert into cl_employee (
+      gmt_create,
+      gmt_modify,
+      name,
+      role_id,
+      password,
+      phone,
+      enable
+    ) values (
+      now(), now(),
+      #name#, #roleId#, #password#, #phone#,#enable#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="Employee">
+    update cl_employee set 
+    <dynamic>
+      <isNotEmpty property="name">  
+         <![CDATA[   
+           name = #name#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="roleId">  
+         <![CDATA[   
+           role_id = #roleId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="password">  
+         <![CDATA[   
+           password = #password#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="phone">  
+         <![CDATA[   
+           phone = #phone#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="enable">  
+         <![CDATA[   
+           enable = #enable#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+
+  <update id="softDeleteById" parameterClass="java.lang.Long">
+  	update cl_employee set enable = '1' where id = #id#
+  </update>
+  
+  <update id="recoverById" parameterClass="java.lang.Long">
+  	update cl_employee set enable = '0' where id = #id#
+  </update>
+
+  <select id="getAll" resultMap="RM">
+    select * from cl_employee  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from cl_employee where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="name" prepend="and">
+        	<![CDATA[ 
+        	name like concat('%',#name#,'%')
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="roleId" prepend="and">
+        	<![CDATA[ 
+        	role_id = #roleId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="enable" prepend="and">
+        	<![CDATA[ 
+        	enable = #enable#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="password" prepend="and">
+        	<![CDATA[ 
+        	password = #password#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="name">
+  	<isNull property="roleId">
+  	<isNull property="enable">
+  	<isNull property="password">
+        <include refid="Common.validModify" />
+    </isNull>
+    </isNull>
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_employee 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_employee 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from cl_employee
+	<include refid="where" />
+  </select>
+</sqlMap>

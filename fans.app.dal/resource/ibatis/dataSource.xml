@@ -22,12 +22,15 @@
 	     	<property name="Pool.RemoveAbandonedTimeout" value="50000"/>
 	   </dataSource>
 	 </transactionManager>
-  
+    
     <sqlMap resource="sqlmap/common.xml"/>
+    <sqlMap resource="sqlmap/cl_coins.xml"/>
+    <sqlMap resource="sqlmap/cl_employee.xml"/>
   	<sqlMap resource="sqlmap/cl_location.xml"/>
+  	<sqlMap resource="sqlmap/cl_resource_role.xml"/>
+  	<sqlMap resource="sqlmap/cl_role.xml"/>
   	<sqlMap resource="sqlmap/cl_system_config.xml"/>
   	<sqlMap resource="sqlmap/cl_top_list.xml"/>
   	<sqlMap resource="sqlmap/cl_topup.xml"/>
-  	<sqlMap resource="sqlmap/cl_coins.xml"/>
   	<sqlMap resource="sqlmap/cl_user.xml"/>
 </sqlMapConfig>
