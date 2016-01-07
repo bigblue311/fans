@@ -38,6 +38,7 @@ public class ShareSuccess extends RequestSessionBase{
         
         Integer shareCount = userManager.getTodayShareCount(userDO.getId());
         if(shareCount!=null && shareCount >= max){
+            userManager.share(userDO.getId(), 0);
             return Result.newInstance("一天最多只能分享置顶"+max+"次哦", "分享置顶成功", false);
         }
         

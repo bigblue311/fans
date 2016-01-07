@@ -1,11 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<div id="embed">
-</div>
 <div id="monitoringMenu">
 </div>
 <script type="text/javascript">
-	var blinkTimer;
-
 	function getMonitoringMsg(){
 		var timestamp = currentTime();
 		jQuery.ajax({
@@ -13,33 +9,26 @@
 			url: "$admin.setTarget('/api/getOrderStatistic.json')?timestamp="+timestamp,
 			success:function(data, textStatus){
 				var itemList = "<p><i class='icon-time'></i> "+currentTime()+"</p>";
-					itemList+= "<p><i class='icon-globe'></i> 本月销售("+data.totalSale+"元)</p>";
-					itemList+= "<p><i class='icon-globe'></i> 总定金额("+data.totalDeposit+"元)</p>";							
+					itemList+= "<p><i class='icon-globe'></i> 本月充值("+data.totalSale+"元)</p>";
+					itemList+= "<p><i class='icon-globe'></i> 今日充值("+data.todaySale+"元)</p>";	
 					itemList+= "<ul>";
-				var blinkRequired = false;
 				var paymentStatusList = data.statusList;
-				itemList += "<li><i class='icon-circle-arrow-right'></i> 有效订单数("+data.totalCount+"个)</li>";
+				itemList += "<li><i class='icon-circle-arrow-right'></i> 本月分享("+data.totalShare+"次)</li>";
+				itemList += "<li><i class='icon-circle-arrow-right'></i> 今日分享("+data.todayShare+"次)</li>";
 				for(var i=0;i<paymentStatusList.length;i++){
 					var msg = "";
 					if(paymentStatusList[i].success){
-						if(i==0 && paymentStatusList[i].count>0){
-							var embed = "<embed loop=false autostart=true height=0 width=0 src='/media/new.mp3'";
-							embed += "hidden=\"true\"/>";
-							jQuery("#embed").empty().append(embed);
-						}
-						msg = "<a href='$admin.setTarget('order.vm')?createStart=${dateTools.DateToString($dateTools.monthStart())}&createEnd=${dateTools.DateToString($dateTools.monthEnd())}"+
-								"&status="+paymentStatusList[i].statusCode+"' "+
+						msg = "<a href='$admin.setTarget('order.vm')?createStart=${dateTools.DateToString($dateTools.todayStart())}&createEnd=${dateTools.DateToString($dateTools.todayEnd())}"+
+								"&type="+paymentStatusList[i].statusCode+"' "+
 								"class='auxiliary-text' style='color:"+paymentStatusList[i].color+"'>"+
 								"<i class='icon-circle-arrow-right'></i> 订单"+paymentStatusList[i].statusDesc+"("+paymentStatusList[i].count+"个)</a>";
 					} else {
-						blinkRequired = true;
 						msg = "<i class='icon-remove'></i><label style='color:red'>"+paymentStatusList[i].msg+"</label>";
 					}
 					itemList += "<li>"+msg+"</li>";
 				}
 				itemList += "</ul>";
 				jQuery("#monitoringMenu").empty().append(itemList);
-				blink(blinkRequired);
 			}
 		});
 	}
@@ -71,21 +60,7 @@
 		}
 	}
 	
-	function blinkFunc(){
-		jQuery("#monitoringMenu").toggle();
-	}
+	getMonitoringMsg();
 	
-	function blink(required){
-		if(required){
-			blinkTimer = setInterval("blinkFunc()",1000);
-		} else {
-			if(blinkTimer!=null){
-				blinkTimer.clearInterval("blinkFunc()");
-				blinkTimer = null;
-			} 
-		}
-	}
-	/* getMonitoringMsg();
-	
-	setInterval("getMonitoringMsg()",10000); */
+	setInterval("getMonitoringMsg()",10000);
 </script>

@@ -127,8 +127,8 @@ public class UserManagerImpl implements UserManager{
     @Override
     public Integer getTodayShareCount(Long userId) {
         TopListQueryCondition queryCondition = new TopListQueryCondition();
-        queryCondition.setUserId(userId).setGmtModifyStart(DateTools.getDayBegin(DateTools.today()))
-        .setGmtModifyEnd(DateTools.getDayEnd(DateTools.today())).setPosition(TopListPositionEnum.分享.getCode());
+        queryCondition.setUserId(userId).setGmtModifyStart(DateTools.todayStart())
+        .setGmtModifyEnd(DateTools.todayEnd()).setPosition(TopListPositionEnum.分享.getCode());
         return topListDAO.getCount(queryCondition);
     }
 

@@ -1,5 +1,6 @@
 package com.fans.biz.manager;
 
+import com.fans.biz.model.OrderStatisticVO;
 import com.fans.dal.enumerate.PayStatusEnum;
 import com.fans.dal.model.TopupDO;
 
@@ -91,4 +92,10 @@ public interface TransactionManager {
 	 * @return
 	 */
 	PayStatusEnum buyZhuangB(Long userId, Integer minutes);
+	
+	/**
+	 * 获取统计数据
+	 * @return
+	 */
+	OrderStatisticVO getOrderStatisticVO();
 }

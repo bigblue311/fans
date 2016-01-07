@@ -1,11 +1,14 @@
 package com.fans.biz.manager.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.PriceManager;
 import com.fans.biz.manager.TransactionManager;
+import com.fans.biz.model.OrderAlertVO;
+import com.fans.biz.model.OrderStatisticVO;
 import com.fans.dal.dao.CoinsDAO;
 import com.fans.dal.dao.TopListDAO;
 import com.fans.dal.dao.TopupDAO;
@@ -19,6 +22,9 @@ import com.fans.dal.model.CoinsDO;
 import com.fans.dal.model.TopListDO;
 import com.fans.dal.model.TopupDO;
 import com.fans.dal.model.UserDO;
+import com.fans.dal.query.TopListQueryCondition;
+import com.fans.dal.query.TopupQueryCondition;
+import com.google.common.collect.Lists;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.UUIDTools;
 
@@ -73,11 +79,11 @@ public class TransactionManagerImpl implements TransactionManager{
     	if(topupType == null){
     		return;
     	}
-    	if(topupType.getCode().intValue() == TopupTypeEnum.充值.getCode().intValue()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.积分充值.getCode().intValue()){
     		payTopup(topupUUId,weixinOrderId);
     		return;
     	}
-    	if(topupType.getCode().intValue() == TopupTypeEnum.购买VIP.getCode().intValue()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.购买会员.getCode().intValue()){
     		payVip(topupUUId,weixinOrderId);
     		return;
     	}
@@ -106,7 +112,7 @@ public class TransactionManagerImpl implements TransactionManager{
 			coinsDO.setOpenId(topupDO.getOpenId());
 			coinsDO.setDescription("充值获得金币");
 			coinsDao.insert(coinsDO);
-			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
+			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付成功.getCode());
 			return;
 		} else {
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
@@ -127,14 +133,14 @@ public class TransactionManagerImpl implements TransactionManager{
 			return;
 		}
 		UserDO user = userDao.getById(userId);
-		Date expire = DateTools.getDayBegin(DateTools.today());
+		Date expire = DateTools.todayStart();
 		//如果已经是VIP, 那么再这个时间上续
 		if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
 			expire = user.getGmtVipExpire();
 		}
 		Date vipExpire = DateTools.addDate(expire, date);
 		userDao.vipExtend(userId, vipExpire);
-		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
+		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付成功.getCode());
 	}
 	
 	@Override
@@ -171,7 +177,7 @@ public class TransactionManagerImpl implements TransactionManager{
 			topListDao.insert(topListDO);
 		}
 		
-		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.成功.getCode());
+		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付成功.getCode());
 	}
 
 	@Override
@@ -196,7 +202,7 @@ public class TransactionManagerImpl implements TransactionManager{
     	if(topupType == null){
     		return PayStatusEnum.支付失败;
     	}
-    	if(topupType.getCode().intValue() == TopupTypeEnum.购买VIP.getCode().intValue()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.购买会员.getCode().intValue()){
     		return buyVip(userId,data1);
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.购买置顶.getCode().intValue()){
@@ -215,7 +221,7 @@ public class TransactionManagerImpl implements TransactionManager{
 			PayStatusEnum payStatus = useCoins(userId, coins);
 			if(payStatus.getSuccess()){
 				UserDO user = userDao.getById(userId);
-				Date expire = DateTools.getDayBegin(DateTools.today());
+				Date expire = DateTools.todayStart();
 				//如果已经是VIP, 那么再这个时间上续
 				if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
 					expire = user.getGmtVipExpire();
@@ -289,4 +295,55 @@ public class TransactionManagerImpl implements TransactionManager{
 			return PayStatusEnum.支付失败;
 		}
 	}
+
+    @Override
+    public OrderStatisticVO getOrderStatisticVO() {
+        OrderStatisticVO orderStatisticVO = new OrderStatisticVO();
+        orderStatisticVO.setTotalShare(getTotalShare(DateTools.monthStart(),DateTools.monthEnd(),TopListPositionEnum.分享));
+        orderStatisticVO.setTodayShare(getTotalShare(DateTools.todayStart(),DateTools.todayEnd(),TopListPositionEnum.分享));
+        orderStatisticVO.setTotalSale(getTotalSale(DateTools.monthStart(),DateTools.monthEnd(),TopupStatusEnum.支付成功,null));
+        orderStatisticVO.setTodaySale(getTotalSale(DateTools.todayStart(),DateTools.todayEnd(),TopupStatusEnum.支付成功,null));
+        List<OrderAlertVO> statusList = Lists.newArrayList();
+        for(TopupTypeEnum type : TopupTypeEnum.getAll()){
+            statusList.add(getOrderAlert(type));
+        }
+        orderStatisticVO.setStatusList(statusList);
+        return orderStatisticVO;
+    }
+    
+    private Integer getTotalShare(Date start, Date end, TopListPositionEnum position){
+        TopListQueryCondition shareQueryCondition = new TopListQueryCondition();
+        shareQueryCondition.setGmtModifyStart(start).setGmtModifyEnd(end).setPosition(position.getCode());
+        return topListDao.getCount(shareQueryCondition);
+    }
+    
+    private Integer getTotalSale(Date start, Date end, TopupStatusEnum status, TopupTypeEnum type){
+        TopupQueryCondition topupQuery = new TopupQueryCondition();
+        topupQuery.setGmtModifyStart(start).setGmtModifyEnd(end).setStatus(status.getCode());
+        if(type != null){
+            topupQuery.setType(type.getCode());
+        }
+        List<TopupDO> topupList = topupDao.getByCondition(topupQuery);
+        Integer amount = 0;
+        if(topupList == null) {
+            return amount;
+        }
+        for(TopupDO topupDO:topupList){
+            amount += topupDO.getAmount();
+        }
+        return amount;
+    }
+    
+    private OrderAlertVO getOrderAlert(TopupTypeEnum type){
+        Integer count = getTotalSale(DateTools.todayStart(),DateTools.todayEnd(),TopupStatusEnum.支付成功,type);
+        
+        OrderAlertVO orderAlertVO = new OrderAlertVO();
+        orderAlertVO.setColor(type.getColor());
+        orderAlertVO.setCount(count == null?0:count);
+        orderAlertVO.setStatusCode(type.getCode().toString());
+        orderAlertVO.setStatusDesc(type.getDesc());
+        orderAlertVO.setSuccess(count != null);
+        orderAlertVO.setMsg(count != null?"查询成功":"系统错误,请速联系管理员!");
+        return orderAlertVO;
+    }
 }

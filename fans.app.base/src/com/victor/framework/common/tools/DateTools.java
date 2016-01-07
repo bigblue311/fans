@@ -18,6 +18,16 @@ public class DateTools {
 		return new Date();
 	}
 	
+	public static Date todayStart(){
+	    Date today = today();
+	    return getDayBegin(today);
+	}
+	
+	public static Date todayEnd(){
+        Date today = today();
+        return getDayEnd(today);
+    }
+	
 	public static Date monthStart(){
 		Date today = today();
 		Calendar cal = Calendar.getInstance();

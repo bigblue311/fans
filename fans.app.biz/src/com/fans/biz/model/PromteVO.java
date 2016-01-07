@@ -4,14 +4,14 @@ import com.victor.framework.common.shared.Split;
 import com.victor.framework.common.tools.CollectionTools;
 import com.victor.framework.common.tools.StringTools;
 
-public class PromteBO {
+public class PromteVO {
 	private Integer valve=0;
 	private String expression="";
 	private String discount="0";
 	private Double precentage = 0.0d;
 	private String text="";
 	
-	public PromteBO(String promte){
+	public PromteVO(String promte){
 		if(StringTools.isEmpty(promte)){
 			return;
 		}

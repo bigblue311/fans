@@ -1,13 +1,12 @@
 package com.fans.biz.model;
 
-public class PriceSetBO {
+public class PriceSetVO {
 	private Integer value;
 	private Integer cash;
 	private Integer coins;
 	private String text;
 	private String cashMsg;
 	private String coinsMsg;
-	
 	
 	public Integer getValue() {
 		return value;

@@ -2,7 +2,7 @@ package com.fans.biz.manager;
 
 import java.util.List;
 
-import com.fans.biz.model.PriceSetBO;
+import com.fans.biz.model.PriceSetVO;
 
 /**
  * 定价中心
@@ -22,7 +22,7 @@ public interface PriceManager {
 	 * 获取充值面板
 	 * @return
 	 */
-	List<PriceSetBO> getTopupSet();
+	List<PriceSetVO> getTopupSet();
 	
 	/**
 	 * 购买VIP
@@ -36,7 +36,7 @@ public interface PriceManager {
 	 * 购买VIP面板
 	 * @return
 	 */
-	List<PriceSetBO> getVipSet();
+	List<PriceSetVO> getVipSet();
 	
 	/**
 	 * 购买超级置顶价格
@@ -50,5 +50,5 @@ public interface PriceManager {
 	 * 购买超级置顶面板
 	 * @return
 	 */
-	List<PriceSetBO> getZhuangBSet();
+	List<PriceSetVO> getZhuangBSet();
 }

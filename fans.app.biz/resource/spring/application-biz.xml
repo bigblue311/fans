@@ -23,11 +23,13 @@
     <bean id="securityManager" class="com.fans.biz.manager.impl.SecurityManagerImpl" />
     
     <bean id="recycleTempFilesTask" class="com.fans.biz.scheduler.task.RecycleTempFilesTask"/>
+    <bean id="orderStatisticTask" class="com.fans.biz.scheduler.task.OrderStatisticTask"/>
     
     <bean id="scheduler" class="com.fans.biz.scheduler.Scheduler" >
 		<property name="tasks">
               <list>
               	<ref bean="recycleTempFilesTask" />
+              	<ref bean="orderStatisticTask" />
               </list>
   		</property>
     </bean>
