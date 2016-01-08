@@ -9,6 +9,9 @@ public enum SubMenuEnum {
 	后台账号("subMenuEmployee","后台账号","/admin/employee",TopMenuEnum.系统管理),
 	角色权限("subMenuResource","角色权限","/admin/role",TopMenuEnum.系统管理),
 	系统配置("subMenuSystem","系统配置","/admin/system",TopMenuEnum.系统管理),
+	
+	用户管理("subMenuUser","用户管理","/admin/user",TopMenuEnum.用户管理),
+	交易管理("subMenuTopup","交易管理","/admin/topup",TopMenuEnum.用户管理),
 	;
 	
 	private SubMenuEnum(String code,String desc, String resource,TopMenuEnum topMenu){

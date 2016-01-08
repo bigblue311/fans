@@ -173,6 +173,11 @@
 	        	gender = #gender#
 	        	]]>
 		    </isNotEmpty>
+		    <isNotEmpty property="phone" prepend="and">
+	        	<![CDATA[ 
+	        	phone = #phone#
+	        	]]>
+		    </isNotEmpty>
 		    <isNotEmpty property="province" prepend="and">
 	        	<![CDATA[ 
 	        	province = #province#

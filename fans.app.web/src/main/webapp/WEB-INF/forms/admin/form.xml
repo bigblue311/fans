@@ -50,29 +50,51 @@
 		</group>
 		
 		<group name="employee" extends="csrfCheck">
-			<field name="id" displayName="ID" />
-			<field name="name" displayName="姓名" />
-			<field name="password" displayName="密码" />
-			<field name="phone" displayName="联系电话" />
-			<field name="roleId" displayName="角色" />
-			<field name="enable" displayName="是否有效" />
+			<field name="id" 			displayName="ID" />
+			<field name="name" 			displayName="姓名" />
+			<field name="password" 		displayName="密码" />
+			<field name="phone" 		displayName="联系电话" />
+			<field name="roleId" 		displayName="角色" />
+			<field name="enable" 		displayName="是否有效" />
 		</group>
 		
 		<group name="role" extends="csrfCheck">
-			<field name="id" displayName="ID" />
-			<field name="name" displayName="角色名称" />
-			<field name="description" displayName="角色描述" />
-			<field name="editable" displayName="是否可编辑" />
+			<field name="id" 			displayName="ID" />
+			<field name="name" 			displayName="角色名称" />
+			<field name="description" 	displayName="角色描述" />
+			<field name="editable" 		displayName="是否可编辑" />
 		</group>
 		
 		<group name="resourceRole" extends="csrfCheck">
-			<field name="roleId" displayName="角色ID" />
-			<field name="resourceIds" displayName="资源ID" />
+			<field name="roleId" 		displayName="角色ID" />
+			<field name="resourceIds" 	displayName="资源ID" />
 		</group>
 		
 		<group name="systemConfig" extends="csrfCheck">
-			<field name="id" displayName="ID" />
-			<field name="configValue" displayName="值" />
+			<field name="id" 			displayName="ID" />
+			<field name="configValue" 	displayName="值" />
+		</group>
+		
+		<group name="user" extends="csrfCheck">
+			<field name="id" 				displayName="ID" />
+			<field name="nickName" 			displayName="昵称" />
+			<field name="phone" 			displayName="电话" />
+			<field name="headImg" 			displayName="头像" />
+			<field name="gender" 			displayName="性别" />
+			<field name="qrcode" 			displayName="二维码" />
+			<field name="groupQrcode" 		displayName="群二维码" />
+			<field name="province" 			displayName="省" />
+			<field name="city" 				displayName="市" />
+			<field name="description" 		displayName="描述" />
+			<field name="groupDescription" 	displayName="群描述" />
+			<field name="weixinId" 			displayName="微信ID" />
+		</group>
+		
+		<group name="topup" extends="csrfCheck">
+			<field name="topupId" 	displayName="充值ID" />
+			<field name="userId" 	displayName="用户ID" />
+			<field name="cash" 		displayName="交易金额" />
+			<field name="description" displayName="文字描述" />
 		</group>
 	</services:form>
 </beans:beans>

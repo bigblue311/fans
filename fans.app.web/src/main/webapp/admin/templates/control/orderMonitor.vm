@@ -21,7 +21,7 @@
 						msg = "<a href='$admin.setTarget('order.vm')?createStart=${dateTools.DateToString($dateTools.todayStart())}&createEnd=${dateTools.DateToString($dateTools.todayEnd())}"+
 								"&type="+paymentStatusList[i].statusCode+"' "+
 								"class='auxiliary-text' style='color:"+paymentStatusList[i].color+"'>"+
-								"<i class='icon-circle-arrow-right'></i> 订单"+paymentStatusList[i].statusDesc+"("+paymentStatusList[i].count+"个)</a>";
+								"<i class='icon-circle-arrow-right'></i>"+paymentStatusList[i].statusDesc+"("+paymentStatusList[i].count+"元)</a>";
 					} else {
 						msg = "<i class='icon-remove'></i><label style='color:red'>"+paymentStatusList[i].msg+"</label>";
 					}

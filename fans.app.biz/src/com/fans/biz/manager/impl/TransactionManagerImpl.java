@@ -9,6 +9,7 @@ import com.fans.biz.manager.PriceManager;
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.model.OrderAlertVO;
 import com.fans.biz.model.OrderStatisticVO;
+import com.fans.biz.model.TopupVO;
 import com.fans.dal.dao.CoinsDAO;
 import com.fans.dal.dao.TopListDAO;
 import com.fans.dal.dao.TopupDAO;
@@ -24,9 +25,12 @@ import com.fans.dal.model.TopupDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.TopListQueryCondition;
 import com.fans.dal.query.TopupQueryCondition;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.victor.framework.common.tools.DateTools;
+import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.common.tools.UUIDTools;
+import com.victor.framework.dal.basic.Paging;
 
 public class TransactionManagerImpl implements TransactionManager{
 
@@ -66,6 +70,63 @@ public class TransactionManagerImpl implements TransactionManager{
 	@Override
 	public TopupDO getTopup(Long id) {
 		return topupDao.getById(id);
+	}
+	
+	@Override
+    public Paging<TopupDO> getPage(TopupQueryCondition queryCondition) {
+	    int totalSize = topupDao.getCount(queryCondition);
+        @SuppressWarnings("unchecked")
+        Paging<TopupDO> page = queryCondition.getPaging(totalSize, 5);
+        List<TopupDO> list = topupDao.getPage(queryCondition);
+        page.setData(list);
+        return page;
+    }
+	
+	@Override
+    public Paging<TopupVO> getVOPage(TopupQueryCondition queryCondition) {
+	    int totalSize = topupDao.getCount(queryCondition);
+        @SuppressWarnings("unchecked")
+        Paging<TopupVO> page = queryCondition.getPaging(totalSize, 5);
+        List<TopupDO> list = topupDao.getPage(queryCondition);
+        List<TopupVO> voList = Lists.transform(list, new Function<TopupDO,TopupVO>(){
+
+            @Override
+            public TopupVO apply(TopupDO topupDO) {
+                return topupDO2VO(topupDO);
+            }
+            
+        });
+        page.setData(voList);
+        return page;
+    }
+	
+	private TopupVO topupDO2VO(TopupDO topupDO){
+	    if(topupDO == null){
+	        return null;
+	    }
+	    TopupVO topupVO = new TopupVO();
+	    topupVO.setTopupDO(topupDO);
+	    Long userId = topupDO.getUserId();
+	    UserDO userDO = userDao.getById(userId);
+	    if(userDO != null){
+	        topupVO.setUserDO(userDO);
+	    }
+	    if(StringTools.isNotEmpty(topupDO.getData4())){
+	        topupVO.setOperator(topupDO.getData4());
+	    }
+	    Integer type = topupDO.getType();
+        TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
+        if(topupType != null){
+            if(topupType.getCode().intValue() == TopupTypeEnum.购买会员.getCode().intValue()){
+                String product = "购买会员"+topupDO.getData1() + "天";
+                topupVO.setProduct(product);
+            }
+            if(topupType.getCode().intValue() == TopupTypeEnum.购买置顶.getCode().intValue()){
+                String product = "购买置顶"+topupDO.getData1() + "分钟";
+                topupVO.setProduct(product);
+            }
+        }
+        return topupVO;
 	}
 	
 	@Override
@@ -119,6 +180,36 @@ public class TransactionManagerImpl implements TransactionManager{
 			return;
 		}
 	}
+	
+	@Override
+    public void payTopupRollback(Long topupId, String operator) {
+	    TopupDO topupDO = topupDao.getById(topupId);
+	    if(topupDO==null){
+            return;
+        }
+	    Integer money = topupDO.getAmount();
+	    if(money == null || money == 0){
+            return;
+        }
+	    
+        Integer coins = priceManager.topupM2C(money);
+        if(coins == null || coins == 0){
+            return;
+        }
+        
+        Long userId = topupDO.getUserId();
+        UserDO userDO = userDao.getById(userId);
+        if(userDO != null){
+            Integer existCoins = userDO.getCoins();
+            Integer updateCoins = existCoins - coins > 0 ? existCoins - coins:0;
+            userDO.setCoins(updateCoins);
+            userDao.update(userDO);
+            
+            topupDO.setStatus(TopupStatusEnum.交易取消.getCode());
+            topupDO.setData4(operator);
+            topupDao.update(topupDO);
+        }
+    }
 	
 	@Override
 	public void payVip(String topupUUId, String weixinOrderId) {

@@ -22,6 +22,15 @@ public class TopupQueryCondition extends QueryCondition implements Serializable{
 		return getLong("id");
 	}
 	
+	public TopupQueryCondition setUserName(String userName) {
+        put("userName",userName);
+        return this;
+    }
+    
+    public String getUserName(){
+        return getString("userName");
+    }
+	
 	public TopupQueryCondition setUserId(Long userId) {
 		put("userId",userId);
 		return this;
@@ -57,6 +66,15 @@ public class TopupQueryCondition extends QueryCondition implements Serializable{
 	public Integer getType(){
 		return getInteger("type");
 	}
+	
+	public TopupQueryCondition setOperator(String operator) {
+        put("operator",operator);
+        return this;
+    }
+    
+    public String getOperator(){
+        return getString("operator");
+    }
 	
 	@Override
 	public TopupQueryCondition setGmtModifyStart(Date from){

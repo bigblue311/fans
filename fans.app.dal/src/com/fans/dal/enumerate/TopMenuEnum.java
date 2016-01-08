@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 public enum TopMenuEnum {
 	
 	系统管理("topMenuSystem","系统管理"),
+	用户管理("topMenuUser","用户管理"),
 	;
 	
 	private TopMenuEnum(String code,String desc){

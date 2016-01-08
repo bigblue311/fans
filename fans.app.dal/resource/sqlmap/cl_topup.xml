@@ -102,6 +102,14 @@
 	        	uuid = #uuid#
 	        	]]>
 		    </isNotEmpty>
+		    <isNotEmpty property="userName" prepend="and">
+	        	<![CDATA[ 
+	        	user_id in (
+	        		select id from cl_user where 
+	        		nick_name like concat('%',#nickName#,'%')
+	        	)
+	        	]]>
+		    </isNotEmpty>
 		    <isNotEmpty property="userId" prepend="and">
 	        	<![CDATA[ 
 	        	user_id = #userId#
@@ -120,6 +128,11 @@
 		    <isNotEmpty property="type" prepend="and">
 	        	<![CDATA[ 
 	        	type = #type#
+	        	]]>
+		    </isNotEmpty>
+		    <isNotEmpty property="operator" prepend="and">
+	        	<![CDATA[ 
+	        	data4 = #operator#
 	        	]]>
 		    </isNotEmpty>
 		    <include refid="Common.queryModify" />

@@ -17,6 +17,9 @@ public enum ResourceEnum {
 	角色权限(3l,"/admin/role","角色权限","查看所有后台用户的角色",SubMenuEnum.角色权限,true),
 	资源权限(4l,"/admin/resource","资源权限","为一个角色添加/删除页面访问权限",SubMenuEnum.角色权限,true),
 	系统配置(5l,"/admin/system","系统配置","系统参数配置",SubMenuEnum.系统配置,true),
+	
+	用户管理(6l,"/admin/user","用户管理","用户管理",SubMenuEnum.用户管理,true),
+	交易管理(7l,"/admin/topup","交易管理","充值记录管理",SubMenuEnum.交易管理,true),
 	;
 	
 	private ResourceEnum(Long code,String resource,String name,String desc, SubMenuEnum subMenu, Boolean loginRequired){

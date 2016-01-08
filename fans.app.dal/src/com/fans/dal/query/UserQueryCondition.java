@@ -32,6 +32,15 @@ public class UserQueryCondition extends QueryCondition implements Serializable{
 		return getString("nickName");
 	}
 	
+	public UserQueryCondition setPhone(String phone) {
+        put("phone",phone);
+        return this;
+    }
+    
+    public String getPhone(){
+        return getString("phone");
+    }
+	
 	public UserQueryCondition setGender(Integer gender) {
 		put("gender",gender);
 		return this;

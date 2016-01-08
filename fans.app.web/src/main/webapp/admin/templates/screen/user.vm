@@ -1,0 +1,271 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<div class="doc-content">
+	<form action="$admin.setTarget('user.vm')" class="form-horizontal well" id="queryForm">
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">昵称：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="nickName" value="$!query.nickName">
+					<input type="hidden" name="page" id="page" value="$!query.page">
+				</div>
+				<label class="control-label">手机：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="phone" value="$!query.phone">
+				</div>
+				<label class="control-label">地区：</label>
+				<div class="controls">
+					<select id="q_province" name="province" style="width:112px;"></select>
+					<select id="q_city" name="city"></select>
+					<select id="q_town" name="town" style="display:none"></select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">ID：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="id" value="$!query.id">
+				</div>
+				<label class="control-label">注册时间：</label>
+				<div class="controls">
+					<input type="text" class="calendar" name="createStart" id="createStart" value="$!query.createStart">
+					至
+					<input type="text" class="calendar" name="createEnd" id="createEnd" value="$!query.createEnd">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-actions offset3">
+				<button class="button button-primary"><i class="icon-search icon-white"></i>搜索</button>
+				<button type="reset" class="button"><i class="icon-repeat"></i>重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript">
+		var Calendar = BUI.Calendar;
+		
+		var createStart = new Calendar.DatePicker({
+			  trigger:'#createStart',
+			  selectedDate : new Date(),
+			  autoRender : true
+		});
+		
+		var createEnd = new Calendar.DatePicker({
+			  trigger:'#createEnd',
+			  selectedDate : new Date(),
+			  autoRender : true
+		});
+	</script>
+</div>
+<div id="grid"></div>
+$control.setTemplate("paging.vm")
+#set ($group = $form.topup.defaultInstance)
+<div id="editor" style="display:none">
+  <form method="post" id="actionFrom">
+  	$csrfToken.hiddenField
+  	<input type="hidden" id="action" name="action" value="transactionAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_topup" value="true"/>
+	<input type="hidden" id="userId" name="$group.userId.key" value=""/>
+    <div class="row">
+      <div class="control-group">
+        <label class="control-label"><s>*</s>金额：</label>
+        <div class="controls">
+          <input type="text" id="cash" name="$group.cash.key" class="input-normal control-text"
+			data-rules="{required:true,regexp:/^[1-9]\d*|0$/}" 
+			data-messages="{required:'请输入金额',regexp:'必须为非负整数'}" style="width: 124px;"> 元
+        </div>
+        <label class="control-label">描述：</label>
+        <div class="controls">
+          <input type="text" id="description" name="$group.description.key" class="input-normal control-text" style="width: 124px;">
+        </div>
+	  </div>
+	</div>
+  </form>
+</div>
+<script type="text/javascript" src="/js/Location/location.js"></script>
+<script type="text/javascript">
+	jQuery(function(){
+		showLocation('q_province','q_city','q_town','$!query.province','$!query.city','$!query.town');
+	});
+</script>
+<script type="text/javascript">
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      genderObj = {
+    		#foreach($gender in $genderEnum)
+   			"$!gender.code": "$!gender.desc"
+   				#if(${velocityCount} != $genderEnum.size())
+   					,
+   				#end
+   			#end
+   	  },
+      columns = [
+		{
+			title : 'ID',
+			elCls: 'center',
+			dataIndex : 'id',
+			width: '5%'
+		},{
+            title : '头像',
+            elCls: 'center',
+            dataIndex :'headImg',
+            renderer : function(val,obj,index) {
+				var html = "";
+				if(obj!=null){
+					html += "<img src='"+obj.headImg+"' style='width:50px;height:50px'/>";
+				}
+				return html;
+		    },
+            width:'5%'
+        },{
+          title : '昵称',
+          elCls: 'left',
+          dataIndex :'nickName',
+          renderer : function(val,obj,index) {
+				var html = "";
+				if(obj!=null){
+					if(obj.vip){
+						html += "<font color='red'>"+obj.nickName+"</font>";
+					} else {
+						html += "<font color='black'>"+obj.nickName+"</font>";
+					}
+				}
+				return html;
+		  },
+		  width:'15%'
+        },{
+            title : '性别',
+            elCls: 'center',
+            dataIndex :'gender',
+  		  	renderer : Grid.Format.enumRenderer(genderObj),
+            width:'5%'
+        },{
+          title : '手机',
+          elCls: 'left',
+          dataIndex :'phone',
+          width:'10%'
+        },{
+            title : '省市',
+            elCls: 'left',
+            width:'5%',
+            renderer : function(val,obj,index){
+            	if(obj != null){
+            		var location = new Location();
+            		if(obj.province == null || obj.province == ""){
+            			return "";
+            		}
+            		var province = location.findProvince(obj.province);
+            		if(obj.city == null || obj.city == ""){
+            			return province;
+            		} else {
+            			var city = location.findCity(obj.province,obj.city);
+                		return  province + " " + city;
+            		}
+            	} else {
+            		return "";
+            	}
+            }
+        },{
+            title : '注册时间',
+            elCls: 'left',
+            dataIndex :'gmtCreate',
+            renderer:BUI.Grid.Format.datetimeRenderer,
+            width:'15%'
+        },{
+            title : '微信ID',
+            elCls: 'left',
+            dataIndex :'weixinId',
+            width:'10%'
+        },{
+            title : '积分',
+            elCls: 'center',
+            dataIndex :'coins',
+            width:'5%'
+        },{
+            title : '会员到期',
+            elCls: 'left',
+            dataIndex :'gmtVipExpire',
+            renderer:BUI.Grid.Format.datetimeRenderer,
+            width:'15%'
+        },{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				if(obj != null){
+					var id = obj.id;
+				}
+				var topup = '<span class="grid-command btn-edit" onclick="topupFunction('+index+')">充值</span>';
+				return topup;
+			},
+	        width:'10%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data
+      }),
+      cascade = new Grid.Plugins.Cascade({
+		    renderer : function(record){
+		    	var qrcode = record.qrcode;
+		    	var description = record.description;
+		    	var qrMsg = "<div><p><img src='"+qrcode+"' style='width:100px;height:100px'></p></div><div><p>"+description+"</p></div>";
+			    var groupQrcode = record.groupQrcode;
+			    var groupDescription = record.groupDescription;
+			    var groupQrMsg = "<div><p><img src='"+groupQrcode+"' style='width:100px;height:100px'></p></div><div><p>"+groupDescription+"</p></div>";
+		    	return qrMsg+groupQrMsg;
+		    }
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        plugins : [cascade],
+        store : store
+      });
+
+    grid.render();
+    
+  	//创建编辑器
+    var editor = new BUI.Editor.DialogEditor({ 
+        contentId:'editor',
+        width : 350,
+        mask : true,
+        title : '会员充值',
+        form : {
+          srcNode : '#actionFrom'
+        },
+        success : function(){
+          this.accept();
+          jQuery("#actionFrom").submit();
+        }
+    });
+  	
+    editor.render();
+    
+    function topupFunction(index){
+		editor.show();
+		bindRecord(index,"event_submit_do_topup");
+	}
+    
+    function bindRecord(index,event){
+		copyCsrf();
+		var record = grid.getItemAt(index);
+		
+    	var userId = record.id;
+
+    	jQuery("#userId").val(userId);
+    	jQuery("#action").val('transactionAction');
+    	
+    	jQuery("#event").attr("name",event);
+    	jQuery("#event").val(true);
+    }
+    
+    function copyCsrf(){
+		var csrf = jQuery("input[name='_csrf_token']").val();
+		jQuery("input[name='_csrf_token']").each(function(){
+			jQuery(this).val(csrf);
+		});
+	}
+</script>

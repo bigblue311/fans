@@ -1,8 +1,11 @@
 package com.fans.biz.manager;
 
 import com.fans.biz.model.OrderStatisticVO;
+import com.fans.biz.model.TopupVO;
 import com.fans.dal.enumerate.PayStatusEnum;
 import com.fans.dal.model.TopupDO;
+import com.fans.dal.query.TopupQueryCondition;
+import com.victor.framework.dal.basic.Paging;
 
 /**
  * 交易管理
@@ -28,6 +31,14 @@ public interface TransactionManager {
 	TopupDO getTopup(Long id);
 	
 	/**
+	 * 充值查询
+	 * @param queryCondition
+	 * @return
+	 */
+	Paging<TopupDO> getPage(TopupQueryCondition queryCondition);
+	Paging<TopupVO> getVOPage(TopupQueryCondition queryCondition);
+	
+	/**
 	 * 交易成功
 	 * @param topupUUId
 	 * @param weixinOrderId
@@ -49,6 +60,13 @@ public interface TransactionManager {
 	 * @return
 	 */
 	void payTopup(String topupUUId, String weixinOrderId);
+	
+	/**
+	 * 充值回滚
+	 * @param topupId
+	 * @param operator 处理人
+	 */
+	void payTopupRollback(Long topupId,String operator);
 	
 	/**
 	 * 购买VIP

@@ -1,0 +1,267 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<div class="doc-content">
+	<form action="$admin.setTarget('topup.vm')" class="form-horizontal well" id="queryForm">
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">用户昵称：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="userName" value="$!query.userName">
+					<input type="hidden" name="page" id="page" value="$!query.page">
+				</div>
+				<label class="control-label">用户ID：</label>
+				<div class="controls">
+					<input type="text" class="control-text" name="userId" value="$!query.userId">
+				</div>
+				<label class="control-label">交易类型：</label>
+				<div class="controls">
+					<select name="type">
+						<option value="">请选择</option>
+						#foreach($type in $typeEnum)
+						<option value="$type.code" #if($type.code == $query.type)selected#end>$type.desc</option>
+						#end
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="control-group">
+				<label class="control-label">交易状态：</label>
+				<div class="controls">
+					<select name="status">
+						<option value="">请选择</option>
+						#foreach($status in $statusEnum)
+						<option value="$status.code" #if($status.code == $query.status)selected#end>$status.desc</option>
+						#end
+					</select>
+				</div>
+				<label class="control-label">交易时间：</label>
+				<div class="controls">
+					<input type="text" class="calendar" name="createStart" id="createStart" value="$!query.createStart">
+					至
+					<input type="text" class="calendar" name="createEnd" id="createEnd" value="$!query.createEnd">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-actions offset3">
+				<button class="button button-primary"><i class="icon-search icon-white"></i>搜索</button>
+				<button type="reset" class="button"><i class="icon-repeat"></i>重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript">
+		var Calendar = BUI.Calendar;
+		
+		var createStart = new Calendar.DatePicker({
+			  trigger:'#createStart',
+			  selectedDate : new Date(),
+			  autoRender : true
+		});
+		
+		var createEnd = new Calendar.DatePicker({
+			  trigger:'#createEnd',
+			  selectedDate : new Date(),
+			  autoRender : true
+		});
+	</script>
+</div>
+<div id="grid"></div>
+$control.setTemplate("paging.vm")
+#set ($group = $form.topup.defaultInstance)
+<div id="editor" style="display:none">
+  <form method="post" id="actionFrom">
+  	$csrfToken.hiddenField
+  	<input type="hidden" id="action" name="action" value="transactionAction"/>  
+	<input type="hidden" id="event" name="event_submit_do_topup" value="true"/>
+	<input type="hidden" id="topupId" name="$group.topupId.key" value=""/>
+	<input type="hidden" id="userId" name="$group.userId.key" value=""/>
+    <div class="row">
+      <div class="control-group">
+        <label class="control-label"><s>*</s>金额：</label>
+        <div class="controls">
+          <input type="text" id="cash" name="$group.cash.key" class="input-normal control-text"
+			data-rules="{required:true,regexp:/^[1-9]\d*|0$/}" 
+			data-messages="{required:'请输入金额',regexp:'必须为非负整数'}" style="width: 124px;"> 元
+        </div>
+        <label class="control-label">描述：</label>
+        <div class="controls">
+          <input type="text" id="description" name="$group.description.key" class="input-normal control-text" style="width: 124px;">
+        </div>
+	  </div>
+	</div>
+  </form>
+</div>
+<script type="text/javascript">
+      var Grid = BUI.Grid,
+      Data = BUI.Data;
+      var Grid = Grid,
+      Store = Data.Store,
+      columns = [
+		{
+			title : '用户ID',
+			elCls: 'center',
+			dataIndex : 'userId',
+			renderer : function(val,obj,index) {
+				var html = "";
+				if(obj!=null && obj.userDO != null){
+					html += obj.userDO.id;
+				}
+				return html;
+		    },
+			width: '5%'
+		},{
+			title : '用户昵称',
+			elCls: 'left',
+			dataIndex : 'userName',
+			renderer : function(val,obj,index) {
+				var html = "";
+				if(obj!=null && obj.userDO != null){
+					html += obj.userDO.nickName;
+				}
+				return html;
+		    },
+			width: '20%'
+		},{
+            title : '金额',
+            elCls: 'left',
+            dataIndex :'amout',
+            renderer : function(val,obj,index) {
+				var html = "";
+				if(obj!=null && obj.topupDO != null){
+					html += obj.topupDO.amount + "元";
+				}
+				return html;
+		    },
+            width:'10%'
+        },{
+          title : '交易类型',
+          elCls: 'left',
+          dataIndex :'type',
+          renderer : function(val,obj,index) {
+				var html = "";
+				if(obj!=null && obj.topupDO != null){
+					#foreach($type in $typeEnum)
+					if(obj.topupDO.type == '$!type.code'){
+						html += '$!type.desc';
+					}
+					#end
+				}
+				return html;
+		  },
+		  width:'15%'
+        },{
+            title : '交易状态',
+            elCls: 'left',
+            dataIndex :'type',
+            renderer : function(val,obj,index) {
+  				var html = "";
+  				if(obj!=null && obj.topupDO != null){
+  					#foreach($status in $statusEnum)
+  					if(obj.topupDO.status == '$!status.code'){
+  						html += '$!status.desc';
+  					}
+  					#end
+  				}
+  				return html;
+  		   },
+  		   width:'15%'
+        },{
+            title : '操作员',
+            elCls: 'center',
+            dataIndex :'operator',
+            width:'10%'
+        },{
+            title : '交易时间',
+            elCls: 'left',
+            dataIndex :'gmtCreate',
+            renderer:BUI.Grid.Format.datetimeRenderer,
+            width:'15%'
+        },{
+			title : '操作',
+			elCls: 'center',
+			dataIndex : 'oper',
+			renderer : function(val,obj,index) {
+				var op = '<span class="grid-command btn-edit" onclick="topupFunction('+index+')">会员充值</span>';
+				op += '<span class="grid-command btn-edit" onclick="rollbackFunction('+index+')">取消交易</span>';
+				return op;
+			},
+	        width:'10%'
+		}],
+		data = #if($!{list})#noescape()$!{list}#end#else null #end;
+      var store = new Store({
+        data : data
+      }),
+      cascade = new Grid.Plugins.Cascade({
+		    renderer : function(record){
+		    	var msg = "";
+		    	if(record.product!=null){
+		    		msg += "<div><p>"+record.product+"</p></div>";
+		    	}
+		    	if(record.topupDO!=null){
+		    		msg += "<div><p>"+record.topupDO.description+"</p></div>";
+		    	}
+		    	return msg;
+		    }
+	  }),
+      grid = new Grid.Grid({
+        render:'#grid',
+        width:'100%',//这个属性一定要设置
+        columns : columns,
+        plugins : [cascade],
+        store : store
+      });
+
+    grid.render();
+    
+  	//创建编辑器
+    var editor = new BUI.Editor.DialogEditor({ 
+        contentId:'editor',
+        width : 350,
+        mask : true,
+        title : '会员充值',
+        form : {
+          srcNode : '#actionFrom'
+        },
+        success : function(){
+          this.accept();
+          jQuery("#actionFrom").submit();
+        }
+    });
+  	
+    editor.render();
+    
+    function topupFunction(index){
+		editor.show();
+		bindRecord(index,"event_submit_do_topup");
+	}
+    
+    function rollbackFunction(index){
+    	var result = confirm('是否取消该笔交易?');  
+        if(result){  
+        	bindRecord(index,"event_submit_do_rollback");
+        	jQuery("#cash").val(1);
+        	jQuery("#actionFrom").submit();
+        }
+    }
+    
+    function bindRecord(index,event){
+		copyCsrf();
+		var record = grid.getItemAt(index);
+		var topupId = record.topupDO.id;
+    	var userId = record.userDO.id;
+
+    	jQuery("#topupId").val(topupId);
+    	jQuery("#userId").val(userId);
+    	jQuery("#action").val('transactionAction');
+    	
+    	jQuery("#event").attr("name",event);
+    	jQuery("#event").val(true);
+    }
+    
+    function copyCsrf(){
+		var csrf = jQuery("input[name='_csrf_token']").val();
+		jQuery("input[name='_csrf_token']").each(function(){
+			jQuery(this).val(csrf);
+		});
+	}
+</script>
