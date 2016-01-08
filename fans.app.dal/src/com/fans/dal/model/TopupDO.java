@@ -24,6 +24,7 @@ public class TopupDO extends EntityDO implements Serializable{
 	private String data2;				//附加字段2
 	private String data3;				//附加字段3
 	private String data4;				//附加字段4
+	private String operator;            //操作人
 	
 	public String getUuid() {
 		return uuid;
@@ -109,7 +110,13 @@ public class TopupDO extends EntityDO implements Serializable{
 	public void setData4(String data4) {
 		this.data4 = data4;
 	}
-	public TopupQueryCondition toQueryCondition(){
+	public String getOperator() {
+        return operator;
+    }
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+    public TopupQueryCondition toQueryCondition(){
 		TopupQueryCondition queryCondition = new TopupQueryCondition();
 		queryCondition.setQueryMap(this.toMap());
 		return queryCondition;

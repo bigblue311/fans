@@ -145,11 +145,11 @@ $control.setTemplate("paging.vm")
           title : '手机',
           elCls: 'left',
           dataIndex :'phone',
-          width:'10%'
+          width:'8%'
         },{
             title : '省市',
             elCls: 'left',
-            width:'5%',
+            width:'7%',
             renderer : function(val,obj,index){
             	if(obj != null){
             		var location = new Location();

@@ -44,7 +44,7 @@ public class TransactionAction {
         topupDO.setAmount(cash);
         topupDO.setStatus(TopupStatusEnum.待支付.getCode());
         topupDO.setType(TopupTypeEnum.积分充值.getCode());
-        topupDO.setData4(loginUser.getName());
+        topupDO.setOperator(loginUser.getName());
         if(StringTools.isEmpty(topupFO.getDescription())){
             topupDO.setDescription(TopupTypeEnum.积分充值.getDesc());
         } else {

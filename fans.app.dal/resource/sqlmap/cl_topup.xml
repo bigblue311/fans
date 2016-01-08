@@ -26,6 +26,7 @@
     <result property="data2" 				column="data2"/>
     <result property="data3" 				column="data3"/>
     <result property="data4" 				column="data4"/>
+    <result property="operator"				column="operator"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="Topup">
@@ -40,11 +41,13 @@
 	    status,
 	    type,
 	    description,
-	    data1, data2, data3, data4
+	    data1, data2, data3, data4,
+	    operator
 	  ) values (
 	    now(), now(), #uuid#,
 	    #userId#, #openId#, #amount#, #status#,
-	    #type#, #description#, #data1#, #data2#, #data3#, #data4#
+	    #type#, #description#, #data1#, #data2#, #data3#, #data4#,
+	    #operator#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -73,6 +76,11 @@
 	      <isNotEmpty property="status">  
 	         <![CDATA[   
 	           status = #status#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="operator">  
+	         <![CDATA[   
+	           operator = #operator#,
 	         ]]> 
 	      </isNotEmpty>
 	    </dynamic>
@@ -132,7 +140,7 @@
 		    </isNotEmpty>
 		    <isNotEmpty property="operator" prepend="and">
 	        	<![CDATA[ 
-	        	data4 = #operator#
+	        	operator = #operator#
 	        	]]>
 		    </isNotEmpty>
 		    <include refid="Common.queryModify" />
@@ -146,7 +154,9 @@
   	<isNull property="openId">
   	<isNull property="status">
   	<isNull property="type">
+  	<isNull property="operator">
         <include refid="Common.validModify" />
+    </isNull>
     </isNull>
     </isNull>
     </isNull>

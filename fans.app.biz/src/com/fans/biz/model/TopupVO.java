@@ -25,6 +25,9 @@ public class TopupVO {
         this.userDO = userDO;
     }
     public String getOperator() {
+        if(topupDO != null){
+            return topupDO.getOperator();
+        }
         return operator;
     }
     public void setOperator(String operator) {

@@ -111,8 +111,8 @@ public class TransactionManagerImpl implements TransactionManager{
 	    if(userDO != null){
 	        topupVO.setUserDO(userDO);
 	    }
-	    if(StringTools.isNotEmpty(topupDO.getData4())){
-	        topupVO.setOperator(topupDO.getData4());
+	    if(StringTools.isNotEmpty(topupDO.getOperator())){
+	        topupVO.setOperator(topupDO.getOperator());
 	    }
 	    Integer type = topupDO.getType();
         TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
@@ -206,7 +206,7 @@ public class TransactionManagerImpl implements TransactionManager{
             userDao.update(userDO);
             
             topupDO.setStatus(TopupStatusEnum.交易取消.getCode());
-            topupDO.setData4(operator);
+            topupDO.setOperator(operator);
             topupDao.update(topupDO);
         }
     }
