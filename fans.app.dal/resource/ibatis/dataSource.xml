@@ -21,7 +21,7 @@
 	     	<property name="Pool.RemoveAbandoned" value="false"/>
 	     	<property name="Pool.RemoveAbandonedTimeout" value="50000"/>
 	   </dataSource>
-	 </transactionManager>
+	</transactionManager>
     
     <sqlMap resource="sqlmap/common.xml"/>
     <sqlMap resource="sqlmap/cl_coins.xml"/>

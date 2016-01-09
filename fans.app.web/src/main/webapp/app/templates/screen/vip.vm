@@ -183,7 +183,7 @@
 			    	#end
 			    	_cash="" 
 			    	_reUrl="/index.htm" 
-			    	_msg="确定购买超级置顶吗?">开启VIP</button>
+			    	_msg="确定购买超级置顶吗?">开启VIP置顶</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg pay" 
 			    	id="rocketPayBtn"
@@ -197,7 +197,7 @@
 			    	#end
 			    	_cash="" 
 			    	_reUrl="/index.htm" 
-			    	_msg="确定购买超级置顶吗?">开启VIP</button>
+			    	_msg="确定购买超级置顶吗?">开启VIP置顶</button>
 			    #end
 			</div>
 		</div>
