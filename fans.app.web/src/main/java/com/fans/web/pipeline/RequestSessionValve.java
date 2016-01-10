@@ -9,7 +9,9 @@ import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.constant.RequestSession;
@@ -35,15 +37,37 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 		try {
 		    
 		    String openId = super.getOpenId(request);
+		    Long skvId = super.getSkvId(request);
 		    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.DEBUG_MODE.getCode())){
 		        if(StringTools.isEmpty(openId)){
 		            openId = "ogOTHwaJi6KDLOjDu-59Nze0YW8M";
 		            super.setOpenId(response, openId);
 		        }
+		        if(skvId == null){
+		            skvId = 1l;
+		        }
             }
+		    //setOpenId
 		    RequestSession.openId(openId);
 		    
+		    SkvUserDO skvUser = userManager.getSkvUserById(skvId);
 		    UserDO userDO = userManager.getByOpenId(openId);
+		    if(userDO != null && userDO.getSkvId() == null && skvUser != null){
+		        userDO.setSkvId(skvId);
+		        userDO.setPhone(skvUser.getPhone()); 
+		        userManager.update(userDO);
+		    } 
+		    if(userDO.getSkvId() != null) {
+		        skvUser = userManager.getSkvUserById(userDO.getSkvId());
+		        if(skvUser != null){
+		            String shoppingLevel = skvUser.getShoppingLevel();
+	                ShoppingLevelEnum level = ShoppingLevelEnum.getByCode(shoppingLevel);
+	                //setLevel
+	                RequestSession.level(level);
+		        }
+		    }
+		    
+		    //setUser
 		    RequestSession.userDO(userDO);
 		    
 		    UserQueryCondition queryCondition = super.getQuery(request);

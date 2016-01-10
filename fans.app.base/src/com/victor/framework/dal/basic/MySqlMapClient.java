@@ -9,7 +9,7 @@ import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
 
 public class MySqlMapClient{
-	private static SqlMapClient sqlMapClient;
+	private SqlMapClient sqlMapClient;
 	
 	public void setDataSource(String dataSource) {
 		try {

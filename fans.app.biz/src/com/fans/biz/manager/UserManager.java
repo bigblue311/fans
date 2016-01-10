@@ -3,6 +3,7 @@ package com.fans.biz.manager;
 import java.util.List;
 
 import com.fans.dal.enumerate.TopListPositionEnum;
+import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.TopListDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
@@ -35,6 +36,8 @@ public interface UserManager {
 	 */
 	UserDO getById(Long id);
 	UserDO getByOpenId(String openId);
+	
+	SkvUserDO getSkvUserById(Long id);
 	
 	/**
 	 * 是否可以刷新

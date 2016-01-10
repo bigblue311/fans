@@ -7,7 +7,8 @@ import com.google.common.collect.Lists;
 public enum TopListPositionEnum {
 	充值(0,"充值置顶"),
 	分享(1,"分享置顶"),
-	加好友(2,"加好友置顶");
+	加好友(2,"加好友置顶"),
+	SKV置顶(3,"skvVIP送置顶");
 	
 	private Integer code;
 	private String desc;

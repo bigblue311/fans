@@ -25,6 +25,35 @@ public abstract class RequestSessionBase extends CookieBase{
 		context.put("rocketSet", priceManager.getZhuangBSet());
 	}
 	
+	public Long getSkvId(HttpServletRequest request) {
+	    String skvId = super.getCookie(request, CookieKey.SKV_ID);
+	    if(StringTools.isNotEmpty(skvId)){
+	        String trimed = trim0(skvId);
+	        return Long.parseLong(trimed);
+	    } else {
+	        return null;
+	    }
+	}
+	
+	private String trim0(String bigInt){
+	    boolean zeroFind = false;
+	    if(StringTools.isEmpty(bigInt)){
+	        return null;
+	    }
+	    char[] chars = bigInt.toCharArray();
+	    String result = "";
+	    for(char c : chars){
+	        String each = c+"";
+	        if(!zeroFind && each.equals("0")){
+	            continue;
+	        } else {
+	            result += c;
+	            zeroFind = true;
+	        }
+	    }
+	    return result;
+	}
+	
     public String getOpenId(HttpServletRequest request) {
         return super.getCookie(request, CookieKey.OPEN_ID);
     }

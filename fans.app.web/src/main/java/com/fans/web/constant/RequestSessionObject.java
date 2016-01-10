@@ -1,10 +1,12 @@
 package com.fans.web.constant;
 
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 
 public class RequestSessionObject {
     private UserDO              userDO;
+    private ShoppingLevelEnum   level;
     private String              openId;
     private Integer             wxVersion;
     private UserQueryCondition  query;
@@ -14,6 +16,12 @@ public class RequestSessionObject {
     }
     public void setUserDO(UserDO userDO) {
         this.userDO = userDO;
+    }
+    public ShoppingLevelEnum getLevel() {
+        return level;
+    }
+    public void setLevel(ShoppingLevelEnum level) {
+        this.level = level;
     }
     public String getOpenId() {
         return openId;

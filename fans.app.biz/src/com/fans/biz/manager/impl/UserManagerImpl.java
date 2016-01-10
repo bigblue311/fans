@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.dao.SkvUserDAO;
 import com.fans.dal.dao.TopListDAO;
 import com.fans.dal.dao.UserDAO;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.enumerate.TopListPositionEnum;
+import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.TopListDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.TopListQueryCondition;
@@ -26,6 +28,9 @@ public class UserManagerImpl implements UserManager{
 
     @Autowired
     private UserDAO userDAO;
+    
+    @Autowired
+    private SkvUserDAO skvUserDAO;
     
     @Autowired
     private TopListDAO topListDAO;
@@ -57,6 +62,14 @@ public class UserManagerImpl implements UserManager{
     @Override
     public UserDO getById(Long id) {
         return userDAO.getById(id);
+    }
+    
+    @Override
+    public SkvUserDO getSkvUserById(Long id) {
+        if(id == null) {
+            return null;
+        }
+        return skvUserDAO.getById(id);
     }
 
     @Override

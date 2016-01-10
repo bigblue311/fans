@@ -12,6 +12,7 @@ public class UserDO extends EntityDO implements Serializable{
      * 
      */
     private static final long serialVersionUID = 9107233004949997492L;
+    private Long skvId;                 //SKV ID
     private String openId;              //微信OPEN ID
     private String nickName;            //微信昵称
     private String phone;               //手机号码
@@ -28,6 +29,13 @@ public class UserDO extends EntityDO implements Serializable{
     private Date gmtRefresh;            //置顶刷新时间
     private Date gmtVipExpire;          //vip过期时间
     private Boolean isTest;
+    
+    public Long getSkvId() {
+        return skvId;
+    }
+    public void setSkvId(Long skvId) {
+        this.skvId = skvId;
+    }
     public String getOpenId() {
         return openId;
     }

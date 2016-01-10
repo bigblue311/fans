@@ -5,7 +5,13 @@
 		<property name="jdbc.username" defaultValue="root" description="登录名"/>
 		<property name="jdbc.password" defaultValue="adminadmin" description="密码"/>
 	</group>
+	<group>
+		<property name="jdbc.skv.url" defaultValue="jdbc:mysql://localhost:3306/pg" description="数据连接字符串"/>
+		<property name="jdbc.skv.username" defaultValue="root" description="登录名"/>
+		<property name="jdbc.skv.password" defaultValue="adminadmin" description="密码"/>
+	</group>
 	<script>
 		<generate template="config/dataSource.xml" destfile="ibatis/dataSource.xml"/>
+		<generate template="config/skvDataSource.xml" destfile="ibatis/skvDataSource.xml"/>
 	</script>
 </config>

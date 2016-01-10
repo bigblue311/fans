@@ -1,5 +1,6 @@
 package com.fans.web.constant;
 
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 
@@ -12,6 +13,17 @@ public class RequestSession {
             obj = new RequestSessionObject();
         }
         return obj;
+    }
+    
+    public static void level(ShoppingLevelEnum level){
+        RequestSessionObject obj = get();
+        obj.setLevel(level);
+        threadLocal.set(obj);
+    }
+    
+    public static ShoppingLevelEnum level(){
+        RequestSessionObject obj = get();
+        return obj.getLevel();
     }
     
     public static void openId(String openId){

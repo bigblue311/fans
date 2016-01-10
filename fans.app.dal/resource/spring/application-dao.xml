@@ -39,4 +39,12 @@
     <bean id="resourceRoleDAO" class="com.fans.dal.dao.impl.ResourceRoleDAOImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient"/>
     </bean>
+    
+    <bean id="skvSqlMapClient" class="com.victor.framework.dal.basic.MySqlMapClient">
+    	<property name="dataSource" value="ibatis/skvDataSource.xml" />
+    </bean>
+    
+    <bean id="skvUserDAO" class="com.fans.dal.dao.impl.SkvUserDAOImpl">
+    	<property name="mySqlMapClient" ref="skvSqlMapClient" />
+    </bean>
 </beans>
