@@ -1,6 +1,7 @@
 package com.fans.biz.manager.impl;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +9,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fans.biz.manager.PriceManager;
 import com.fans.biz.model.PriceSetVO;
 import com.fans.biz.model.PromteVO;
+import com.fans.biz.model.SkvTopVO;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.dao.TopListDAO;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.enumerate.TopListPositionEnum;
+import com.fans.dal.model.TopListDO;
+import com.fans.dal.model.UserDO;
 import com.google.common.collect.Lists;
 import com.victor.framework.common.shared.Split;
 import com.victor.framework.common.tools.CollectionTools;
+import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
 
 public class PriceManagerImpl implements PriceManager{
 
 	@Autowired
     private SystemConfigCache systemConfigCache;
+	
+	@Autowired
+	private TopListDAO topListDAO;
 	
 	@Override
 	public Integer topupM2C(Integer money) {
@@ -153,6 +165,11 @@ public class PriceManagerImpl implements PriceManager{
 	@Override
 	public List<PriceSetVO> getZhuangBSet() {
 		List<PriceSetVO> list = Lists.newArrayList();
+		PriceSetVO free = getSkvPriceSetVO();
+		if(free!=null){
+		    list.add(free);
+		    return list;
+		}
 		List<Integer> rocketList = getSetList(SystemConfigKeyEnum.ROCKET_SET);
 		List<PromteVO> promteList = getPromteList(SystemConfigKeyEnum.ROCKET_PROMOTE);
 		if(CollectionTools.isNotEmpty(rocketList)){
@@ -160,31 +177,31 @@ public class PriceManagerImpl implements PriceManager{
 				Integer cash = buyZhuangBUseMoney(minute);
 				Integer coins = buyZhuangBUseCoins(minute);
 				
-				PriceSetVO priceSetBO = new PriceSetVO();
-				priceSetBO.setValue(minute);
-				priceSetBO.setCash(cash);
-				priceSetBO.setCoins(coins);
+				PriceSetVO priceSetVO = new PriceSetVO();
+				priceSetVO.setValue(minute);
+				priceSetVO.setCash(cash);
+				priceSetVO.setCoins(coins);
 				
 				//设置优惠信息
 				for(PromteVO promteBO : promteList){
 					if(promteBO.match(minute)){
 					    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode())){
-					        priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元 "+promteBO.getText());
+					        priceSetVO.setText(minute+"分钟 "+coins+"积分或"+cash+"元 "+promteBO.getText());
 					    } else {
-					        priceSetBO.setText(minute+"分钟 "+coins+"积分 "+promteBO.getText());
+					        priceSetVO.setText(minute+"分钟 "+coins+"积分 "+promteBO.getText());
 					    }
 					}
 				}
-				if(StringTools.isEmpty(priceSetBO.getText())){
+				if(StringTools.isEmpty(priceSetVO.getText())){
 				    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode())){
-				        priceSetBO.setText(minute+"分钟 "+coins+"积分或"+cash+"元");
+				        priceSetVO.setText(minute+"分钟 "+coins+"积分或"+cash+"元");
 				    } else {
-                        priceSetBO.setText(minute+"分钟 "+coins+"积分");
+                        priceSetVO.setText(minute+"分钟 "+coins+"积分");
                     }
 				}
-				priceSetBO.setCoinsMsg("确定花费"+coins+"积分 购买超级置顶"+minute+"分钟?");
-				priceSetBO.setCashMsg("确定花费"+cash+"元 购买超级置顶"+minute+"分钟?");
-				list.add(priceSetBO);
+				priceSetVO.setCoinsMsg("确定花费"+coins+"积分 购买超级置顶"+minute+"分钟?");
+				priceSetVO.setCashMsg("确定花费"+cash+"元 购买超级置顶"+minute+"分钟?");
+				list.add(priceSetVO);
 			}
 		}
 		return list;
@@ -232,4 +249,51 @@ public class PriceManagerImpl implements PriceManager{
 		return list;
 	}
 
+	@Override
+	public PriceSetVO getSkvPriceSetVO(){
+	    PriceSetVO priceSetVO = new PriceSetVO();
+	    UserDO userDO = RequestSession.userDO();
+	    if(userDO == null){
+	        return null;
+	    }
+	    ShoppingLevelEnum level = RequestSession.level();
+	    if(level == null){
+	        return null;
+	    }
+	    TopListDO topList = topListDAO.getLatestByUserId(userDO.getId(), TopListPositionEnum.SKV置顶.getCode());
+	    
+	    String configValue = systemConfigCache.getCacheString(SystemConfigKeyEnum.SVK_TOP.getCode(),"");
+	    if(StringTools.isEmpty(configValue)){
+	        return null;
+	    }
+	    String[] split = configValue.split(Split.逗号);
+	    for(String value : split){
+	        SkvTopVO skvTopVO = new SkvTopVO(value);
+	        if(skvTopVO.getLevel() == null || !skvTopVO.getLevel().getCode().equals(level.getCode())){
+	            continue;
+	        }
+            if(topList == null){
+                priceSetVO.setValue(skvTopVO.getMinute());
+                priceSetVO.setCash(0);
+                priceSetVO.setCoins(0);
+                priceSetVO.setText(level.getDesc()+" 每"+skvTopVO.getDay()+"天可获得一次免费刷新机会");
+                priceSetVO.setCoinsMsg("确定超级置顶"+skvTopVO.getMinute()+"分钟?");
+                priceSetVO.setCashMsg("确定超级置顶"+skvTopVO.getMinute()+"分钟?");
+                return priceSetVO;
+            } else {
+                Date gmtEnd = topList.getGmtEnd();
+                if(!DateTools.isDayValid(skvTopVO.getDay(), gmtEnd)){
+                    continue;
+                }
+                priceSetVO.setValue(skvTopVO.getMinute());
+                priceSetVO.setCash(0);
+                priceSetVO.setCoins(0);
+                priceSetVO.setText(level.getDesc()+" 每"+skvTopVO.getDay()+"天可获得一次"+skvTopVO.getMinute()+"分钟免费置顶");
+                priceSetVO.setCoinsMsg("确定超级置顶"+skvTopVO.getMinute()+"分钟?");
+                priceSetVO.setCashMsg("确定超级置顶"+skvTopVO.getMinute()+"分钟?");
+                return priceSetVO;
+            }
+        }
+	    return null;
+	}
 }

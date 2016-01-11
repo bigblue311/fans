@@ -51,4 +51,5 @@ public interface PriceManager {
 	 * @return
 	 */
 	List<PriceSetVO> getZhuangBSet();
+	PriceSetVO getSkvPriceSetVO();
 }

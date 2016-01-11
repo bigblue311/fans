@@ -39,4 +39,12 @@ public class TopListDAOImpl extends EntityDAO<TopListDO,TopListQueryCondition> i
 		query.put("position", position);
 		return super.queryForEntity("getValidByUserId", query);
 	}
+
+    @Override
+    public TopListDO getLatestByUserId(Long userId, Integer position) {
+        Map<String,Object> query = Maps.newHashMap();
+        query.put("userId", userId);
+        query.put("position", position);
+        return super.queryForEntity("getLatestByUserId", query);
+    }
 }

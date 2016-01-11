@@ -22,7 +22,8 @@ public enum SystemConfigKeyEnum {
 	SHARE_TITLE("SHARE_TITLE","分享标题"),
 	SHARE_IMG("SHARE_IMG","分享图标"),
 	SHARE_MAX("SHARE_MAX","一天内最多分享置顶次数"),
-	WEIXIN_PAY("WEIXIN_PAY","微信支付开关 值ON/OFF 一旦开启将微信支付");
+	WEIXIN_PAY("WEIXIN_PAY","微信支付开关 值ON/OFF 一旦开启将微信支付"),
+	SVK_TOP("SVK_TOP","SKV会员免费刷新设置, 单位天");
 	
 	private String code;
 	private String desc;

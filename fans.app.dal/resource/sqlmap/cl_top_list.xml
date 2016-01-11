@@ -106,6 +106,15 @@
 		<include refid="orderByEnd" />
 		 limit 1
 	</select>
+	
+	<select id="getLatestByUserId" parameterClass="java.util.HashMap" resultMap="RM">
+  		<![CDATA[ 
+	    select * from cl_top_list where 
+	    	user_id = #userId# and position=#position#  
+		]]>
+		<include refid="orderByEnd" />
+		 limit 1
+	</select>
   
   <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
     select * from cl_top_list 

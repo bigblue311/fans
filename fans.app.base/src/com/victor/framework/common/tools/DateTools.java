@@ -117,6 +117,20 @@ public class DateTools {
 	}
 	
 	/**
+	 * 计算date+day天后是否还未到
+	 * @param day
+	 * @param date
+	 * @return
+	 */
+	public static Boolean isDayValid(int day, Date date){
+	    Date now = today();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DATE, cal.get(Calendar.DATE)+day);
+        return now.before(cal.getTime());
+	}
+	
+	/**
      * 计算date - minLength小时后是否还未到
      * @param hourLength
      * @param date

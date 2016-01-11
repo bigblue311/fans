@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.manager.PriceManager;
+import com.fans.biz.model.PriceSetVO;
 import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
@@ -65,7 +66,6 @@ public class GetPrepay extends RequestSessionBase{
     	if(topupType == null){
     		return Result.newInstance(null, "业务类型不存在", false);
     	}
-    	
     	cash = getPrice(topupType,data1,cash);
     	if(cash < 0){
     		return Result.newInstance(null, "交易金额不能为负数", false);
@@ -125,7 +125,13 @@ public class GetPrepay extends RequestSessionBase{
     		return priceManager.buyVipUseMoney(data1);
     	}
     	if(topupType.getCode() == TopupTypeEnum.购买置顶.getCode()){
-    		return priceManager.buyZhuangBUseMoney(data1);
+    	    PriceSetVO freeSet = priceManager.getSkvPriceSetVO();
+            if(freeSet != null){
+                data1 = freeSet.getValue();
+                return 0;
+            } else {
+                return priceManager.buyZhuangBUseMoney(data1);
+            }
     	}
     	return 0;
     }

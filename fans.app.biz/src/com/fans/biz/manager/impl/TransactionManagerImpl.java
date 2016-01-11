@@ -9,6 +9,7 @@ import com.fans.biz.manager.PriceManager;
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.model.OrderAlertVO;
 import com.fans.biz.model.OrderStatisticVO;
+import com.fans.biz.model.PriceSetVO;
 import com.fans.biz.model.TopupVO;
 import com.fans.dal.dao.CoinsDAO;
 import com.fans.dal.dao.TopListDAO;
@@ -246,6 +247,19 @@ public class TransactionManagerImpl implements TransactionManager{
 			updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.业务异常.getCode());
 			return;
 		}
+		UserDO user = userDao.getById(userId);
+        if(user == null) {
+            return;
+        }
+		if(topupDO.getAmount() == 0){
+		    TopListDO forCreate = new TopListDO();
+            forCreate.setGmtStart(DateTools.today());
+            forCreate.setGmtEnd(DateTools.addMinute(DateTools.today(), minutes));
+            forCreate.setUserId(userId);
+            forCreate.setOpenId(user.getOpenId());
+            forCreate.setPosition(TopListPositionEnum.SKV置顶.getCode());
+            topListDao.insert(forCreate);
+		}
 		TopListDO topListDO = topListDao.getValidByUserId(userId, TopListPositionEnum.充值.getCode());
 		Date expire = DateTools.today();
 		if(topListDO!=null && topListDO.getGmtEnd()!=null && topListDO.getGmtEnd().after(expire)){
@@ -254,10 +268,6 @@ public class TransactionManagerImpl implements TransactionManager{
 			Date gmtEnd = DateTools.addMinute(expire, minutes);
 			topListDao.extend(topListDO.getId(), TopListPositionEnum.充值.getCode(), gmtEnd);
 		} else {
-			UserDO user = userDao.getById(userId);
-			if(user == null) {
-				return;
-			}
 			Date gmtEnd = DateTools.addMinute(expire, minutes);
 			TopListDO forCreate = new TopListDO();
 			forCreate.setGmtStart(DateTools.today());
@@ -265,7 +275,7 @@ public class TransactionManagerImpl implements TransactionManager{
 			forCreate.setUserId(userId);
 			forCreate.setOpenId(user.getOpenId());
 			forCreate.setPosition(TopListPositionEnum.充值.getCode());
-			topListDao.insert(topListDO);
+			topListDao.insert(forCreate);
 		}
 		
 		updateTopup(topupDO.getId(),weixinOrderId,TopupStatusEnum.支付成功.getCode());
@@ -335,8 +345,17 @@ public class TransactionManagerImpl implements TransactionManager{
 				return PayStatusEnum.支付失败;
 			}
 			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
+			PriceSetVO freeSet = priceManager.getSkvPriceSetVO();
+			if(freeSet != null){
+			    coins = 0;
+			    minutes = freeSet.getValue();
+			}
 			PayStatusEnum payStatus = useCoins(userId, coins);
 			if(payStatus.getSuccess()){
+			    UserDO user = userDao.getById(userId);
+                if(user == null) {
+                    return PayStatusEnum.支付失败;
+                }
 				TopListDO topListDO = topListDao.getValidByUserId(userId, TopListPositionEnum.充值.getCode());
 				Date expire = DateTools.today();
 				if(topListDO!=null && topListDO.getGmtEnd()!=null && topListDO.getGmtEnd().after(expire)){
@@ -345,10 +364,6 @@ public class TransactionManagerImpl implements TransactionManager{
 					Date gmtEnd = DateTools.addMinute(expire, minutes);
 					topListDao.extend(topListDO.getId(), TopListPositionEnum.充值.getCode(), gmtEnd);
 				} else {
-					UserDO user = userDao.getById(userId);
-					if(user == null) {
-						return PayStatusEnum.支付失败;
-					}
 					Date gmtEnd = DateTools.addMinute(expire, minutes);
 					TopListDO forCreate = new TopListDO();
 					forCreate.setGmtStart(expire);

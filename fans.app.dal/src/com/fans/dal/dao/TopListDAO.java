@@ -36,6 +36,14 @@ public interface TopListDAO {
     TopListDO getValidByUserId(Long userId, Integer position);
     
     /**
+     * 获取用户最后一条记录
+     * @param userId
+     * @param position
+     * @return
+     */
+    TopListDO getLatestByUserId(Long userId, Integer position);
+    
+    /**
      * 根据查询条件获取
      * @param queryCondition
      * @return
