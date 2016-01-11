@@ -344,18 +344,25 @@ public class TransactionManagerImpl implements TransactionManager{
 			if(minutes == null || minutes <= 0){
 				return PayStatusEnum.支付失败;
 			}
+			UserDO user = userDao.getById(userId);
+            if(user == null) {
+                return PayStatusEnum.支付失败;
+            }
 			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
 			PriceSetVO freeSet = priceManager.getSkvPriceSetVO();
 			if(freeSet != null){
 			    coins = 0;
 			    minutes = freeSet.getValue();
+			    TopListDO forCreate = new TopListDO();
+	            forCreate.setGmtStart(DateTools.today());
+	            forCreate.setGmtEnd(DateTools.addMinute(DateTools.today(), minutes));
+	            forCreate.setUserId(userId);
+	            forCreate.setOpenId(user.getOpenId());
+	            forCreate.setPosition(TopListPositionEnum.SKV置顶.getCode());
+	            topListDao.insert(forCreate);
 			}
 			PayStatusEnum payStatus = useCoins(userId, coins);
 			if(payStatus.getSuccess()){
-			    UserDO user = userDao.getById(userId);
-                if(user == null) {
-                    return PayStatusEnum.支付失败;
-                }
 				TopListDO topListDO = topListDao.getValidByUserId(userId, TopListPositionEnum.充值.getCode());
 				Date expire = DateTools.today();
 				if(topListDO!=null && topListDO.getGmtEnd()!=null && topListDO.getGmtEnd().after(expire)){
