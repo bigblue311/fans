@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
-import com.fans.web.constant.RequestSession;
 import com.victor.framework.common.shared.Result;
 import com.victor.framework.dal.basic.Paging;
 

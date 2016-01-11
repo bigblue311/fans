@@ -5,10 +5,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.UserDO;
-import com.fans.web.constant.RequestSession;
 import com.fans.web.webpage.RequestSessionBase;
 import com.weixin.model.JsApiConfig;
 import com.weixin.service.WeixinService;

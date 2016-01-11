@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.manager.UserManager;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.UserDO;
-import com.fans.web.constant.RequestSession;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.shared.Result;
 import com.victor.framework.common.tools.StringTools;

@@ -85,7 +85,6 @@ public interface TransactionManager {
 	 */
 	void payZhuangB(String topupUUId, String weixinOrderId);
 	
-	
 	/**
 	 * 用金币购买
 	 * @param userId

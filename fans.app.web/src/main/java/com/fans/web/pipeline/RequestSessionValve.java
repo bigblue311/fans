@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
 import com.fans.biz.manager.UserManager;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
-import com.fans.web.constant.RequestSession;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
 
@@ -64,7 +64,11 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 	                ShoppingLevelEnum level = ShoppingLevelEnum.getByCode(shoppingLevel);
 	                //setLevel
 	                RequestSession.level(level);
-		        }
+		        } else {
+	                RequestSession.level(null);
+	            }
+		    } else {
+		        RequestSession.level(null);
 		    }
 		    
 		    //setUser

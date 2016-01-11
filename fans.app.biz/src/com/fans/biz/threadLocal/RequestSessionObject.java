@@ -1,4 +1,4 @@
-package com.fans.web.constant;
+package com.fans.biz.threadLocal;
 
 import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.model.UserDO;

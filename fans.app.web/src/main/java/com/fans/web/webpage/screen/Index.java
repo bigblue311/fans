@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Context;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.enumerate.SearchTypeEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
-import com.fans.web.constant.RequestSession;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.dal.basic.Paging;
 

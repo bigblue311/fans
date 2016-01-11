@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.TransactionManager;
+import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.enumerate.PayStatusEnum;
 import com.fans.dal.model.UserDO;
-import com.fans.web.constant.RequestSession;
 import com.victor.framework.common.shared.Result;
 import com.victor.framework.common.tools.StringTools;
 
