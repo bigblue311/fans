@@ -8,10 +8,13 @@ import com.alibaba.citrus.turbine.Context;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
 import com.fans.biz.threadLocal.RequestSession;
+import com.fans.dal.cache.LocationCache;
 import com.fans.dal.enumerate.SearchTypeEnum;
+import com.fans.dal.model.LocationDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.webpage.RequestSessionBase;
+import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.dal.basic.Paging;
 
 public class Index extends RequestSessionBase{
@@ -21,7 +24,24 @@ public class Index extends RequestSessionBase{
     @Autowired
     private HttpServletResponse response;
     
+    @Autowired
+    private LocationCache locationCache;
+    
     public void execute(@Param("searchType") Integer searchType, Context context){
+        UserQueryCondition userQueryCondition = getQueryCondition(searchType);
+        Paging<UserDO> paging = userManager.getPage(userQueryCondition);
+        UserDO userDO = RequestSession.userDO();
+        
+        loadPriceSet(context);
+        context.put("searchType", userQueryCondition.getSearchType());
+        context.put("query", userQueryCondition);
+        context.put("topList", userManager.getTopUsers(RequestSession.openId()));
+        context.put("list", paging.getData());
+        context.put("user", userDO);
+        context.put("nextRefresh", userManager.nextRefresh(userDO));
+    }
+    
+    private UserQueryCondition getQueryCondition(Integer searchType){
         UserQueryCondition userQueryCondition = RequestSession.queryCondition();
         if(searchType != null){
             switch(searchType){
@@ -38,16 +58,15 @@ public class Index extends RequestSessionBase{
             }
         }
         
-        userQueryCondition.valid().setPageSize(UserQueryCondition.DEFAULT_PAGE_SIZE).setPage(1);
-        Paging<UserDO> paging = userManager.getPage(userQueryCondition);
-        UserDO userDO = RequestSession.userDO();
+        String province = userQueryCondition.getProvince();
+        String city = userQueryCondition.getCity();
         
-        loadPriceSet(context);
-        context.put("searchType", userQueryCondition.getSearchType());
-        context.put("query", userQueryCondition);
-        context.put("topList", userManager.getTopUsers(RequestSession.openId()));
-        context.put("list", paging.getData());
-        context.put("user", userDO);
-        context.put("nextRefresh", userManager.nextRefresh(userDO));
+        if(StringTools.isNotEmpty(province) && StringTools.isNotEmpty(city)){
+            LocationDO location = locationCache.getCache(province+","+city+",");
+            String extCity = location.getName().replace("省", "").replace("市", "");
+            userQueryCondition.setExtCity(extCity);
+        }
+        userQueryCondition.valid().setPageSize(UserQueryCondition.DEFAULT_PAGE_SIZE).setPage(1);
+        return userQueryCondition;
     }
 }

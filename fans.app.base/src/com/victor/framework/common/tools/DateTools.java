@@ -126,7 +126,7 @@ public class DateTools {
 	    Date now = today();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.set(Calendar.DATE, cal.get(Calendar.DATE)+day);
+        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+day);
         return now.before(cal.getTime());
 	}
 	

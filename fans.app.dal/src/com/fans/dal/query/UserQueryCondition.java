@@ -68,6 +68,15 @@ public class UserQueryCondition extends QueryCondition implements Serializable{
         return getString("city");
     }
     
+    public UserQueryCondition setExtCity(String extCity) {
+        put("extCity",extCity);
+        return this;
+    }
+    
+    public String getExtCity(){
+        return getString("extCity");
+    }
+    
     public UserQueryCondition setDesciption(String description) {
         put("description",description);
         return this;

@@ -56,7 +56,10 @@
 								</div>
 								<div class="left ft_describe">
 									<h3>
-										<span class="city_area location" province="$!each.province" city="$!each.city"></span> &nbsp;$!each.nickName
+										<span class="city_area location" 
+											  province="$!each.province" 
+											  city="$!each.city"
+											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
 									</h3>
 									<p>$!each.description</p>
 								</div>
@@ -85,7 +88,10 @@
 								</div>
 								<div class="left ft_describe">
 									<h3>
-										<span class="city_area location" province="$!each.province" city="$!each.city"></span> &nbsp;$!each.nickName
+										<span class="city_area location" 
+											  province="$!each.province" 
+											  city="$!each.city"
+											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
 									</h3>
 									<p>$!each.description</p>
 								</div>
@@ -126,7 +132,10 @@
 								</div>
 								<div class="left ft_describe">
 									<h3>
-										<span class="city_area location" province="$!each.province" city="$!each.city"></span> &nbsp;$!each.nickName
+										<span class="city_area location" 
+											  province="$!each.province" 
+											  city="$!each.city"
+											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
 									</h3>
 									<p>$!each.description</p>
 								</div>
@@ -155,7 +164,10 @@
 								</div>
 								<div class="left ft_describe">
 									<h3>
-										<span class="city_area location" province="$!each.province" city="$!each.city"></span> &nbsp;$!each.nickName
+										<span class="city_area location" 
+											  province="$!each.province" 
+											  city="$!each.city"
+											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
 									</h3>
 									<p>$!each.description</p>
 								</div>
@@ -258,14 +270,14 @@
 
 					<div class="left ft_describe">
 						<h2 id="user_popup_nickname"></h2>
-						<p id="user_popup_description"></p>
+						<p id="user_popup_description" style="max-width:300px"></p>
 					</div>
 				</div>
 
 			</div>
 			<div class="clear"></div>
 			<div class="code_area center">
-				<img id="user_popup_code" src="" alt="" style="width: 224px;">
+				<img id="user_popup_code" src="" alt="" style="max-width: 224px; min-width:224px;">
 			</div>
 			<p class="ft_code">扫一扫上面的二维码图案，或者长按识别二维码，加我微信</p>
 
@@ -354,10 +366,22 @@
  						var headImg = list[i].headImg;
  						var provinceCode = list[i].province;
  						var cityCode = list[i].city;
+ 						var extCity = list[i].extCity;
  						
  						var location = new Location();
- 			    		var provinceName = location.findProvince(provinceCode);
- 			    		var cityName = location.findCity(provinceCode,cityCode);
+ 						var provinceName = "";
+ 						var cityName = "";
+ 						
+ 	            		if(provinceCode == null || provinceCode == ""){
+ 	            			provinceName = "";
+ 	            		} else {
+ 	            			provinceName = location.findProvince(provinceCode);
+ 	            			if(cityCode == null || cityCode == ""){
+ 	            				cityName = "";
+ 	 	            		} else {
+ 	 	            			var cityName = location.findCity(provinceCode,cityCode);
+ 	 	            		}
+ 	            		}
  						
  						var nickName = list[i].nickName;
  						var description = list[i].description;
@@ -391,7 +415,11 @@
  						   msg += "		</div>";
  						   msg += "	    <div class='left ft_describe'>";
  						   msg += "			 <h3>";
- 						   msg += "			 	<span class='city_area location'>["+provinceName+" "+cityName+"]</span> &nbsp;"+nickName;
+ 						   if(extCity != null && extCity != ""){
+ 							  msg += "			 	<span class='city_area location'>["+extCity+"]</span> &nbsp;"+nickName;
+ 						   } else {
+ 							  msg += "			 	<span class='city_area location'>["+provinceName+cityName+"]</span> &nbsp;"+nickName; 
+ 						   }
  						   msg += "			 </h3>";
  						   msg += "			 <p>"+description+"</p>";
  						   msg += "	    </div>";
@@ -435,12 +463,29 @@
 	   jQuery(".location").each(function(){
 			var provinceCode = jQuery(this).attr("province");
 			var cityCode = jQuery(this).attr("city");
+			var extCity = jQuery(this).attr("extCity");
 			
 			var location = new Location();
-   			var provinceName = location.findProvince(provinceCode);
-   			var cityName = location.findCity(provinceCode,cityCode);
+			var provinceName = "";
+			var cityName = "";
+				
+     		if(provinceCode == null || provinceCode == ""){
+     			provinceName = "";
+     		} else {
+     			provinceName = location.findProvince(provinceCode);
+     			if(cityCode == null || cityCode == ""){
+     				cityName = "";
+          		} else {
+          			var cityName = location.findCity(provinceCode,cityCode);
+          		}
+     		}
+     		
+     		if(extCity != null && extCity != ""){
+				jQuery(this).empty().append("["+extCity+"]");
+			} else {
+				jQuery(this).empty().append("["+provinceName+cityName+"]");
+			}
 			
-			jQuery(this).empty().append("["+provinceName+" "+cityName+"]");
 		});
 	    showLocation('q_province','q_city','q_twon','$!{query.province}','$!{query.city}','');
 	    

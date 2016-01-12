@@ -1,5 +1,6 @@
 package com.fans.biz.manager.impl;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -282,7 +283,7 @@ public class PriceManagerImpl implements PriceManager{
                 return priceSetVO;
             } else {
                 Date gmtEnd = topList.getGmtEnd();
-                if(!DateTools.isDayValid(skvTopVO.getDay(), gmtEnd)){
+                if(DateTools.isDayValid(skvTopVO.getDay(), gmtEnd)){
                     continue;
                 }
                 priceSetVO.setValue(skvTopVO.getMinute());
@@ -296,4 +297,48 @@ public class PriceManagerImpl implements PriceManager{
         }
 	    return null;
 	}
+
+    @Override
+    public String getSkvPriceMsg() {
+        UserDO userDO = RequestSession.userDO();
+        if(userDO == null){
+            return null;
+        }
+        ShoppingLevelEnum level = RequestSession.level();
+        if(level == null){
+            return null;
+        }
+        TopListDO topList = topListDAO.getLatestByUserId(userDO.getId(), TopListPositionEnum.SKV置顶.getCode());
+        
+        String configValue = systemConfigCache.getCacheString(SystemConfigKeyEnum.SVK_TOP.getCode(),"");
+        if(StringTools.isEmpty(configValue)){
+            return null;
+        }
+        String[] split = configValue.split(Split.逗号);
+        for(String value : split){
+            SkvTopVO skvTopVO = new SkvTopVO(value);
+            if(skvTopVO.getLevel() == null || !skvTopVO.getLevel().getCode().equals(level.getCode())){
+                continue;
+            }
+            if(topList == null){
+                return level.getDesc()+" 每"+skvTopVO.getDay()+"天可获得一次免费刷新机会";
+            } else {
+                Date gmtEnd = topList.getGmtEnd();
+                if(DateTools.isDayValid(skvTopVO.getDay(), gmtEnd)){
+                    Integer interval = skvTopVO.getDay();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(userDO.getGmtRefresh());
+                    cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + interval);
+                    Long countDown = cal.getTime().getTime() - DateTools.today().getTime();
+                    countDown = countDown / 1000;
+                    Integer countDownSec = countDown <= 0 ? 0 : countDown.intValue();
+                    int oneHour = 60 * 60;
+                    String countDownMsg = countDownSec >= oneHour ? (countDownSec / oneHour) + "小时" : countDownSec + "秒";
+                    return countDownMsg+"后可获得一次"+skvTopVO.getMinute()+"分钟免费置顶";
+                }
+                return level.getDesc()+" 每"+skvTopVO.getDay()+"天可获得一次"+skvTopVO.getMinute()+"分钟免费置顶";
+            }
+        }
+        return null;
+    }
 }

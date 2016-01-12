@@ -28,7 +28,6 @@
     <result property="coins" 				column="coins"/>
     <result property="gmtRefresh" 			column="gmt_refresh"/>
     <result property="gmtVipExpire" 		column="gmt_vip_expire"/>
-    <result property="isTest" 				column="is_test"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="User">
@@ -52,12 +51,15 @@
 	    coins,
 	    gmt_refresh,
 	    gmt_vip_expire,
-	    is_test
+	    ext_id,
+	    ext_city,
+	    ext_source
 	  ) values (
 	    now(), now(), #skvId#,
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
-	    #groupDescription#, #weixinId#, #coins#, now(), now(), #isTest#
+	    #groupDescription#, #weixinId#, #coins#, now(), now(),
+	    #extId#, #extCity#, #extSource#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -154,8 +156,21 @@
 	    where id = #id#
 	  </update>
 	  
+	  <select id="getRandom" resultMap="RM">
+	  	<![CDATA[   
+	  	select * from cl_user where 
+	    open_id is null and 
+	    ext_id >= ((SELECT MAX(ext_id) FROM cl_user)-(SELECT MIN(ext_id) FROM cl_user)) * RAND() + (SELECT MIN(ext_id) FROM cl_user) 
+	    limit 30
+	    ]]> 
+	  </select>
+	  
 	  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
 	    select * from cl_user where id = #id#  
+	  </select>
+	  
+	  <select id="getByExtId" parameterClass="java.util.HashMap" resultMap="RM">
+	    select * from cl_user where ext_id = #extId#  
 	  </select>
 	  
 	  <select id="getByOpenId" parameterClass="java.util.HashMap" resultMap="RM">
@@ -187,12 +202,21 @@
 		    </isNotEmpty>
 		    <isNotEmpty property="province" prepend="and">
 	        	<![CDATA[ 
-	        	province = #province#
+	        	(
+	        		province = #province#
+	        		or
+	        		ext_city like concat('%',#extCity#,'%') 
+	        	)
 	        	]]>
 		    </isNotEmpty>
 		    <isNotNull property="city" prepend="and">  
 	         <![CDATA[   
-	           city = #city#
+	           (
+	           		city = #city#
+	           		or
+	           		ext_city like concat('%',#extCity#,'%') 
+	           )
+	           
 	         ]]> 
 	      	</isNotNull>
 	      	<isEqual property="searchType" compareValue="0">

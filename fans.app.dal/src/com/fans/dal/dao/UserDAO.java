@@ -42,6 +42,8 @@ public interface UserDAO {
      */
     UserDO getById(Long id);
     UserDO getByOpenId(String openId);
+    UserDO getByExtId(Long extId);
+    List<UserDO> getRandom();
 
     /**
      * 根据查询条件获取

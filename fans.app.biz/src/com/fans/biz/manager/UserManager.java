@@ -28,6 +28,7 @@ public interface UserManager {
 	 * @param id
 	 */
 	void refresh(Long id);
+	void randomRefresh();
 	
 	/**
 	 * 根据ID获取

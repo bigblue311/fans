@@ -23,6 +23,7 @@ public abstract class RequestSessionBase extends CookieBase{
 		context.put("topupSet", priceManager.getTopupSet());
 		context.put("vipSet", priceManager.getVipSet());
 		context.put("rocketSet", priceManager.getZhuangBSet());
+		context.put("skvPriceMsg", priceManager.getSkvPriceMsg());
 	}
 	
 	public Long getSkvId(HttpServletRequest request) {

@@ -1,6 +1,7 @@
 package com.fans.dal.dao.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fans.dal.dao.UserDAO;
 import com.fans.dal.model.UserDO;
@@ -16,6 +17,16 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
     @Override
     public UserDO getByOpenId(String openId) {
         return super.queryForEntity("getByOpenId", "openId", openId);
+    }
+    
+    @Override
+    public UserDO getByExtId(Long extId) {
+        return super.queryForEntity("getByExtId", "extId", extId);
+    }
+    
+    @Override
+    public List<UserDO> getRandom() {
+        return super.queryForList("getRandom");
     }
 
     @Override

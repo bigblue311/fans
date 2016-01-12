@@ -41,8 +41,16 @@ public class UserManagerImpl implements UserManager{
     @Override
     public void create(UserDO userDO) {
         String openId = userDO.getOpenId();
-        if(StringTools.isNotEmpty(openId) && userDAO.getByOpenId(openId) == null){
-            userDAO.insert(userDO);
+        Long extId = userDO.getExtId();
+        if(StringTools.isNotEmpty(openId)){
+            if(userDAO.getByOpenId(openId) == null) {
+                userDAO.insert(userDO);
+            }
+        } 
+        if(extId!=null){
+            if(userDAO.getByExtId(extId) == null){
+                userDAO.insert(userDO);
+            }
         }
     }
 
@@ -69,7 +77,12 @@ public class UserManagerImpl implements UserManager{
         if(id == null) {
             return null;
         }
-        return skvUserDAO.getById(id);
+        try {
+            return skvUserDAO.getById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -202,5 +215,17 @@ public class UserManagerImpl implements UserManager{
     @Override
     public TopListDO getValidTop(Long userId,TopListPositionEnum position) {
         return topListDAO.getValidByUserId(userId, position.getCode());
+    }
+
+    @Override
+    public void randomRefresh() {
+        List<UserDO> list = userDAO.getRandom();
+        if(CollectionTools.isNotEmpty(list)){
+            for(UserDO user : list){
+                if(user != null){
+                    userDAO.refresh(user.getId());
+                }
+            }
+        }
     }
 }

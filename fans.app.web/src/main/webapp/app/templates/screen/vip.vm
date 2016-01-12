@@ -141,6 +141,9 @@
  		<p>4.在置顶时间内继续购买,时间将累加</p>
  		<div class="blank2"></div> 
  		<p>5.数量有限，下单后不可退款</p>
+ 		#if($!skvPriceMsg)
+ 		<p>6.$!skvPriceMsg</p>
+ 		#end
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div>

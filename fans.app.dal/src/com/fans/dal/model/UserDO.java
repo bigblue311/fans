@@ -28,7 +28,9 @@ public class UserDO extends EntityDO implements Serializable{
     private Integer coins;				//金币
     private Date gmtRefresh;            //置顶刷新时间
     private Date gmtVipExpire;          //vip过期时间
-    private Boolean isTest;
+    private Long extId;                 //外部ID
+    private String extCity;             //外部城市
+    private String extSource;           //外部来源
     
     public Long getSkvId() {
         return skvId;
@@ -120,20 +122,31 @@ public class UserDO extends EntityDO implements Serializable{
     public void setGmtVipExpire(Date gmtVipExpire) {
         this.gmtVipExpire = gmtVipExpire;
     }
-    public Boolean getIsTest() {
-        return isTest;
-    }
-    public void setIsTest(Boolean isTest) {
-        this.isTest = isTest;
-    }
     public Integer getCoins() {
 		return coins;
 	}
 	public void setCoins(Integer coins) {
 		this.coins = coins;
 	}
-	
-	public boolean isVip(){
+	public Long getExtId() {
+        return extId;
+    }
+    public void setExtId(Long extId) {
+        this.extId = extId;
+    }
+    public String getExtCity() {
+        return extCity;
+    }
+    public void setExtCity(String extCity) {
+        this.extCity = extCity;
+    }
+    public String getExtSource() {
+        return extSource;
+    }
+    public void setExtSource(String extSource) {
+        this.extSource = extSource;
+    }
+    public boolean isVip(){
         if(gmtVipExpire == null){
             return false;
         }
