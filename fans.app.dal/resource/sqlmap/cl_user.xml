@@ -28,6 +28,9 @@
     <result property="coins" 				column="coins"/>
     <result property="gmtRefresh" 			column="gmt_refresh"/>
     <result property="gmtVipExpire" 		column="gmt_vip_expire"/>
+    <result property="extId" 				column="ext_id"/>
+    <result property="extCity" 				column="ext_city"/>
+    <result property="extSource" 			column="ext_source"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="User">

@@ -62,9 +62,11 @@ public class Index extends RequestSessionBase{
         String city = userQueryCondition.getCity();
         
         if(StringTools.isNotEmpty(province) && StringTools.isNotEmpty(city)){
-            LocationDO location = locationCache.getCache(province+","+city+",");
-            String extCity = location.getName().replace("省", "").replace("市", "");
-            userQueryCondition.setExtCity(extCity);
+            LocationDO location = locationCache.getCache(province+","+city);
+            if(location!=null){
+                String extCity = location.getName().replace("省", "").replace("市", "");
+                userQueryCondition.setExtCity(extCity);
+            }
         }
         userQueryCondition.valid().setPageSize(UserQueryCondition.DEFAULT_PAGE_SIZE).setPage(1);
         return userQueryCondition;
