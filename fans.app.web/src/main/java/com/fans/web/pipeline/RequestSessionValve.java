@@ -57,7 +57,7 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 		        userDO.setPhone(skvUser.getPhone()); 
 		        userManager.update(userDO);
 		    } 
-		    if(userDO.getSkvId() != null) {
+		    if(userDO != null && userDO.getSkvId() != null) {
 		        skvUser = userManager.getSkvUserById(userDO.getSkvId());
 		        if(skvUser != null){
 		            String shoppingLevel = skvUser.getShoppingLevel();
