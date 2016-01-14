@@ -19,11 +19,6 @@
 	<section class="order_box padd1" style="padding-top: 0; padding-bottom: 0;">
 		<div class="table_box table_box2">
 			<dl>
-				<dd class="right">
-					<a href="/index.htm">取消</a>
-				</dd>
-			</dl>
-			<dl>
 				<dd class="dd1">修改头像</dd>
 				<dd class="padded">
 					<form id='form_headImg_uploader' method='post' enctype='multipart/form-data'>

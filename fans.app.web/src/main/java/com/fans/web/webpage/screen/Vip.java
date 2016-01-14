@@ -1,5 +1,7 @@
 package com.fans.web.webpage.screen;
 
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
@@ -10,6 +12,7 @@ import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.enumerate.TopListPositionEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
+import com.victor.framework.common.tools.DateTools;
 
 public class Vip extends RequestSessionBase{
 
@@ -32,6 +35,19 @@ public class Vip extends RequestSessionBase{
         
         Integer shareCount = userManager.getTodayShareCount(userDO.getId());
         context.put("shareCount", shareCount);
+        
+        String kefuOnline = systemConfigCache.getCacheString(SystemConfigKeyEnum.KEFU_ONLINE.getCode(), "09:00:00");
+        context.put("kefuOnline", kefuOnline);
+        
+        String kefuOffline = systemConfigCache.getCacheString(SystemConfigKeyEnum.KEFU_OFFLINE.getCode(), "09:00:00");
+        context.put("kefuOffline", kefuOffline);
+        
+        try {
+            boolean isKefuOnline = DateTools.inTime(kefuOnline, kefuOffline);
+            context.put("isKefuOnline", isKefuOnline);
+        } catch (ParseException e) {
+            context.put("isKefuOnline", false);
+        }
         
         boolean weixinSwitch = systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode());
         context.put("weixinSwitch", weixinSwitch);

@@ -45,6 +45,7 @@
 		</p>
 		<div class="blank2"></div>
 		<div id="topupDetail" style="display:none">
+			#if($!weixinSwitch)
 			<ul>
 				#foreach($item in $!topupSet) 
 				<li class="radio_item" bind="topup">
@@ -57,7 +58,6 @@
 			  	</li>
 				#end
 			</ul>
-			#if($!weixinSwitch)
 			<div class="padded10">
 			    <button class="btn btn-pink btn-lg pay" 
 			    	id="topupPayBtn"
@@ -68,7 +68,12 @@
 			    	_msg="确定充值吗?">充值</button>
 			</div>
 			#else
-			<p>联系微信XXX客服,发送您的会员ID和金额</p>
+			<ul>
+			#foreach($item in $!topupSet) 
+			<li>$item.text</li>
+			#end
+			</ul>
+			<p>联系客服微信号<font color="red">tangzhejiafen_1</font>,发送您的会员ID和金额</p>
 			#end
 		</div>
 		<div class="blank2"></div>
@@ -91,8 +96,8 @@
 			  		coinsMsg="$!item.coinsMsg"> $item.text 
 			  	</li>
 				#end
-				<li class="radio_item" show="vipBuyBtn" hide="vipPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
 				#if($!weixinSwitch)
+				<li class="radio_item" show="vipBuyBtn" hide="vipPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
 				<li class="radio_item" show="vipPayBtn" hide="vipBuyBtn"><input type="radio" name="payType"> 使用微信支付</li>
 				#end
 			</ul>
@@ -169,8 +174,8 @@
 			  		coinsMsg="$!item.coinsMsg"> $item.text 
 			  	</li>
 				#end
-				<li class="radio_item" show="rocketBuyBtn" hide="rocketPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
 				#if($!weixinSwitch)
+				<li class="radio_item" show="rocketBuyBtn" hide="rocketPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
 				<li class="radio_item" show="rocketPayBtn" hide="rocketBuyBtn"><input type="radio" name="payType"> 使用微信支付</li>
 				#end
 			</ul>
