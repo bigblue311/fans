@@ -15,7 +15,7 @@
     <services:uris>
         <uris:uri id="server" requestAware="true" />
 
-        <uris:turbine-uri id="fans" exposed="true" extends="server">
+        <uris:turbine-uri id="app" exposed="true" extends="server">
             <componentPath>/</componentPath>
         </uris:turbine-uri>
         
@@ -23,7 +23,7 @@
             <componentPath>/admin</componentPath>
         </uris:turbine-uri>
         
-        <uris:turbine-content-uri id="fansContent" exposed="true" extends="fans" />
+        <uris:turbine-content-uri id="fansContent" exposed="true" extends="app" />
 
     </services:uris>
 

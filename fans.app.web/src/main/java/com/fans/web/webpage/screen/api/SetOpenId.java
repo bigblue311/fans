@@ -24,10 +24,8 @@ public class SetOpenId extends RequestSessionBase{
     private UserManager userManager;
     
     public void execute(@Param("code")String code, Navigator nav){
-    	
-    	String openId = "";
 		WxUser wxUser = weixinService.getUserInfo(code);
-        openId = wxUser.getOpenId();
+		String openId = wxUser.getOpenId();
         UserDO userDO = userManager.getByOpenId(openId);
         if(userDO == null){
             userDO = new UserDO();
@@ -35,10 +33,11 @@ public class SetOpenId extends RequestSessionBase{
             userDO.setNickName(wxUser.getNickName());
             userDO.setHeadImg(wxUser.getHeadImgUrl());
             userDO.setGender(getSex(wxUser.getSex()));
+            userDO.setCoins(0);
             userManager.create(userDO);
         }
         super.setOpenId(response, openId);
-        nav.forwardTo("index");
+        nav.redirectTo("app").withTarget("index.vm");
     }
     
     private Integer getSex(Integer wxSex){
