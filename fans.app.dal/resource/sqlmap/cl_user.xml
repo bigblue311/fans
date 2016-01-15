@@ -61,7 +61,7 @@
 	    now(), now(), #skvId#,
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
-	    #groupDescription#, #weixinId#, #coins#, now(), now(),
+	    #groupDescription#, #weixinId#, #coins#, now(), #gmtVipExpire#,
 	    #extId#, #extCity#, #extSource#
 	  )
 	  ]]>

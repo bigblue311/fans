@@ -1,5 +1,7 @@
 package com.fans.web.webpage.screen.api;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Navigator;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
+import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
+import com.victor.framework.common.tools.DateTools;
 import com.weixin.model.WxUser;
 import com.weixin.service.WeixinService;
 
@@ -23,6 +28,9 @@ public class SetOpenId extends RequestSessionBase{
     @Autowired
     private UserManager userManager;
     
+    @Autowired
+    private SystemConfigCache systemConfigCache;
+    
     public void execute(@Param("code")String code, Navigator nav){
 		WxUser wxUser = weixinService.getUserInfo(code);
 		String openId = wxUser.getOpenId();
@@ -33,7 +41,10 @@ public class SetOpenId extends RequestSessionBase{
             userDO.setNickName(wxUser.getNickName());
             userDO.setHeadImg(wxUser.getHeadImgUrl());
             userDO.setGender(getSex(wxUser.getSex()));
-            userDO.setCoins(0);
+            userDO.setCoins(systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_COINS.getCode(), 0));
+            Integer dayToAdd = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_VIP.getCode(), 0);
+            Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
+            userDO.setGmtVipExpire(vipExpire);
             userManager.create(userDO);
         }
         super.setOpenId(response, openId);
