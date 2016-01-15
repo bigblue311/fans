@@ -156,6 +156,7 @@
  		<div class="blank2"></div> 
  		<p>5.数量有限，下单后不可退款</p>
  		#if($!skvPriceMsg)
+ 		<div class="blank2"></div> 
  		<p>6.$!skvPriceMsg</p>
  		#end
  		<div class="blank2"></div> 
