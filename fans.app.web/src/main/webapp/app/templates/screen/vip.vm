@@ -70,10 +70,19 @@
 			#else
 			<ul>
 			#foreach($item in $!topupSet) 
-			<li>$item.text</li>
+			<li style="padding:5px;">$item.text</li>
 			#end
 			</ul>
-			<p>联系客服微信号<font color="red">tangzhejiafen_1</font>,发送您的会员ID和金额</p>
+			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;margin:10px 5px 10px 5px;clear:both;" />
+			<div style="float:left"><img src="/images/kefu.jpg" style="width:140px"></div>
+			<div style="float:left;margin-left:5px;">
+				<div style="margin-bottom:12px;">客服微信号 <font color="red">tangzhejiafen_1</font></div>
+				<div style="margin-bottom:12px;">工作时间 <font #if($!isKefuOnline)color="red"#else color="grey"#end>$kefuOnline - $kefuOffline</font></div>
+				<div style="margin-bottom:12px;">非工作时间将会在第二天处理</div>
+				<div style="margin-bottom:12px;">发送您的红包和会员ID</div>
+				<div style="margin-bottom:12px;">例如发送:红包+会员$!user.id</div>
+			</div>
+			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;margin:10px 5px 10px 5px;clear:both;" />
 			#end
 		</div>
 		<div class="blank2"></div>
@@ -222,7 +231,7 @@
  		<div class="blank2"></div> 
  		<p>4.在置顶时间内继续分享,时间将累加</p>
  		<div class="blank2"></div> 
- 		<p>今天分享 ：<span class="member">$!shareCount次</span><span class="link_btn"><a href="/share.htm">我要分享</a></span></p>
+ 		<p>今天分享 ：<span class="member">$!shareCount次</span><span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a></span></p>
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div>

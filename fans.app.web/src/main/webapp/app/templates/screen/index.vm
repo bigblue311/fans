@@ -242,18 +242,22 @@
 		<ul>
 			<li><a href="javascript:void(0)" id="zt_top"> 
 				<font class="iconfont">&#xe613;</font>
-				<span id="countDown" style="color:white"></span>
+				<div style="color:white">置顶<span id="countDown" style="color:white"></span></div>
 			</a></li>
 
-			<li><a href="/vip.htm"> <font class="iconfont">&#xe608;</font>
-
+			<li><a href="/vip.htm"> 
+				<font class="iconfont">&#xe608;</font>
+				<div style="color:white">VIP</div>
 			</a></li>
 
-			<li><a href="/my.htm"> <font class="iconfont">&#xe615;</font>
-
+			<li><a href="/my.htm"> 
+				<font class="iconfont">&#xe615;</font>
+				<div style="color:white">个人</div>
 			</a></li>
 
-			<li><a href="/index.htm"> <font class="iconfont">&#xe614;</font>
+			<li><a href="/index.htm"> 
+				<font class="iconfont">&#xe614;</font>
+				<div style="color:white">刷新</div>
 			</a></li>
 		</ul>
 	</footer>

@@ -164,7 +164,7 @@ textarea {
 .footer_nav {
 	/*background: #212227;*/
 	background: -webkit-linear-gradient(left, #FF5648, #FF1082);
-	height: 45px;
+	height: 55px;
 	position: fixed;
 	bottom: 0;
 	right: 0;
@@ -177,7 +177,7 @@ textarea {
 	float: left;
 	width: 25%;
 	text-align: center;
-	height: 45px;
+	height: 50px;
 	overflow: hidden;
 	line-height: 19px;
 }
