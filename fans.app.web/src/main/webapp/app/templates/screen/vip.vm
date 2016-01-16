@@ -10,6 +10,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<meta name="format-detection" content="telephone=no" />
 		<link rel="stylesheet" href="css/super_style.css" />
+		<title>躺着加粉</title>
 </head>
 <body>
 	<div>
@@ -41,7 +42,7 @@
 		<div class="blank2"></div>
 		<div class="blank2"></div>
 		<p>
-			会员积分 ：<span class="member">$!user.coins</span> <span class="link_btn" for="topupDetail">购买积分</span>
+			会员金币 ：<span class="member">$!user.coins</span> <span class="link_btn" for="topupDetail">购买金币</span>
 		</p>
 		<div class="blank2"></div>
 		<div id="topupDetail" style="display:none">
@@ -106,7 +107,7 @@
 			  	</li>
 				#end
 				#if($!weixinSwitch)
-				<li class="radio_item" show="vipBuyBtn" hide="vipPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
+				<li class="radio_item" show="vipBuyBtn" hide="vipPayBtn"><input type="radio" name="payType" checked> 使用金币支付</li>
 				<li class="radio_item" show="vipPayBtn" hide="vipBuyBtn"><input type="radio" name="payType"> 使用微信支付</li>
 				#end
 			</ul>
@@ -185,7 +186,7 @@
 			  	</li>
 				#end
 				#if($!weixinSwitch)
-				<li class="radio_item" show="rocketBuyBtn" hide="rocketPayBtn"><input type="radio" name="payType" checked> 使用积分支付</li>
+				<li class="radio_item" show="rocketBuyBtn" hide="rocketPayBtn"><input type="radio" name="payType" checked> 使用金币支付</li>
 				<li class="radio_item" show="rocketPayBtn" hide="rocketBuyBtn"><input type="radio" name="payType"> 使用微信支付</li>
 				#end
 			</ul>
@@ -223,14 +224,12 @@
  		<div class="blank2"></div> 
 		#end
 		<h2>分享置顶</h2>
-		<div class="blank2"></div> 
- 		<p>1.在全国相应地区持续置顶第二条</p>
  		<div class="blank2"></div> 
- 		<p>2.不购买VIP也可以</p>
+ 		<p>1.不购买VIP也可以</p>
  		<div class="blank2"></div> 
- 		<p>3.一天最多分享$!shareMax次</p>
+ 		<p>2.一天最多分享$!shareMax次</p>
  		<div class="blank2"></div> 
- 		<p>4.在置顶时间内继续分享,时间将累加</p>
+ 		<p>3.分享成功可获取50金币</p>
  		<div class="blank2"></div> 
  		<p>今天分享 ：<span class="member">$!shareCount次</span><span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a></span></p>
  		<div class="blank2"></div> 
@@ -282,5 +281,6 @@
 			})
 		})
 	</script>
+	$control.setTemplate("home.vm")
 </body>
 </html>

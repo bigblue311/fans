@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="css/basic.css" />
 		<link rel="stylesheet" href="css/layer.css" />
 		<link rel="stylesheet" href="css/index.css" />
+		<title>躺着加粉</title>
 </head>
 #set ($userGroup = $form.user.defaultInstance)
 <body>
@@ -440,6 +441,7 @@
 	}
 	
 	function bindAdd(){
+		$(".icon,.add_fri").unbind("click");
 		$(".icon,.add_fri").click(function(){
 			var user_popup_nickname = $(this).attr("user_popup_nickname");
 			var user_popup_description = $(this).attr("user_popup_description");

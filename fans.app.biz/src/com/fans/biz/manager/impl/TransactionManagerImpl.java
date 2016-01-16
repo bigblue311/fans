@@ -141,7 +141,7 @@ public class TransactionManagerImpl implements TransactionManager{
     	if(topupType == null){
     		return;
     	}
-    	if(topupType.getCode().intValue() == TopupTypeEnum.积分充值.getCode().intValue()){
+    	if(topupType.getCode().intValue() == TopupTypeEnum.金币充值.getCode().intValue()){
     		payTopup(topupUUId,weixinOrderId);
     		return;
     	}

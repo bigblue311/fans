@@ -1,7 +1,6 @@
 package com.fans.biz.manager.impl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,27 +129,6 @@ public class UserManagerImpl implements UserManager{
     }
     
     @Override
-    public void share(Long userId, Integer minutes) {
-        TopListDO topListDO = topListDAO.getValidByUserId(userId, TopListPositionEnum.分享.getCode());
-        UserDO user = getById(userId);
-        if(user == null) {
-            return;
-        }
-        Date expire = DateTools.today();
-        if(topListDO!=null && topListDO.getGmtEnd()!=null && topListDO.getGmtEnd().after(expire)){
-            topListDAO.expire(userId, TopListPositionEnum.分享.getCode());
-        }
-        Date gmtEnd = DateTools.addMinute(expire, minutes);
-        TopListDO forCreate = new TopListDO();
-        forCreate.setGmtStart(expire);
-        forCreate.setGmtEnd(gmtEnd);
-        forCreate.setUserId(userId);
-        forCreate.setOpenId(user.getOpenId());
-        forCreate.setPosition(TopListPositionEnum.分享.getCode());
-        topListDAO.insert(forCreate);
-    }
-    
-    @Override
     public Integer getTodayShareCount(Long userId) {
         TopListQueryCondition queryCondition = new TopListQueryCondition();
         queryCondition.setUserId(userId).setGmtModifyStart(DateTools.todayStart())
@@ -227,5 +205,10 @@ public class UserManagerImpl implements UserManager{
                 }
             }
         }
+    }
+
+    @Override
+    public void addCoins(Long userId, Integer coins) {
+        userDAO.topup(userId, coins);
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 public enum TopupTypeEnum {
-    积分充值(0,"积分充值","red","<span class='am-badge am-badge-danger am-round'>"),
+    金币充值(0,"金币充值","red","<span class='am-badge am-badge-danger am-round'>"),
     购买会员(1,"购买会员","blue","<span class='am-badge am-badge-primary am-round'>"),
 	购买置顶(2,"购买指定","blueviolet","<span class='am-badge am-badge-secondary am-round'>");
 	

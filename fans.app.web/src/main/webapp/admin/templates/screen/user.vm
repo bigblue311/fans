@@ -179,7 +179,7 @@ $control.setTemplate("paging.vm")
             dataIndex :'weixinId',
             width:'10%'
         },{
-            title : '积分',
+            title : '金币',
             elCls: 'center',
             dataIndex :'coins',
             width:'5%'

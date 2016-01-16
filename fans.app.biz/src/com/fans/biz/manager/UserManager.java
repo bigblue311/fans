@@ -59,7 +59,7 @@ public interface UserManager {
 	 * @param userId
 	 * @param minutes
 	 */
-	void share(Long userId, Integer minutes);
+	void addCoins(Long userId, Integer coins);
 	Integer getTodayShareCount(Long userId);
 	
 	/**

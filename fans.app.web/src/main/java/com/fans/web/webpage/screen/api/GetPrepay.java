@@ -118,7 +118,7 @@ public class GetPrepay extends RequestSessionBase{
     }
     
     private Integer getPrice(TopupTypeEnum topupType, Integer data1, Integer cash){
-    	if(topupType.getCode() == TopupTypeEnum.积分充值.getCode()){
+    	if(topupType.getCode() == TopupTypeEnum.金币充值.getCode()){
     		return cash;
     	}
     	if(topupType.getCode() == TopupTypeEnum.购买会员.getCode()){

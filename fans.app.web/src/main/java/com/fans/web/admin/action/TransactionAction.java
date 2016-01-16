@@ -43,10 +43,10 @@ public class TransactionAction {
         topupDO.setOpenId(userDO.getOpenId());
         topupDO.setAmount(cash);
         topupDO.setStatus(TopupStatusEnum.待支付.getCode());
-        topupDO.setType(TopupTypeEnum.积分充值.getCode());
+        topupDO.setType(TopupTypeEnum.金币充值.getCode());
         topupDO.setOperator(loginUser.getName());
         if(StringTools.isEmpty(topupFO.getDescription())){
-            topupDO.setDescription(TopupTypeEnum.积分充值.getDesc());
+            topupDO.setDescription(TopupTypeEnum.金币充值.getDesc());
         } else {
             topupDO.setDescription(topupFO.getDescription());
         }

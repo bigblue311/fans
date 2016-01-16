@@ -38,13 +38,12 @@ public class ShareSuccess extends RequestSessionBase{
         
         Integer shareCount = userManager.getTodayShareCount(userDO.getId());
         if(shareCount!=null && shareCount >= max){
-            userManager.share(userDO.getId(), 0);
             return Result.newInstance("一天最多只能分享置顶"+max+"次哦", "分享置顶成功", false);
         }
         
-        Integer minutes = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_INTERVAL.getCode(), 30);
-        userManager.share(userDO.getId(), minutes);
+        Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
+        userManager.addCoins(userDO.getId(), coins);
         
-        return Result.newInstance("成功分享, 获得置顶"+minutes+"分钟", "分享置顶成功", true);
+        return Result.newInstance("成功分享, 获得"+coins+"金币", "分享置顶成功", true);
     }
 }
