@@ -35,7 +35,11 @@
 				<dd class="dd1">微信二维码</dd>
 				<dd class="padded">
 				<form id='form_qrcode_uploader' method='post' enctype='multipart/form-data'>
-					<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
+					#if($!{user.qrcode})
+						<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
+					#else
+						上传
+					#end
 					<a href="javascript:;" class="mar_rt suc file">
 						<input type="file" class="imgUploader" name="Filedata"
 						show="qrcodeShow" text="qrcodeText" form="form_qrcode_uploader" multiple="multiple"/>
@@ -48,8 +52,12 @@
 					微信群二维码 <span class="gary">[可选项]</span>
 				</dd>
 				<dd class="padded">
-				<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data' s>
-					<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />
+				<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data'>
+					#if($!{user.groupQrcode})
+						<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />
+					#else
+						上传
+					#end
 					<a href="javascript:;" class="mar_rt suc file">
 						<input type="file" class="imgUploader" name="Filedata"
 						show="groupQrcodeShow" text="groupQrcodeText" form="form_groupQrcode_uploader" multiple="multiple"/>

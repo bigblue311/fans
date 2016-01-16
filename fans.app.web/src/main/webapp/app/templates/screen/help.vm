@@ -54,16 +54,16 @@
 	}
 </style>
 <body>
-<h3>产品简介</h3>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;躺着加粉是一款懒人加粉神器, 内含数万个加粉个人脉信息.无需注册, 关注公众号即可使用.<p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户可以通过扫描二维码添加关注. 用户也可以自助上传微信个人或群二维码, 让更多人添加您为好友,互相交流,互相拓展人脉<p>
-<h3>服务介绍</h3>
+<h3>躺着加粉新手上门攻略</h3>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;躺着加粉是一款专为懒人准备的加粉神器，轻松轻松点击百万人脉在手，无需注册，关注公众号即可使用。<p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户可以通过扫描二维码添加关注，也可以自助上传个人二维码或者群二维码，让人脉主动找上你，体验爆粉中的战斗机，拓展自己的人脉圈。<p>
+<h3>功能介绍</h3>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新注册会员赠送<s>$!{coins}</s>金币和<s>${vip}</s>天免费会员试用.<p>
 <table>
 	<tr>
 		<td width="30%">功能/服务</td>
 		<td width="35%">普通会员</td>
-		<td width="35%">VIP会员</td>
+		<td width="35%">金粉会员</td>
 	</tr>
 	<tr>
 		<td>加友/加群</td>
@@ -74,8 +74,12 @@
 		<td colspan="2">√</td>
 	</tr>
 	<tr>
-		<td>二维码海报</td>
+		<td>推广获金币</td>
 		<td colspan="2">√</td>
+	</tr>
+	<tr>
+		<td>搜索删选</td>
+		<td colspan="2">全国</td>
 	</tr>
 	<tr>
 		<td>刷新置顶</td>
@@ -87,17 +91,12 @@
 		<td>×</td>
 		<td>√</td>
 	</tr>
-	<tr>
-		<td>搜索删选</td>
-		<td>全国</td>
-		<td>全国</td>
-	</tr>
 </table>
 <p>&nbsp;</p>
 
 <h3>添加好友</h3>
 <img src="images/help/0.jpg" />
-<p>长按二维码,会出现识别图中二维码选项,确定即可</p>
+<p>新关注的用户可主动添加首页列表右边的“加粉”按钮，并扫描二维码，添加为好友！</p>
 
 <h3>底部菜单</h3>
 <img src="images/help/10.jpg" />
@@ -115,6 +114,7 @@
 <p>超级置顶助您一直呆在第一个位置, 占据有利地形, 开通后立即生效, 在超级置顶时间内继续购买. 将在本次结束时间后累加购买的时候.
 比如小A购买了超级置顶10分钟, 在第7分钟的时候又买了5分钟. 那么超级置顶的结束时间是15分钟</p>
 <hr>
+<p>快来关注我们吧</p>
 <img src="images/wetuan.jpg" />
 </body>
 </html>
