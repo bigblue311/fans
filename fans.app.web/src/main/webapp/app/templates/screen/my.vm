@@ -38,7 +38,7 @@
 					#if($!{user.qrcode})
 						<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
 					#else
-						上传
+						<span style="float:right">上传</span>
 					#end
 					<a href="javascript:;" class="mar_rt suc file">
 						<input type="file" class="imgUploader" name="Filedata"
@@ -56,7 +56,7 @@
 					#if($!{user.groupQrcode})
 						<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />
 					#else
-						上传
+						<span style="float:right">上传</span>
 					#end
 					<a href="javascript:;" class="mar_rt suc file">
 						<input type="file" class="imgUploader" name="Filedata"
@@ -68,7 +68,7 @@
 		</div>
 	</section>
 	<div class="blank3"></div>
-	<form action="/my.htm" method="post" id="myForm">
+	<form action="/index.htm" method="post" id="myForm">
 		$csrfToken.hiddenField
 		<input type="hidden" name="$!userGroup.id.key" value="$!{user.id}"/>
 		<input type="hidden" name="$!userGroup.headImg.key" value="$!{user.headImg}" id="headImgText"/>

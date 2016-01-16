@@ -463,10 +463,26 @@
 		});	
 	}
 	
+	function showAlert(){
+		layer.open({
+		    title: [
+		        '按钮使用说明',
+		        'background-color:#F6F6F6; color:#191919;font-weight:bold;'
+		    ],
+		    content: '<div class="ft_detail">'+
+					 '<p>1、置顶刷新可以将您上传的二维码刷新到人脉列表最顶端让更多人看到您。</p>'+
+					 '<p>2、剩余'+countDown+'秒后可使用一次。</p>'+
+					 '<p>3、只有VIP会员才能使用。</p>'+
+					 '<p>4、请上传二维码再置顶。</p>'+
+					 '<p>5、点击本提示框关闭提示。</p>'+
+					 '</div>'
+		});
+	}   
+	
    $(function(){
 	   bindAdd();
 	   
-	   jQuery(".location").each(function(){
+	   $(".location").each(function(){
 			var provinceCode = jQuery(this).attr("province");
 			var cityCode = jQuery(this).attr("city");
 			var extCity = jQuery(this).attr("extCity");
@@ -491,8 +507,8 @@
 			} else {
 				jQuery(this).empty().append("["+provinceName+cityName+"]");
 			}
-			
 		});
+	   
 	    showLocation('q_province','q_city','q_twon','$!{query.province}','$!{query.city}','');
 	    
 	    $("#btnReset").click(function(){
@@ -519,18 +535,29 @@
 		//按钮使用说明
 		$("#zt_top").click(function(){
 			if(countDown <= 0){
-				jQuery("#refreshForm").submit();
+				#if($user.isVip())
+					#if($!searchType == '0')
+						#if($!user.qrcode)
+							jQuery("#refreshForm").submit();
+						#else
+							showAlert();
+						#end
+					#else
+						#if($!user.groupQrcode)
+							jQuery("#refreshForm").submit();
+						#else
+							showAlert();
+						#end
+					#end
+				#else
+					showAlert();
+				#end
 			} else {
-				layer.open({
-				    title: [
-				        '按钮使用说明',
-				        'background-color:#F6F6F6; color:#191919;font-weight:bold;'
-				    ],
-				    content: '<div class="ft_detail"><p>1、置顶刷新可以将您上传的二维码刷新到人脉列表最顶端让更多人看到您。</p><p>2、剩余'+countDown+'秒后可使用一次。</p><p>3、只有VIP会员才能使用。</p><p>4、点击本提示框关闭提示。</p> </div>'
-				});
+				showAlert();
 			}
 		});
 	});
+   
    	#if($!searchType == '0')
    		$("#cont1").show();
    	#else
