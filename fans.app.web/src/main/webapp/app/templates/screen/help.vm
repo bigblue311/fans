@@ -116,6 +116,6 @@
 <hr>
 <p>快来关注我们吧</p>
 <p>微信号: tangzhejiafen</p>
-<img src="images/wetuan.jpg" />
+<img src="images/wetuan.jpg?t=1234" />
 </body>
 </html>
