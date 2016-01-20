@@ -115,7 +115,7 @@
 比如小A购买了超级置顶10分钟, 在第7分钟的时候又买了5分钟. 那么超级置顶的结束时间是15分钟</p>
 <hr>
 <p>快来关注我们吧</p>
-<p>微信号: tangzhejiafen</p>
-<img src="images/wetuan.jpg?t=1234" />
+<p>微信号: $!{weixin}</p>
+<img src="$!{qrcode}?t=$!{ts}" />
 </body>
 </html>

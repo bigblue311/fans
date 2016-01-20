@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.manager.PriceManager;
+import com.fans.biz.manager.WeixinManager;
 import com.fans.biz.model.PriceSetVO;
 import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
@@ -24,7 +25,6 @@ import com.victor.framework.common.shared.Result;
 import com.victor.framework.common.tools.StringTools;
 import com.weixin.model.WxPayRequest;
 import com.weixin.model.WxPayResponse;
-import com.weixin.service.WeixinService;
 
 /**
  *  "appId" ： "wx2421b1c4370ec43b",     //公众号名称，由商户传入     
@@ -40,7 +40,7 @@ import com.weixin.service.WeixinService;
 public class GetPrepay extends RequestSessionBase{
     
     @Autowired
-    private WeixinService weixinService;
+    private WeixinManager weixinManager;
     
     @Autowired
     private TransactionManager transactionManager;
@@ -57,6 +57,8 @@ public class GetPrepay extends RequestSessionBase{
     public Result<WxPayResponse> execute(@Param(name="cash", defaultValue="0") Integer cash,
     							 		 @Param(name="type", defaultValue="0") Integer type,
     							 		 @Param("data1") Integer data1){
+        String domain = super.getDomain(request);
+        
     	UserDO userDO = RequestSession.userDO();
     	if(userDO == null || userDO.getId() == null || StringTools.isEmpty(userDO.getOpenId())){
     		return Result.newInstance(null, "用户不存在", false);
@@ -101,7 +103,7 @@ public class GetPrepay extends RequestSessionBase{
     		wxPayRequest.setTotalFee(totalFee);
     	}
     	
-        WxPayResponse wxPay = weixinService.getUnifiedorder(wxPayRequest);
+        WxPayResponse wxPay = weixinManager.getUnifiedorder(domain,wxPayRequest);
         
         topupDO.setWeixinPrepayResult(wxPay.getResultCode());
         transactionManager.updateTopup(topupDO);
@@ -112,7 +114,7 @@ public class GetPrepay extends RequestSessionBase{
         parameters.put("nonceStr", wxPay.getNonceStr());
         parameters.put("package", wxPay.getPackageValue());
         parameters.put("signType", "MD5");
-        String paySign = weixinService.createSignMD5(parameters);
+        String paySign = weixinManager.createSignMD5(domain,parameters);
         wxPay.setPaySign(paySign);
         return Result.newInstance(wxPay, "交易成功", true);
     }

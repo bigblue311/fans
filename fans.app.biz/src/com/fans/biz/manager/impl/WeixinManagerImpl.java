@@ -1,4 +1,4 @@
-package com.weixin.service;
+package com.fans.biz.manager.impl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -21,9 +21,13 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fans.biz.manager.WeixinManager;
+import com.fans.dal.cache.WeixinConfigCache;
+import com.fans.dal.model.WeixinConfigDO;
 import com.google.common.collect.Maps;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.JsonTools;
@@ -38,23 +42,27 @@ import com.weixin.model.WxPayResponse;
 import com.weixin.model.WxPayRequest;
 import com.weixin.model.WxUser;
 
-public class WeixinServiceImpl implements WeixinService{
+public class WeixinManagerImpl implements WeixinManager{
 
     private static GuavaCache cache = new GuavaCache(7000);  
     
-    private String appId="wx65bcca07aa8b4a53";
-    private String appSecret="8ab8cbbdada8cb78f4f4a0d44e23709d";
-    private String mchId="1290486501";
-    private String reUrl;
-    private String key = "wtHp80kLn7xG78uoEhkgCC5HaS2rAhOe";
+    @Autowired
+    private WeixinConfigCache weixinConfigCache;
     
     @Override
-    public String getOauth2Url() {
+    public String getOauth2Url(String domain) {
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        String appId = configDO.getAppId();
+        String reUrl = configDO.getReUrl();
         return WxConfig.getOauth2Url(appId, reUrl);
     }
 
     @Override
-    public WxUser getUserInfo(String code) {
+    public WxUser getUserInfo(String domain, String code) {
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        String appId = configDO.getAppId();
+        String appSecret = configDO.getAppSecret();
+        
         String url = WxConfig.getAccessTokenUrl(appId, appSecret, code);
         String result = httpRequest(url,null);
         JSONObject json = JSON.parseObject(result);
@@ -71,8 +79,8 @@ public class WeixinServiceImpl implements WeixinService{
     }
 
     @Override
-    public WxPayResponse getUnifiedorder(WxPayRequest wxPayRequest) {
-        String result = httpRequest(WxConfig.getUnifiledOrderUrl(), getPostData(wxPayRequest));
+    public WxPayResponse getUnifiedorder(String domain, WxPayRequest wxPayRequest) {
+        String result = httpRequest(WxConfig.getUnifiledOrderUrl(), getPostData(domain, wxPayRequest));
         WxPayResponse wxPay = new WxPayResponse();
         try {
             Map<String,String> map = doXMLParse(result);
@@ -114,7 +122,12 @@ public class WeixinServiceImpl implements WeixinService{
         return wxPay;
     }
     
-    private String getPostData(WxPayRequest wxPayRequest){
+    private String getPostData(String domain, WxPayRequest wxPayRequest){
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        String appId = configDO.getAppId();
+        String mchId = configDO.getMchId();
+        String key = configDO.getKey();
+        
         SortedMap<String,String> parameters = new TreeMap<String,String>();
         parameters.put("appid", 		appId);
         parameters.put("body", 			wxPayRequest.getDescription());
@@ -126,14 +139,14 @@ public class WeixinServiceImpl implements WeixinService{
         parameters.put("total_fee", 	wxPayRequest.getTotalFee().toPlainString());
         parameters.put("trade_type", 	"JSAPI");
         //parameters.put("trade_type", 	"NATIVE");
-        String sign = createSignMD5(parameters);
+        String sign = createSignMD5(key, parameters);
         parameters.put("sign", sign);
         String postData = getRequestXml(parameters);
         return postData;
     }
     
     @Override
-    public String createSignMD5(SortedMap<String,String> parameters){
+    public String createSignMD5(String key, SortedMap<String,String> parameters){
         StringBuffer sb = new StringBuffer();
         
         List<String> keys = new ArrayList<String>(parameters.keySet());
@@ -237,7 +250,7 @@ public class WeixinServiceImpl implements WeixinService{
         return m;
     }
     
-    private String getJsApiAccessToken(){
+    private String getJsApiAccessToken(String appId, String appSecret){
         String accessToken = cache.get("getJsApiAccessToken");
         if(StringTools.isEmpty(accessToken)){
             String result = httpRequest(WxConfig.getJSAPIAccessToken(appId, appSecret), null);
@@ -250,10 +263,14 @@ public class WeixinServiceImpl implements WeixinService{
     }
     
     @Override
-    public String getJsApiTicket() {
+    public String getJsApiTicket(String domain) {
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        String appId = configDO.getAppId();
+        String appSecret = configDO.getAppSecret();
+        
         String ticket = cache.get("getJsApiTicket");
         if(StringTools.isEmpty(ticket)){
-            String accessToken = getJsApiAccessToken();
+            String accessToken = getJsApiAccessToken(appId, appSecret);
             String result = httpRequest(WxConfig.getJSAPITicket(accessToken), null);
             JSONObject json = JSON.parseObject(result);
             String errmsg = json.getString("errmsg");
@@ -269,8 +286,11 @@ public class WeixinServiceImpl implements WeixinService{
     }
     
     @Override
-    public JsApiConfig getJsApiConfig(String url) {
-        String ticket = getJsApiTicket();
+    public JsApiConfig getJsApiConfig(String domain, String url) {
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        String appId = configDO.getAppId();
+        
+        String ticket = getJsApiTicket(domain);
         String nonceStr = UUIDTools.getID();
         String ts = Long.toString(DateTools.today().getTime()/1000);
         
@@ -311,29 +331,9 @@ public class WeixinServiceImpl implements WeixinService{
         
         return sb.toString();
     }
-    
-    public void setMchId(String mchId) {
-        this.mchId = mchId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
-    }
-
-    public void setReUrl(String reUrl) {
-        this.reUrl = reUrl;
-    }
-    
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public static void main(String[] args){
-        WeixinServiceImpl test = new WeixinServiceImpl();
-        System.out.println(test.getJsApiConfig("http://wxt.wetuan.com/my.htm").getSign());
+        WeixinManagerImpl test = new WeixinManagerImpl();
+        System.out.println(test.getJsApiConfig("wz.wetuan.com","http://wz.wetuan.com/my.htm").getSign());
     }
 }

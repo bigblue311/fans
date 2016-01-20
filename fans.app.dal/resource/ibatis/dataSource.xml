@@ -33,4 +33,5 @@
   	<sqlMap resource="sqlmap/cl_top_list.xml"/>
   	<sqlMap resource="sqlmap/cl_topup.xml"/>
   	<sqlMap resource="sqlmap/cl_user.xml"/>
+  	<sqlMap resource="sqlmap/cl_weixin_config.xml"/>
 </sqlMapConfig>

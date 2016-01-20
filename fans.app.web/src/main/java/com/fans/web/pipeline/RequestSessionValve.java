@@ -1,5 +1,7 @@
 package com.fans.web.pipeline;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +18,7 @@ import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.webpage.RequestSessionBase;
+import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
 
 public class RequestSessionValve extends RequestSessionBase implements Valve {
@@ -35,7 +38,7 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 	@Override
 	public void invoke(PipelineContext pipelineContext) throws Exception {
 		try {
-		    
+		    String domain = super.getDomain(request);
 		    String openId = super.getOpenId(request);
 		    Long skvId = super.getSkvId(request);
 		    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.DEBUG_MODE.getCode())){
@@ -52,6 +55,21 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 		    
 		    SkvUserDO skvUser = userManager.getSkvUserById(skvId);
 		    UserDO userDO = userManager.getByOpenId(openId);
+		    if(userDO == null){
+		        userDO = userManager.getByExtId(skvId);
+		        if(userDO == null && skvUser != null){
+		            userDO = new UserDO();
+		            userDO.setOpenId(openId);
+		            userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
+		            userDO.setNickName(skvUser.getUserName());
+		            userDO.setCoins(systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_COINS.getCode(), 0));
+		            Integer dayToAdd = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_VIP.getCode(), 0);
+		            Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
+		            userDO.setGmtVipExpire(vipExpire);
+		            userDO.setDomain(domain);
+		            userManager.create(userDO);
+		        }
+		    }
 		    if(userDO != null && userDO.getSkvId() == null && skvUser != null){
 		        userDO.setSkvId(skvId);
 		        userDO.setPhone(skvUser.getPhone()); 

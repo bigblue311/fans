@@ -10,6 +10,8 @@
 
   <resultMap id="RM" class="SkvUser">
     <result property="id" 					column="id"/>
+    <result property="userImage" 			column="userImage"/>
+    <result property="userName" 			column="userName"/>
     <result property="phone" 				column="phone"/>
     <result property="shoppingLevel" 		column="shoppingLevel_"/>
   </resultMap>

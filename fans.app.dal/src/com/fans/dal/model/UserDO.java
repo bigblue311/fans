@@ -31,6 +31,7 @@ public class UserDO extends EntityDO implements Serializable{
     private Long extId;                 //外部ID
     private String extCity;             //外部城市
     private String extSource;           //外部来源
+    private String domain;              //外部域名
     
     public Long getSkvId() {
         return skvId;
@@ -145,6 +146,12 @@ public class UserDO extends EntityDO implements Serializable{
     }
     public void setExtSource(String extSource) {
         this.extSource = extSource;
+    }
+    public String getDomain() {
+        return domain;
+    }
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
     public boolean isVip(){
         if(gmtVipExpire == null){

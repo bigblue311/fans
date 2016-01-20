@@ -12,8 +12,8 @@ import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.TransactionManager;
+import com.fans.biz.manager.WeixinManager;
 import com.fans.dal.model.TopupDO;
-import com.weixin.service.WeixinService;
 
 public class WxCallback {
 
@@ -24,7 +24,7 @@ public class WxCallback {
     private HttpServletResponse response;
     
     @Autowired
-    private WeixinService weixinService;
+    private WeixinManager weixinManager;
     
     @Autowired
     private TransactionManager transactionManager;
@@ -42,7 +42,7 @@ public class WxCallback {
 			inStream.close();
 			//获取微信调用我们notify_url的返回信息
 			String result = new String(outSteam.toByteArray(), "UTF-8");
-			Map<String, String> map = weixinService.doXMLParse(result);
+			Map<String, String> map = weixinManager.doXMLParse(result);
 			
 			String uuid = map.get("out_trade_no");
 			TopupDO topupDO =  transactionManager.getTopup(uuid);

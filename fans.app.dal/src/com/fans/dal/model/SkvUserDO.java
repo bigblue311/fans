@@ -13,7 +13,25 @@ public class SkvUserDO extends EntityDO implements Serializable{
     private static final long serialVersionUID = -1872234305444923618L;
     private String shoppingLevel;
     private String phone;
+    private String userName;
+    private String userImage;
     
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getShoppingLevel() {
         return shoppingLevel;
     }

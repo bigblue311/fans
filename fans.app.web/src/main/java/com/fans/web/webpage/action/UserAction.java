@@ -63,6 +63,8 @@ public class UserAction extends RequestSessionBase{
         if(StringTools.isEmpty(userDO.getOpenId())){
             userDO.setOpenId(super.getOpenId(request));
         }
+        String domain = super.getDomain(request);
+        userDO.setDomain(domain);
         if(userDO.getId() == null){
             userManager.create(userDO);
         } else {

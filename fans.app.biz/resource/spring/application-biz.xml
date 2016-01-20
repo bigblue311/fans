@@ -22,6 +22,8 @@
     
     <bean id="securityManager" class="com.fans.biz.manager.impl.SecurityManagerImpl" />
     
+    <bean id="weixinManager" class="com.fans.biz.manager.impl.WeixinManagerImpl"/>
+    
     <bean id="recycleTempFilesTask" class="com.fans.biz.scheduler.task.RecycleTempFilesTask"/>
     <bean id="orderStatisticTask" class="com.fans.biz.scheduler.task.OrderStatisticTask"/>
     <bean id="chaojirmUserTask" class="com.fans.biz.scheduler.task.ChaojirmUserTask"/>

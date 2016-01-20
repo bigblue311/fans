@@ -31,6 +31,7 @@
     <result property="extId" 				column="ext_id"/>
     <result property="extCity" 				column="ext_city"/>
     <result property="extSource" 			column="ext_source"/>
+    <result property="domain" 				column="domain"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="User">
@@ -56,13 +57,14 @@
 	    gmt_vip_expire,
 	    ext_id,
 	    ext_city,
-	    ext_source
+	    ext_source,
+	    domain
 	  ) values (
 	    now(), now(), #skvId#,
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
 	    #groupDescription#, #weixinId#, #coins#, now(), #gmtVipExpire#,
-	    #extId#, #extCity#, #extSource#
+	    #extId#, #extCity#, #extSource#, #domain#
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -76,6 +78,11 @@
 	      <isNotEmpty property="skvId">  
 	         <![CDATA[   
 	           skv_id = #skvId#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="domain">  
+	         <![CDATA[   
+	           domain = #domain#,
 	         ]]> 
 	      </isNotEmpty>
 	      <isNotEmpty property="nickName">  

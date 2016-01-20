@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
+import com.fans.biz.manager.WeixinManager;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
-import com.weixin.service.WeixinService;
 
 public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 
@@ -20,15 +20,15 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 	private HttpServletResponse response;
 	
 	@Autowired
-	private WeixinService weixinService;
+	private WeixinManager weixinManager;
 	
 	@Override
 	public void invoke(PipelineContext pipelineContext) throws Exception {
 		try {
 		    String _setOpenId = request.getParameter("_setOpenId");
-		    
+		    String domain = super.getDomain(request);
 		    if(StringTools.isNotEmpty(_setOpenId)){
-		        response.sendRedirect(weixinService.getOauth2Url());
+		        response.sendRedirect(weixinManager.getOauth2Url(domain));
 	            return;
 		    }
 		} finally {

@@ -1,5 +1,7 @@
 package com.fans.web.webpage;
 
+import java.net.URL;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +13,7 @@ import com.fans.dal.enumerate.SearchTypeEnum;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.constant.CookieKey;
+import com.google.common.net.InetAddresses;
 import com.victor.framework.common.tools.JsonTools;
 import com.victor.framework.common.tools.StringTools;
 
@@ -25,6 +28,38 @@ public abstract class RequestSessionBase extends CookieBase{
 		context.put("rocketSet", priceManager.getZhuangBSet());
 		context.put("skvPriceMsg", priceManager.getSkvPriceMsg());
 	}
+	
+	/**
+     * 获取当前域名
+     * @param request
+     * @return
+     */
+    public String getDomain(HttpServletRequest request){
+        String __domain = request.getParameter("__domain");
+        String domain = "";
+        try{
+            URL urlObj = new URL(request.getRequestURL().toString());
+            domain = urlObj.getHost();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        if(StringTools.isNotEmpty(__domain)){
+            domain = __domain;
+        } else {
+            if(StringTools.isEmpty(domain) || "localhost".equals(domain) || isValidIP(domain)){
+                domain = "wz.wetuan.com";
+            }
+        }
+        return domain;
+    }
+    
+    private boolean isValidIP(String ip){
+        if(StringTools.isEmpty(ip)){
+            return false;
+        }
+        return InetAddresses.isInetAddress(ip);
+    } 
 	
 	public Long getSkvId(HttpServletRequest request) {
 	    String skvId = super.getCookie(request, CookieKey.SKV_ID);

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="WeixinConfigDO">
+
+  <typeAlias alias="WeixinConfig" type="com.fans.dal.model.WeixinConfigDO"/>
+
+  <resultMap id="RM" class="WeixinConfig">
+    <result property="id" 			column="id"/>
+    <result property="gmtCreate" 	column="gmt_create"/>
+    <result property="gmtModify" 	column="gmt_modify"/>
+    <result property="domain" 		column="domain"/>
+    <result property="appId" 		column="app_id"/>
+    <result property="appSecret" 	column="app_secret"/>
+    <result property="reUrl" 		column="re_url"/>
+    <result property="mchId" 		column="mch_id"/>
+    <result property="qrcode" 		column="qrcode"/>
+    <result property="weixin" 		column="weixin"/>
+    <result property="key" 			column="key"/>
+    <result property="shareImg" 	column="share_img"/>
+  </resultMap>
+  
+  <update id="update" parameterClass="WeixinConfig">
+    update cl_weixin_config set 
+    <dynamic>
+      <isNotEmpty property="domain">  
+         <![CDATA[   
+           domain = #domain#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="appId">  
+         <![CDATA[   
+           app_id = #appId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="appSecret">  
+         <![CDATA[   
+           app_secret = #appSecret#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="reUrl">  
+         <![CDATA[   
+           re_url = #reUrl#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="mchId">  
+         <![CDATA[   
+           mch_id = #mchId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="qrcode">  
+         <![CDATA[   
+           qrcode = #qrcode#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="weixin">  
+         <![CDATA[   
+           weixin = #weixin#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="key">  
+         <![CDATA[   
+           key = #key#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+
+  <select id="getAll" resultMap="RM">
+    select * from cl_weixin_config  
+  </select>
+  
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from cl_weixin_config where id = #id#  
+  </select>
+</sqlMap>
