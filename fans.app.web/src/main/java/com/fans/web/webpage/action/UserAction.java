@@ -11,7 +11,6 @@ import com.fans.biz.manager.UserManager;
 import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
-import com.victor.framework.common.shared.Result;
 import com.victor.framework.common.tools.StringTools;
 
 public class UserAction extends RequestSessionBase{
@@ -36,30 +35,30 @@ public class UserAction extends RequestSessionBase{
     }
     
     public void doUpdate(@FormGroup("user") UserDO userDO){
-        if(StringTools.isNotEmpty(userDO.getHeadImg()) && userDO.getHeadImg().contains("temp/")){
-            Result<String> result = fileStorageRepository.copyTemp(userDO.getHeadImg());
-            if(result.isSuccess()){
-                userDO.setHeadImg(result.getDataObject());
-            } else {
-                userDO.setHeadImg("");
-            }
-        }
-        if(StringTools.isNotEmpty(userDO.getQrcode()) && userDO.getQrcode().contains("temp/")){
-            Result<String> result = fileStorageRepository.copyTemp(userDO.getQrcode());
-            if(result.isSuccess()){
-                userDO.setQrcode(result.getDataObject());
-            } else {
-                userDO.setQrcode("");
-            }
-        }
-        if(StringTools.isNotEmpty(userDO.getGroupQrcode()) && userDO.getGroupQrcode().contains("temp/")){
-            Result<String> result = fileStorageRepository.copyTemp(userDO.getGroupQrcode());
-            if(result.isSuccess()){
-                userDO.setGroupQrcode(result.getDataObject());
-            } else {
-                userDO.setGroupQrcode("");
-            }
-        }
+//        if(StringTools.isNotEmpty(userDO.getHeadImg()) && userDO.getHeadImg().contains("temp/")){
+//            Result<String> result = fileStorageRepository.copyTemp(userDO.getHeadImg());
+//            if(result.isSuccess()){
+//                userDO.setHeadImg(result.getDataObject());
+//            } else {
+//                userDO.setHeadImg("");
+//            }
+//        }
+//        if(StringTools.isNotEmpty(userDO.getQrcode()) && userDO.getQrcode().contains("temp/")){
+//            Result<String> result = fileStorageRepository.copyTemp(userDO.getQrcode());
+//            if(result.isSuccess()){
+//                userDO.setQrcode(result.getDataObject());
+//            } else {
+//                userDO.setQrcode("");
+//            }
+//        }
+//        if(StringTools.isNotEmpty(userDO.getGroupQrcode()) && userDO.getGroupQrcode().contains("temp/")){
+//            Result<String> result = fileStorageRepository.copyTemp(userDO.getGroupQrcode());
+//            if(result.isSuccess()){
+//                userDO.setGroupQrcode(result.getDataObject());
+//            } else {
+//                userDO.setGroupQrcode("");
+//            }
+//        }
         if(StringTools.isEmpty(userDO.getOpenId())){
             userDO.setOpenId(super.getOpenId(request));
         }
@@ -80,7 +79,11 @@ public class UserAction extends RequestSessionBase{
     
     private void updateRequestSession(){
         String openId = super.getOpenId(request);
+        Long skvId = super.getSkvId(request);
         UserDO userDO = userManager.getByOpenId(openId);
+        if(userDO == null){
+            userDO = userManager.getBySkvId(skvId);
+        }
         RequestSession.userDO(userDO);
     }
 }

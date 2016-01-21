@@ -39,17 +39,27 @@ public class UserManagerImpl implements UserManager{
     
     @Override
     public void create(UserDO userDO) {
+        boolean find = false;
         String openId = userDO.getOpenId();
         Long extId = userDO.getExtId();
+        Long skvId = userDO.getSkvId();
         if(StringTools.isNotEmpty(openId)){
-            if(userDAO.getByOpenId(openId) == null) {
-                userDAO.insert(userDO);
+            if(userDAO.getByOpenId(openId) != null) {
+                find = true;
             }
         } 
         if(extId!=null){
-            if(userDAO.getByExtId(extId) == null){
-                userDAO.insert(userDO);
+            if(userDAO.getByExtId(extId) != null){
+                find = true;
             }
+        }
+        if(skvId!=null){
+            if(userDAO.getBySkvId(skvId) != null){
+                find = true;
+            }
+        }
+        if(!find){
+            userDAO.insert(userDO);
         }
     }
 
@@ -215,5 +225,10 @@ public class UserManagerImpl implements UserManager{
     @Override
     public UserDO getByExtId(Long extId) {
         return userDAO.getByExtId(extId);
+    }
+
+    @Override
+    public UserDO getBySkvId(Long skvId) {
+        return userDAO.getBySkvId(skvId);
     }
 }

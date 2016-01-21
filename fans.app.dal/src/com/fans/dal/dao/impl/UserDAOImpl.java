@@ -25,6 +25,11 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
     }
     
     @Override
+    public UserDO getBySkvId(Long skvId) {
+        return super.queryForEntity("getBySkvId", "skvId", skvId);
+    }
+    
+    @Override
     public List<UserDO> getRandom() {
         return super.queryForList("getRandom");
     }

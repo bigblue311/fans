@@ -41,14 +41,14 @@
 	 
 	 <update id="extend" parameterClass="TopList">
     	update cl_top_list set gmt_end = #gmtEnd#
-	    where id = #id# and position = "position"
+	    where id = #id# and position = #position#
 	 </update>
 	  
 	 <update id="expire" parameterClass="TopList">
 	 	<![CDATA[ 
     	update cl_top_list set gmt_end = now() , gmt_modify = now() 
     		where 
-    	gmt_end > now() and gmt_start < now() and user_id = #userId# and position = "position"
+    	gmt_end > now() and gmt_start < now() and user_id = #userId# and position = #position#
     	]]>
 	 </update>
 	  

@@ -251,13 +251,13 @@ public class WeixinManagerImpl implements WeixinManager{
     }
     
     private String getJsApiAccessToken(String appId, String appSecret){
-        String accessToken = cache.get("getJsApiAccessToken");
+        String accessToken = cache.get(appId+":getJsApiAccessToken");
         if(StringTools.isEmpty(accessToken)){
             String result = httpRequest(WxConfig.getJSAPIAccessToken(appId, appSecret), null);
             JSONObject json = JSON.parseObject(result);
             
             accessToken = json.getString("access_token");
-            cache.put("getJsApiAccessToken", accessToken);
+            cache.put(appId+":getJsApiAccessToken", accessToken);
         }
         return accessToken;
     }
@@ -268,7 +268,7 @@ public class WeixinManagerImpl implements WeixinManager{
         String appId = configDO.getAppId();
         String appSecret = configDO.getAppSecret();
         
-        String ticket = cache.get("getJsApiTicket");
+        String ticket = cache.get(appId+":getJsApiTicket");
         if(StringTools.isEmpty(ticket)){
             String accessToken = getJsApiAccessToken(appId, appSecret);
             String result = httpRequest(WxConfig.getJSAPITicket(accessToken), null);
@@ -276,7 +276,7 @@ public class WeixinManagerImpl implements WeixinManager{
             String errmsg = json.getString("errmsg");
             if("ok".equals(errmsg)){
                 ticket = json.getString("ticket");
-                cache.put("getJsApiTicket", ticket);
+                cache.put(appId+":getJsApiTicket", ticket);
             } else {
                 System.out.println("failed to get jsapi ticket =" + errmsg);
                 return null;

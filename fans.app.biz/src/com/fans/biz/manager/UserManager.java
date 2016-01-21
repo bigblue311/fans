@@ -37,6 +37,7 @@ public interface UserManager {
 	 */
 	UserDO getById(Long id);
 	UserDO getByExtId(Long extId);
+	UserDO getBySkvId(Long skvId);
 	UserDO getByOpenId(String openId);
 	
 	SkvUserDO getSkvUserById(Long id);

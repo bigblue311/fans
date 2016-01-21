@@ -62,10 +62,17 @@ public abstract class RequestSessionBase extends CookieBase{
     } 
 	
 	public Long getSkvId(HttpServletRequest request) {
-	    String skvId = super.getCookie(request, CookieKey.SKV_ID);
+	    String skvId = request.getParameter(CookieKey.SKV_ID);
+	    if(StringTools.isEmpty(skvId)){
+	        skvId = super.getCookie(request, CookieKey.SKV_ID);
+	    }
 	    if(StringTools.isNotEmpty(skvId)){
 	        String trimed = trim0(skvId);
-	        return Long.parseLong(trimed);
+	        try {
+                return Long.parseLong(trimed);
+            } catch (NumberFormatException e) {
+                return null;
+            }
 	    } else {
 	        return null;
 	    }

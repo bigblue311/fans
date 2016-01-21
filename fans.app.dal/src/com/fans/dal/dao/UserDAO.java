@@ -42,6 +42,7 @@ public interface UserDAO {
      */
     UserDO getById(Long id);
     UserDO getByOpenId(String openId);
+    UserDO getBySkvId(Long skvId);
     UserDO getByExtId(Long extId);
     List<UserDO> getRandom();
 

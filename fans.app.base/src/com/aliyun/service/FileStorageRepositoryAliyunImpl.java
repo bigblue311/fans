@@ -50,7 +50,7 @@ public class FileStorageRepositoryAliyunImpl implements FileStorageRepository {
     	if(StringTools.isEmpty(fileName)){
     		return Result.newInstance("", "文件不存在", false);
     	}
-    	fileName = TEMP_PATH+generateRelativePath(fileName);
+    	fileName = generateRelativePath(fileName);
     	try {
 			put(fileName, in);
 		} catch (IOException e) {

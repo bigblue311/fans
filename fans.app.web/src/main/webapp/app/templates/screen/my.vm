@@ -23,10 +23,17 @@
 				<dd class="dd1">修改头像</dd>
 				<dd class="padded">
 					<form id='form_headImg_uploader' method='post' enctype='multipart/form-data'>
-					<img src="$!{user.headImg}" class="head_portraits" id="headImgShow" /> 
+					#if($!{user.headImg})
+						<span style="float:right" id="headImgLabel" style="display:none">上传</span>
+						<img src="$!{user.headImg}" class="head_portraits" id="headImgShow" />
+					#else
+						<span style="float:right" id="headImgLabel">上传</span>
+						<img src="" class="head_portraits" id="headImgShow" style="display:none"/>
+					#end
 					<a href="javascript:;" class="file head_portraits_file">
 						<input type="file" class="imgUploader" name="Filedata"
-						show="headImgShow" text="headImgText" form="form_headImg_uploader" multiple="multiple"/>
+						show="headImgShow" label="headImgLabel" text="headImgText" 
+						form="form_headImg_uploader" multiple="multiple"/>
 					</a>
 					</form>
 				</dd>
@@ -36,13 +43,16 @@
 				<dd class="padded">
 				<form id='form_qrcode_uploader' method='post' enctype='multipart/form-data'>
 					#if($!{user.qrcode})
+						<span style="float:right" id="qrcodeLabel" style="display:none">上传</span>
 						<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
 					#else
-						<span style="float:right">上传</span>
+						<span style="float:right" id="qrcodeLabel">上传</span>
+						<img src="" class="head_portraits" id="qrcodeShow" style="display:none"/>
 					#end
 					<a href="javascript:;" class="mar_rt suc file">
 						<input type="file" class="imgUploader" name="Filedata"
-						show="qrcodeShow" text="qrcodeText" form="form_qrcode_uploader" multiple="multiple"/>
+						show="qrcodeShow" label="qrcodeLabel" text="qrcodeText" 
+						form="form_qrcode_uploader" multiple="multiple"/>
 					</a>
 				</form>
 				</dd>
@@ -54,13 +64,16 @@
 				<dd class="padded">
 				<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data'>
 					#if($!{user.groupQrcode})
+						<span style="float:right" id="groupQrcodeLabel" style="display:none">上传</span>
 						<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />
 					#else
-						<span style="float:right">上传</span>
+						<span style="float:right" id="groupQrcodeLabel">上传</span>
+						<img src="" class="head_portraits" id="groupQrcodeShow" style="display:none"/>
 					#end
 					<a href="javascript:;" class="mar_rt suc file">
 						<input type="file" class="imgUploader" name="Filedata"
-						show="groupQrcodeShow" text="groupQrcodeText" form="form_groupQrcode_uploader" multiple="multiple"/>
+						show="groupQrcodeShow" label="groupQrcodeLabel" text="groupQrcodeText" 
+						form="form_groupQrcode_uploader" multiple="multiple"/>
 					</a>
 				</form>
 				</dd>
@@ -68,7 +81,7 @@
 		</div>
 	</section>
 	<div class="blank3"></div>
-	<form action="/index.htm" method="post" id="myForm">
+	<form action="/my.htm" method="post" id="myForm">
 		$csrfToken.hiddenField
 		<input type="hidden" name="$!userGroup.id.key" value="$!{user.id}"/>
 		<input type="hidden" name="$!userGroup.headImg.key" value="$!{user.headImg}" id="headImgText"/>
@@ -191,6 +204,7 @@
 			$('.imgUploader').on('change', function() {
 				var form = jQuery(this).attr("form");
 				var show = jQuery(this).attr("show");
+				var label = jQuery(this).attr("label");
 				var text = jQuery(this).attr("text");
 				$.ajax({
 					  url: '/api/fileService.json',
@@ -202,7 +216,9 @@
 					  processData: false,
 					  success: function(data){
 						  if(data.success){
+							jQuery("#"+label).hide();
 							jQuery("#"+show).attr("src", data.dataObject);
+							jQuery("#"+show).show();
 							jQuery("#"+text).val(data.dataObject);
 						  }else{
 							alert(data.message);

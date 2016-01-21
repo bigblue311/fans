@@ -1,5 +1,7 @@
 package com.fans.web.pipeline;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
+import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
@@ -41,6 +44,7 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 		    String domain = super.getDomain(request);
 		    String openId = super.getOpenId(request);
 		    Long skvId = super.getSkvId(request);
+		    
 		    if(systemConfigCache.getSwitch(SystemConfigKeyEnum.DEBUG_MODE.getCode())){
 		        if(StringTools.isEmpty(openId)){
 		            openId = "ogOTHwaJi6KDLOjDu-59Nze0YW8M";
@@ -50,52 +54,120 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 		            skvId = 1l;
 		        }
             }
-		    //setOpenId
 		    RequestSession.openId(openId);
+		    if(skvId!=null){
+		        super.setCookie(response, CookieKey.SKV_ID, skvId+"");
+		    }
+		    
+
+		    UserDO userDOFromOpenId = userManager.getByOpenId(openId);
+		    UserDO userDOFromSkvId = userManager.getBySkvId(skvId);
 		    
 		    SkvUserDO skvUser = userManager.getSkvUserById(skvId);
-		    UserDO userDO = userManager.getByOpenId(openId);
-		    if(userDO == null){
-		        userDO = userManager.getByExtId(skvId);
-		        if(userDO == null && skvUser != null){
-		            userDO = new UserDO();
-		            userDO.setOpenId(openId);
-		            userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
-		            userDO.setNickName(skvUser.getUserName());
-		            userDO.setCoins(systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_COINS.getCode(), 0));
-		            Integer dayToAdd = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_VIP.getCode(), 0);
-		            Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
-		            userDO.setGmtVipExpire(vipExpire);
-		            userDO.setDomain(domain);
-		            userManager.create(userDO);
-		        }
-		    }
-		    if(userDO != null && userDO.getSkvId() == null && skvUser != null){
-		        userDO.setSkvId(skvId);
-		        userDO.setPhone(skvUser.getPhone()); 
-		        userManager.update(userDO);
-		    } 
-		    if(userDO != null && userDO.getSkvId() != null) {
-		        skvUser = userManager.getSkvUserById(userDO.getSkvId());
-		        if(skvUser != null){
-		            String shoppingLevel = skvUser.getShoppingLevel();
-	                ShoppingLevelEnum level = ShoppingLevelEnum.getByCode(shoppingLevel);
-	                //setLevel
-	                RequestSession.level(level);
-		        } else {
-	                RequestSession.level(null);
-	            }
-		    } else {
-		        RequestSession.level(null);
+		    userDOFromSkvId = userMerge(userDOFromSkvId, skvUser);
+		    
+		    UserDO merged = userMerge(userDOFromOpenId, userDOFromSkvId);
+		    if(merged != null && merged.getId() == null){
+	            merged.setCoins(systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_COINS.getCode(), 0));
+	            Integer dayToAdd = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.NEW_VIP.getCode(), 0);
+	            Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
+	            merged.setGmtVipExpire(vipExpire);
+	            merged.setDomain(domain);
+	            userManager.create(merged);
 		    }
 		    
 		    //setUser
-		    RequestSession.userDO(userDO);
+		    RequestSession.userDO(merged);
 		    
 		    UserQueryCondition queryCondition = super.getQuery(request);
 		    RequestSession.queryCondition(queryCondition);
 		} finally {
 			pipelineContext.invokeNext();
 		}
+	}
+	
+	private UserDO userMerge(UserDO userDO, SkvUserDO skvUser){
+	    if(userDO != null && skvUser == null){
+	        RequestSession.level(null);
+	        return userDO;
+	    }
+	    if(userDO == null && skvUser != null){
+	        String shoppingLevel = skvUser.getShoppingLevel();
+            ShoppingLevelEnum level = ShoppingLevelEnum.getByCode(shoppingLevel);
+            RequestSession.level(level);
+	        
+	        userDO = new UserDO();
+	        userDO.setSkvId(skvUser.getId());
+	        userDO.setPhone(skvUser.getPhone()); 
+	        userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
+	        userDO.setNickName(skvUser.getUserName());
+            return userDO;
+        }
+        if(userDO == null && skvUser == null){
+            RequestSession.level(null);
+            return null;
+        }
+        String shoppingLevel = skvUser.getShoppingLevel();
+        ShoppingLevelEnum level = ShoppingLevelEnum.getByCode(shoppingLevel);
+        RequestSession.level(level);
+        
+        userDO.setSkvId(skvUser.getId());
+        userDO.setPhone(skvUser.getPhone()); 
+        userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
+        userDO.setNickName(skvUser.getUserName());
+        return userDO;
+	}
+	
+	private UserDO userMerge(UserDO user1, UserDO user2){
+	    if(user1!=null && user2==null){
+	        return user1;
+	    }
+	    if(user1 == null && user2 != null){
+	        return user2;
+	    }
+	    if(user1 == null && user2 == null){
+	        return null;
+	    }
+	    UserDO merged = user1;
+	    Field[] fields = user1.getClass().getDeclaredFields();
+	    for(Field field : fields){
+	        String getMethod = "get"+field.getName();
+	        String setMethod = "set"+field.getName();
+	        Object obj1 = doGetMethod(user1,getMethod);
+            Object obj2 = doGetMethod(user2,getMethod);
+            if(obj1 == null && obj2 != null){
+                doSetMethod(merged,setMethod,obj2);
+            }
+	    }
+	    return merged;
+	}
+	
+	private Object doGetMethod(UserDO userDO, String methodName){
+	    Method[] methods = userDO.getClass().getDeclaredMethods();
+        for(Method method : methods){
+            if(!method.getName().equalsIgnoreCase(methodName)){
+                continue;
+            }
+            try {
+                return method.invoke(userDO, new Object[0]);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+	}
+	
+	private void doSetMethod(UserDO userDO, String methodName, Object value){
+	    Method[] methods = userDO.getClass().getDeclaredMethods();
+	    for(Method method : methods){
+	        if(!method.getName().equalsIgnoreCase(methodName)){
+	            continue;
+	        }
+	        try {
+                method.invoke(userDO, value);
+            } catch (Exception e) {
+                return;
+            }
+	    }
 	}
 }
