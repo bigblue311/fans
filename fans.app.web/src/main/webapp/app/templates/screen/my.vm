@@ -24,7 +24,7 @@
 				<dd class="padded">
 					<form id='form_headImg_uploader' method='post' enctype='multipart/form-data'>
 					#if($!{user.headImg})
-						<span style="float:right" id="headImgLabel" style="display:none">上传</span>
+						<span style="float:right;display:none" id="headImgLabel">上传</span>
 						<img src="$!{user.headImg}" class="head_portraits" id="headImgShow" />
 					#else
 						<span style="float:right" id="headImgLabel">上传</span>
@@ -43,7 +43,7 @@
 				<dd class="padded">
 				<form id='form_qrcode_uploader' method='post' enctype='multipart/form-data'>
 					#if($!{user.qrcode})
-						<span style="float:right" id="qrcodeLabel" style="display:none">上传</span>
+						<span style="float:right;display:none" id="qrcodeLabel">上传</span>
 						<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
 					#else
 						<span style="float:right" id="qrcodeLabel">上传</span>
@@ -64,7 +64,7 @@
 				<dd class="padded">
 				<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data'>
 					#if($!{user.groupQrcode})
-						<span style="float:right" id="groupQrcodeLabel" style="display:none">上传</span>
+						<span style="float:right;display:none" id="groupQrcodeLabel">上传</span>
 						<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />
 					#else
 						<span style="float:right" id="groupQrcodeLabel">上传</span>
@@ -81,7 +81,7 @@
 		</div>
 	</section>
 	<div class="blank3"></div>
-	<form action="/my.htm" method="post" id="myForm">
+	<form action="/my.htm?success=true" method="post" id="myForm">
 		$csrfToken.hiddenField
 		<input type="hidden" name="$!userGroup.id.key" value="$!{user.id}"/>
 		<input type="hidden" name="$!userGroup.headImg.key" value="$!{user.headImg}" id="headImgText"/>
@@ -194,6 +194,10 @@
 	<script type="text/javascript" src="js/layer.m.js"></script>
 	<script type="text/javascript" src="/js/Location/location.js"></script>
 	<script>
+		#if($!success)
+			alert("更新成功!");
+		#end
+		
 		jQuery(function(){
 			showLocation('q_province','q_city','q_twon','$!{user.province}','$!{user.city}','');
 			

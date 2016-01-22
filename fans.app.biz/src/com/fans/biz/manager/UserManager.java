@@ -63,6 +63,8 @@ public interface UserManager {
 	 */
 	void addCoins(Long userId, Integer coins);
 	Integer getTodayShareCount(Long userId);
+	Integer getTodayFriendCount(Long userId);
+	String getTodayTask(UserDO userDO);
 	
 	/**
 	 * 根据查询条件获取
@@ -76,7 +78,7 @@ public interface UserManager {
 	 * @param openId
 	 * @return
 	 */
-	List<UserDO> getTopUsers(String openId);
+	List<UserDO> getTopUsers(String openId,Long skvId);
 	TopListDO getValidTop(Long userId, TopListPositionEnum position);
 	
 	/**

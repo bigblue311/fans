@@ -13,6 +13,7 @@ public class TopListDO extends EntityDO implements Serializable{
 	private static final long serialVersionUID = -4635261558817654105L;
 	private Long userId;				//用户ID
 	private String openId;				//用户OPEN_ID
+	private Long skvId;                 //用户SKV_ID
 	private Integer position;			//位置
 	private Date gmtStart;				//开始时间
 	private Date gmtEnd;				//结束时间
@@ -29,7 +30,13 @@ public class TopListDO extends EntityDO implements Serializable{
 	public void setOpenId(String openId) {
 		this.openId = openId;
 	}
-	public Integer getPosition() {
+	public Long getSkvId() {
+        return skvId;
+    }
+    public void setSkvId(Long skvId) {
+        this.skvId = skvId;
+    }
+    public Integer getPosition() {
 		return position;
 	}
 	public void setPosition(Integer position) {

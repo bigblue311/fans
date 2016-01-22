@@ -27,14 +27,28 @@ public class Vip extends RequestSessionBase{
         UserDO userDO = RequestSession.userDO();
         context.put("user", userDO);
         
-        context.put("vipTop", userManager.getValidTop(userDO.getId(), TopListPositionEnum.充值));
-        context.put("shareTop", userManager.getValidTop(userDO.getId(), TopListPositionEnum.分享));
+        Integer refreshInterval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.REFRESH_INTERVAL.getCode(), 5);
+        context.put("refreshInterval", refreshInterval);
         
-        Integer max = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_MAX.getCode(), 3);
-        context.put("shareMax", max);
+        context.put("vipTop", userManager.getValidTop(userDO.getId(), TopListPositionEnum.充值));
+        
+        Integer shareMax = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_MAX.getCode(), 3);
+        context.put("shareMax", shareMax);
+        
+        Integer shareCoins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
+        context.put("shareCoins", shareCoins);
         
         Integer shareCount = userManager.getTodayShareCount(userDO.getId());
         context.put("shareCount", shareCount);
+        
+        Integer friendMax = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_MAX.getCode(), 6);
+        context.put("friendMax", friendMax);
+        
+        Integer friendCoins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_COINS.getCode(), 10);
+        context.put("friendCoins", friendCoins);
+        
+        Integer friendCount = userManager.getTodayFriendCount(userDO.getId());
+        context.put("friendCount", friendCount);
         
         String kefuOnline = systemConfigCache.getCacheString(SystemConfigKeyEnum.KEFU_ONLINE.getCode(), "09:00:00");
         context.put("kefuOnline", kefuOnline);

@@ -31,6 +31,15 @@ public class TopListQueryCondition extends QueryCondition implements Serializabl
 		return getString("openId");
 	}
 	
+	public TopListQueryCondition setSkvId(Long skvId) {
+        put("skvId",skvId);
+        return this;
+    }
+    
+    public Long getSkvId(){
+        return getLong("skvId");
+    }
+	
 	public TopListQueryCondition setValid(Integer valid) {
 		put("valid", valid);
 		return this;

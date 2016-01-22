@@ -4,6 +4,7 @@ import com.fans.biz.model.OrderStatisticVO;
 import com.fans.biz.model.TopupVO;
 import com.fans.dal.enumerate.PayStatusEnum;
 import com.fans.dal.model.TopupDO;
+import com.fans.dal.model.UserDO;
 import com.fans.dal.query.TopupQueryCondition;
 import com.victor.framework.dal.basic.Paging;
 
@@ -115,4 +116,11 @@ public interface TransactionManager {
 	 * @return
 	 */
 	OrderStatisticVO getOrderStatisticVO();
+	
+	/**
+	 * 分享和加好友
+	 * @param userId
+	 */
+	void share(UserDO userDO);
+	void friend(UserDO userDO);
 }

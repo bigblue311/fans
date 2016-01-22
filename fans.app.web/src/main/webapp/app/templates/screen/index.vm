@@ -17,6 +17,9 @@
 </head>
 #set ($userGroup = $form.user.defaultInstance)
 <body>
+	#if($!todayTask)
+	<div style="margin: 10px;color: #E6257D;"><a href="/vip.htm">$!todayTask</a></div>
+	#end
 	<div class="change_tab">
 		<div class="filter_heard">
 			<ul class="filter-inner-cont">
@@ -288,7 +291,8 @@
 			</div>
 			<div class="clear"></div>
 			<div class="code_area center">
-				<img id="user_popup_code" src="" alt="" style="max-width: 224px; min-width:224px;">
+				<img id="user_popup_code" src="" alt="" onclick="addFriend()" 
+					style="max-width: 224px; min-width:224px;">
 			</div>
 			<p class="ft_code">扫一扫上面的二维码图案，或者长按识别二维码，加我微信</p>
 
@@ -347,6 +351,8 @@
 	}
 	
 	var countDown = $!nextRefresh;
+	var ctime = 0;
+	var friendCount = 0;
 	
 	var timer = setInterval("countDownTask()",1000);
 	
@@ -446,9 +452,29 @@
  		});
 	}
 	
+	function addFriend(){
+		var timestamp=Math.round(new Date() / 1000);
+		if(ctime && timestamp - ctime >= 2){
+			friendCount++;
+			if(friendCount == 5){
+				$.ajax({
+					  url: '/api/friendSuccess.json',
+					  type: 'POST',
+					  dataType: "json",
+					  success: function(res){
+						  friendCount=0;
+					  }
+				});
+			}
+		}
+	}
+	
 	function bindAdd(){
 		$(".icon,.add_fri").unbind("click");
 		$(".icon,.add_fri").click(function(){
+			
+			ctime = Math.round(new Date() / 1000);
+			
 			var user_popup_nickname = $(this).attr("user_popup_nickname");
 			var user_popup_description = $(this).attr("user_popup_description");
 			var user_popup_headimg = $(this).attr("user_popup_headimg");
@@ -464,7 +490,7 @@
     			type: 1,
     			content: html_r,
     			anim: true,
-    			style: 'position:fixed; left:0; top:0; width:100%; height:100%;     background: rgba(255,255,255,0.1); border:none;'
+    			style: 'position:fixed; left:0; top:0; width:100%; height:100%;background: rgba(255,255,255,0.1); border:none;'
 			});
 		});	
 	}

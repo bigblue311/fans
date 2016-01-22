@@ -34,7 +34,7 @@
               <list>
               	<!-- <ref bean="recycleTempFilesTask" /> -->
               	<ref bean="orderStatisticTask" />
-              	<!-- <ref bean="randomRefreshTask" /> -->
+              	<ref bean="randomRefreshTask" />
               </list>
   		</property>
     </bean>

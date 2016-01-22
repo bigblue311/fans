@@ -145,13 +145,52 @@ public class UserManagerImpl implements UserManager{
         .setGmtModifyEnd(DateTools.todayEnd()).setPosition(TopListPositionEnum.分享.getCode());
         return topListDAO.getCount(queryCondition);
     }
+    
+    @Override
+    public Integer getTodayFriendCount(Long userId) {
+        TopListQueryCondition queryCondition = new TopListQueryCondition();
+        queryCondition.setUserId(userId).setGmtModifyStart(DateTools.todayStart())
+        .setGmtModifyEnd(DateTools.todayEnd()).setPosition(TopListPositionEnum.加好友.getCode());
+        return topListDAO.getCount(queryCondition);
+    }
+    
+    @Override
+    public String getTodayTask(UserDO userDO) {
+        if(userDO==null){
+            return "账号异常,请联系客服";
+        }
+        
+        Integer shareMax = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_MAX.getCode(), 3);
+        Integer shareCoins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
+        Integer shareCount = getTodayShareCount(userDO.getId());
+
+        Integer shareLeft = shareMax - shareCount;
+        shareLeft = shareLeft<=0?0:shareLeft;
+        
+        Integer friendMax = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_MAX.getCode(), 6);
+        Integer friendCoins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_COINS.getCode(), 10);
+        Integer friendCount = getTodayFriendCount(userDO.getId());
+        
+        Integer friendLeft = friendMax - friendCount;
+        friendLeft = friendLeft<=0?0:friendLeft;
+        
+        Integer taskCount = shareLeft + friendLeft;
+        Integer taskCoins = (shareLeft*shareCoins) + (friendLeft*friendCoins);
+        
+        if(taskCount!=null && taskCount.intValue()>0){
+            return userDO.getNickName()+", 您今日再分享"+shareLeft+"次和加好友"+friendLeft+"次, 还可以获得"+taskCoins+"个金币";
+        } else {
+            return null;
+        }
+        
+    }
 
     @Override
-    public List<UserDO> getTopUsers(String openId) {
-        UserDO top1 = getRandom(openId, TopListPositionEnum.充值.getCode());
-        UserDO top2 = getRandom("", TopListPositionEnum.充值.getCode());
-        UserDO top3 = getRandom(openId, TopListPositionEnum.分享.getCode());
-        UserDO top4 = getRandom("", TopListPositionEnum.分享.getCode());
+    public List<UserDO> getTopUsers(String openId,Long skvId) {
+        UserDO top1 = getRandom(openId,skvId, TopListPositionEnum.充值.getCode());
+        UserDO top2 = getRandom("",null, TopListPositionEnum.充值.getCode());
+        UserDO top3 = getRandom(openId,skvId, TopListPositionEnum.分享.getCode());
+        UserDO top4 = getRandom("",null, TopListPositionEnum.分享.getCode());
         List<UserDO> list = Lists.newArrayList(top1,top2,top3,top4);
         List<UserDO> result = Lists.newArrayList();
         for(UserDO userDO : list){
@@ -177,7 +216,7 @@ public class UserManagerImpl implements UserManager{
         return false;
     }
     
-    private UserDO getRandom(String openId, Integer position){
+    private UserDO getRandom(String openId,Long skvId, Integer position){
         TopListQueryCondition queryCondition = new TopListQueryCondition();
         queryCondition.setValid(0).setPosition(position);
         List<TopListDO> list = topListDAO.getByCondition(queryCondition);
@@ -185,11 +224,24 @@ public class UserManagerImpl implements UserManager{
             return null;
         }
         for(TopListDO topListDO : list){
-            if(topListDO.getOpenId().equals(openId)){
-                if(topListDO.getUserId() == null){
-                    continue;
+            if(StringTools.isEmpty(openId) && skvId == null){
+                continue;
+            }
+            if(StringTools.isNotEmpty(openId) && StringTools.isNotEmpty(topListDO.getOpenId())){
+                if(openId.equals(topListDO.getOpenId())){
+                    if(topListDO.getUserId() == null){
+                        continue;
+                    }
+                    return userDAO.getById(topListDO.getUserId());
                 }
-                return userDAO.getById(topListDO.getUserId());
+            }
+            if(skvId != null && topListDO.getSkvId()!=null){
+                if(skvId.equals(topListDO.getSkvId()) || skvId.longValue() == topListDO.getSkvId().longValue()){
+                    if(topListDO.getUserId() == null){
+                        continue;
+                    }
+                    return userDAO.getById(topListDO.getUserId());
+                }
             }
         }
         int num = (int)(Math.random() * list.size());

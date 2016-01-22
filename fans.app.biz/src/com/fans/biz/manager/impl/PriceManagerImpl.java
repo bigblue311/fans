@@ -321,7 +321,7 @@ public class PriceManagerImpl implements PriceManager{
                 continue;
             }
             if(topList == null){
-                return level.getDesc()+" 每"+skvTopVO.getDay()+"天可获得一次免费刷新机会";
+                return level.getDesc()+" 每"+skvTopVO.getDay()+"天可获得一次"+skvTopVO.getMinute()+"分钟免费刷新机会";
             } else {
                 Date gmtEnd = topList.getGmtEnd();
                 if(DateTools.isDayValid(skvTopVO.getDay(), gmtEnd)){

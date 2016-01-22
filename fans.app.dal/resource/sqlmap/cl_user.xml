@@ -176,19 +176,19 @@
 	  </select>
 	  
 	  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
-	    select * from cl_user where id = #id#  
+	    select * from cl_user where id = #id#
 	  </select>
 	  
 	  <select id="getByExtId" parameterClass="java.util.HashMap" resultMap="RM">
-	    select * from cl_user where ext_id = #extId#  
+	    select * from cl_user where ext_id = #extId# limit 1
 	  </select>
 	  
 	  <select id="getBySkvId" parameterClass="java.util.HashMap" resultMap="RM">
-	    select * from cl_user where skv_id = #skvId#  
+	    select * from cl_user where skv_id = #skvId#  limit 1
 	  </select>
 	  
 	  <select id="getByOpenId" parameterClass="java.util.HashMap" resultMap="RM">
-	    select * from cl_user where open_id = #openId#  
+	    select * from cl_user where open_id = #openId#  limit 1
 	  </select>
 
 	  <sql id="where">

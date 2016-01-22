@@ -257,6 +257,7 @@ public class TransactionManagerImpl implements TransactionManager{
             forCreate.setGmtEnd(DateTools.addMinute(DateTools.today(), minutes));
             forCreate.setUserId(userId);
             forCreate.setOpenId(user.getOpenId());
+            forCreate.setSkvId(user.getSkvId());
             forCreate.setPosition(TopListPositionEnum.SKV置顶.getCode());
             topListDao.insert(forCreate);
 		}
@@ -274,6 +275,7 @@ public class TransactionManagerImpl implements TransactionManager{
 			forCreate.setGmtEnd(gmtEnd);
 			forCreate.setUserId(userId);
 			forCreate.setOpenId(user.getOpenId());
+			forCreate.setSkvId(user.getSkvId());
 			forCreate.setPosition(TopListPositionEnum.充值.getCode());
 			topListDao.insert(forCreate);
 		}
@@ -357,6 +359,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	            forCreate.setGmtStart(DateTools.today());
 	            forCreate.setGmtEnd(DateTools.addMinute(DateTools.today(), minutes));
 	            forCreate.setUserId(userId);
+	            forCreate.setSkvId(user.getSkvId());
 	            forCreate.setOpenId(user.getOpenId());
 	            forCreate.setPosition(TopListPositionEnum.SKV置顶.getCode());
 	            topListDao.insert(forCreate);
@@ -458,5 +461,32 @@ public class TransactionManagerImpl implements TransactionManager{
         orderAlertVO.setSuccess(count != null);
         orderAlertVO.setMsg(count != null?"查询成功":"系统错误,请速联系管理员!");
         return orderAlertVO;
+    }
+
+    @Override
+    public void share(UserDO userDO) {
+        Date now = DateTools.today();
+        TopListDO forCreate = new TopListDO();
+        forCreate.setGmtStart(now);
+        forCreate.setGmtEnd(now);
+        forCreate.setUserId(userDO.getId());
+        forCreate.setOpenId(userDO.getOpenId());
+        forCreate.setSkvId(userDO.getSkvId());
+        forCreate.setPosition(TopListPositionEnum.分享.getCode());
+        topListDao.insert(forCreate);
+        
+    }
+
+    @Override
+    public void friend(UserDO userDO) {
+        Date now = DateTools.today();
+        TopListDO forCreate = new TopListDO();
+        forCreate.setGmtStart(now);
+        forCreate.setGmtEnd(now);
+        forCreate.setUserId(userDO.getId());
+        forCreate.setOpenId(userDO.getOpenId());
+        forCreate.setSkvId(userDO.getSkvId());
+        forCreate.setPosition(TopListPositionEnum.加好友.getCode());
+        topListDao.insert(forCreate);
     }
 }

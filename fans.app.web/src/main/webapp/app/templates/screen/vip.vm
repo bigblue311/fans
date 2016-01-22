@@ -22,7 +22,7 @@
 		#if($user.isVip())
 		<p>你已成功开通VIP。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
 		#else
-		<p>开通VIP。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
+		<p>每$!{refreshInterval}分钟更新一次名片可以刷新名片至列表前面！</p>
 		#end
 		<div class="blank2"></div>
 		<hr class="line_h">
@@ -223,15 +223,27 @@
  		<hr class="line_h">
  		<div class="blank2"></div> 
 		#end
-		<h2>分享置顶</h2>
+		<h2>任务1 分享得金币</h2>
  		<div class="blank2"></div> 
  		<p>1.不购买VIP也可以</p>
  		<div class="blank2"></div> 
- 		<p>2.一天最多分享$!shareMax次</p>
+ 		<p>2.每天最多有分享$!shareMax次得金币机会</p>
  		<div class="blank2"></div> 
- 		<p>3.分享成功可获取50金币</p>
+ 		<p>3.成功分享可获取$!shareCoins金币</p>
  		<div class="blank2"></div> 
- 		<p>今天分享 ：<span class="member">$!shareCount次</span><span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a></span></p>
+ 		<p>今天任务 ：<span class="member">$!shareCount次 / $!shareMax次</span><span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a></span></p>
+ 		<div class="blank2"></div> 
+ 		<hr class="line_h">
+ 		<div class="blank2"></div> 
+ 		<h2>任务2 加好友得金币</h2>
+ 		<div class="blank2"></div> 
+ 		<p>1.不购买VIP也可以</p>
+ 		<div class="blank2"></div> 
+ 		<p>2.每天最多有加好友$!friendMax次得金币机会</p>
+ 		<div class="blank2"></div> 
+ 		<p>3.成功加好友5人可获取$!friendCoins金币</p>
+ 		<div class="blank2"></div> 
+ 		<p>今天任务 ：<span class="member">$!friendCount次 / $!friendMax次</span><span class="link_btn"><a class="link_btn" href="/index.htm">去加好友</a></span></p>
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div>

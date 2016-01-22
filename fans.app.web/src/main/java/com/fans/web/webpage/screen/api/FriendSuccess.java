@@ -13,7 +13,7 @@ import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.shared.Result;
 
-public class ShareSuccess extends RequestSessionBase{
+public class FriendSuccess extends RequestSessionBase{
     
     @Autowired
     private HttpServletRequest request;
@@ -33,16 +33,16 @@ public class ShareSuccess extends RequestSessionBase{
             return Result.newInstance("用户不存在", "用户不存在", false);
         }
         
-        Integer max = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_MAX.getCode(), 3);
+        Integer max = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_MAX.getCode(), 6);
         
-        Integer shareCount = userManager.getTodayShareCount(userDO.getId());
-        if(shareCount!=null && shareCount > max){
-            return Result.newInstance("一天最多只能分享置顶"+max+"次哦", "分享置顶成功", false);
+        Integer friendCount = userManager.getTodayFriendCount(userDO.getId());
+        if(friendCount!=null && friendCount > max){
+            return Result.newInstance("一天最多只能加好友"+max+"次得金币哦", "加好友成功", false);
         }
+        transactionManager.friend(userDO);
         
-        transactionManager.share(userDO);
-        Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
+        Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_COINS.getCode(), 10);
         userManager.addCoins(userDO.getId(), coins);
-        return Result.newInstance("成功分享, 获得"+coins+"金币", "分享置顶成功", true);
+        return Result.newInstance("加好友成功", "加好友成功", true);
     }
 }
