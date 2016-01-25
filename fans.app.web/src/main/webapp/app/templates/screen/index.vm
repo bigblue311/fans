@@ -18,8 +18,26 @@
 #set ($userGroup = $form.user.defaultInstance)
 <body>
 	#if($!todayTask)
-	<div style="margin: 10px;color: #E6257D;"><a href="/vip.htm">$!todayTask</a></div>
+	<div style="margin: 10px;color: #E6257D;">
+		<a href="/vip.htm">$!todayTask</a>
+		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
+	</div>
+	#else
+	<div style="margin: 10px;color: #E6257D;">
+		<a href="/vip.htm">今日任务已经全部完成</a>
+		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
+	</div>
 	#end
+	<div id="popup" style="margin: -5px; 
+				text-align:center;
+				position:relative;
+				top: 350px;
+				background: #FF5648;
+				color: white;
+				padding: 10px;
+				z-index: 999;
+				display:none;
+				">加好友+1</div>
 	<div class="change_tab">
 		<div class="filter_heard">
 			<ul class="filter-inner-cont">
@@ -354,6 +372,15 @@
 	var ctime = 0;
 	var friendCount = 0;
 	
+	function showPopup(msg){
+		$("#popup").empty().append(msg);
+		$("#popup").show();
+		$("#popup").animate({top:"-20px"});
+		setTimeout(function(){
+			$("#popup").hide();
+		},5000);
+	}
+	
 	var timer = setInterval("countDownTask()",1000);
 	
 	function countDownTask(){
@@ -456,12 +483,16 @@
 		var timestamp=Math.round(new Date() / 1000);
 		if(ctime && timestamp - ctime >= 2){
 			friendCount++;
+			showPopup("加好友+"+friendCount);
 			if(friendCount == 5){
 				$.ajax({
 					  url: '/api/friendSuccess.json',
 					  type: 'POST',
 					  dataType: "json",
 					  success: function(res){
+						  if(res.success){
+							  showPopup(res.dataObject);
+						  }
 						  friendCount=0;
 					  }
 				});

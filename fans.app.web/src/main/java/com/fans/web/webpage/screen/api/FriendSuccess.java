@@ -43,6 +43,6 @@ public class FriendSuccess extends RequestSessionBase{
         
         Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_COINS.getCode(), 10);
         userManager.addCoins(userDO.getId(), coins);
-        return Result.newInstance("加好友成功", "加好友成功", true);
+        return Result.newInstance("加好友任务完成+"+friendCount+",获得金币"+coins, "加好友成功", true);
     }
 }

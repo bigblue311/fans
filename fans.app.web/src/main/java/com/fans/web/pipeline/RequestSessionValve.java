@@ -88,8 +88,15 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 	
 	private UserDO userMerge(UserDO userDO, SkvUserDO skvUser){
 	    if(userDO != null && skvUser == null){
-	        RequestSession.level(null);
-	        return userDO;
+	        if(userDO.getSkvId() == null){
+	            RequestSession.level(null);
+	            return userDO;
+	        }
+	        skvUser = userManager.getSkvUserById(userDO.getSkvId());
+	        if(skvUser == null){
+	            RequestSession.level(null);
+                return userDO;
+	        }
 	    }
 	    if(userDO == null && skvUser != null){
 	        String shoppingLevel = skvUser.getShoppingLevel();

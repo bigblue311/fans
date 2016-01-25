@@ -144,7 +144,6 @@
 		<div class="blank2"></div>
 		<hr class="line_h">
 		<div class="blank2"></div>
-		#if($user.isVip())
 		<h2>开启超级VIP固定置顶首位服务</h2>
 		<div class="blank2"></div> 
  		<p>1.在全国相应地区持续置顶第一条</p>
@@ -191,6 +190,7 @@
 				#end
 			</ul>
 			<div class="padded10">
+			#if($user.isVip())
 				<button class="btn btn-pink btn-lg buy" 
 					id="rocketBuyBtn"
 					_type="2" 
@@ -218,11 +218,13 @@
 			    	_reUrl="/index.htm" 
 			    	_msg="确定购买超级置顶吗?">开启VIP置顶</button>
 			    #end
+			#else
+				<p>您的会员到期了.续期会员,开启VIP置顶</p>
+			#end
 			</div>
 		</div>
  		<hr class="line_h">
  		<div class="blank2"></div> 
-		#end
 		<h2>任务1 分享得金币</h2>
  		<div class="blank2"></div> 
  		<p>1.不购买VIP也可以</p>
@@ -239,7 +241,7 @@
  		<div class="blank2"></div> 
  		<p>1.不购买VIP也可以</p>
  		<div class="blank2"></div> 
- 		<p>2.每天最多有加好友$!friendMax次得金币机会</p>
+ 		<p>2.每天最多有$!friendMax次得金币机会</p>
  		<div class="blank2"></div> 
  		<p>3.成功加好友5人可获取$!friendCoins金币</p>
  		<div class="blank2"></div> 

@@ -18,7 +18,7 @@
 				for(var i=0;i<paymentStatusList.length;i++){
 					var msg = "";
 					if(paymentStatusList[i].success){
-						msg = "<a href='$admin.setTarget('order.vm')?createStart=${dateTools.DateToString($dateTools.todayStart())}&createEnd=${dateTools.DateToString($dateTools.todayEnd())}"+
+						msg = "<a href='$admin.setTarget('topup.vm')?createStart=${dateTools.DateToString($dateTools.todayStart())}&createEnd=${dateTools.DateToString($dateTools.todayEnd())}"+
 								"&type="+paymentStatusList[i].statusCode+"' "+
 								"class='auxiliary-text' style='color:"+paymentStatusList[i].color+"'>"+
 								"<i class='icon-circle-arrow-right'></i>"+paymentStatusList[i].statusDesc+"("+paymentStatusList[i].count+"元)</a>";

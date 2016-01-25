@@ -78,7 +78,7 @@ public interface UserManager {
 	 * @param openId
 	 * @return
 	 */
-	List<UserDO> getTopUsers(String openId,Long skvId);
+	List<UserDO> getTopUsers();
 	TopListDO getValidTop(Long userId, TopListPositionEnum position);
 	
 	/**

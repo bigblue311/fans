@@ -36,7 +36,7 @@ public class Index extends RequestSessionBase{
         context.put("searchType", userQueryCondition.getSearchType());
         context.put("query", userQueryCondition);
         if(userDO != null){
-            context.put("topList", userManager.getTopUsers(RequestSession.openId(),userDO.getSkvId()));
+            context.put("topList", userManager.getTopUsers());
         }
         context.put("list", paging.getData());
         context.put("user", userDO);

@@ -178,7 +178,7 @@ public class UserManagerImpl implements UserManager{
         Integer taskCoins = (shareLeft*shareCoins) + (friendLeft*friendCoins);
         
         if(taskCount!=null && taskCount.intValue()>0){
-            return userDO.getNickName()+", 您今日再分享"+shareLeft+"次和加好友"+friendLeft+"次, 还可以获得"+taskCoins+"个金币";
+            return "您今日再分享"+shareLeft+"次和加好友"+friendLeft+"次, 还可以获得"+taskCoins+"个金币";
         } else {
             return null;
         }
@@ -186,71 +186,89 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public List<UserDO> getTopUsers(String openId,Long skvId) {
-        UserDO top1 = getRandom(openId,skvId, TopListPositionEnum.充值.getCode());
-        UserDO top2 = getRandom("",null, TopListPositionEnum.充值.getCode());
-        UserDO top3 = getRandom(openId,skvId, TopListPositionEnum.分享.getCode());
-        UserDO top4 = getRandom("",null, TopListPositionEnum.分享.getCode());
-        List<UserDO> list = Lists.newArrayList(top1,top2,top3,top4);
-        List<UserDO> result = Lists.newArrayList();
-        for(UserDO userDO : list){
-            if(!contains(result, userDO)){
-                result.add(userDO);
-            }
-        }
-        return result;
-    }
-    
-    private Boolean contains(List<UserDO> list, UserDO userDO){
-        if(userDO == null){
-            return true;
-        }
-        if(CollectionTools.isEmpty(list)){
-            return false;
-        }
-        for(UserDO user : list){
-            if(user.getId().intValue() == userDO.getId().intValue()){
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private UserDO getRandom(String openId,Long skvId, Integer position){
+    public List<UserDO> getTopUsers() {
         TopListQueryCondition queryCondition = new TopListQueryCondition();
-        queryCondition.setValid(0).setPosition(position);
+        queryCondition.setValid(0).setPosition(TopListPositionEnum.充值.getCode());
         List<TopListDO> list = topListDAO.getByCondition(queryCondition);
         if(CollectionTools.isEmpty(list)){
-            return null;
+            return Lists.newArrayList();
         }
+        List<UserDO> result = Lists.newArrayList();
         for(TopListDO topListDO : list){
-            if(StringTools.isEmpty(openId) && skvId == null){
-                continue;
-            }
-            if(StringTools.isNotEmpty(openId) && StringTools.isNotEmpty(topListDO.getOpenId())){
-                if(openId.equals(topListDO.getOpenId())){
-                    if(topListDO.getUserId() == null){
-                        continue;
-                    }
-                    return userDAO.getById(topListDO.getUserId());
-                }
-            }
-            if(skvId != null && topListDO.getSkvId()!=null){
-                if(skvId.equals(topListDO.getSkvId()) || skvId.longValue() == topListDO.getSkvId().longValue()){
-                    if(topListDO.getUserId() == null){
-                        continue;
-                    }
-                    return userDAO.getById(topListDO.getUserId());
+            if(topListDO != null && topListDO.getUserId() != null){
+                UserDO userDO = userDAO.getById(topListDO.getUserId());
+                if(userDO != null){
+                    result.add(userDO);
                 }
             }
         }
-        int num = (int)(Math.random() * list.size());
-        TopListDO topListDO = list.get(num);
-        if(topListDO.getUserId() == null){
-            return null;
-        }
-        return userDAO.getById(topListDO.getUserId());
+        
+        return result;
+        
+//        UserDO top1 = getRandom(openId,skvId, TopListPositionEnum.充值.getCode());
+//        UserDO top2 = getRandom("",null, TopListPositionEnum.充值.getCode());
+//        UserDO top3 = getRandom(openId,skvId, TopListPositionEnum.分享.getCode());
+//        UserDO top4 = getRandom("",null, TopListPositionEnum.分享.getCode());
+//        List<UserDO> list = Lists.newArrayList(top1,top2,top3,top4);
+//        List<UserDO> result = Lists.newArrayList();
+//        for(UserDO userDO : list){
+//            if(!contains(result, userDO)){
+//                result.add(userDO);
+//            }
+//        }
+//        return result;
     }
+    
+//    private Boolean contains(List<UserDO> list, UserDO userDO){
+//        if(userDO == null){
+//            return true;
+//        }
+//        if(CollectionTools.isEmpty(list)){
+//            return false;
+//        }
+//        for(UserDO user : list){
+//            if(user.getId().intValue() == userDO.getId().intValue()){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//    
+//    private UserDO getRandom(String openId,Long skvId, Integer position){
+//        TopListQueryCondition queryCondition = new TopListQueryCondition();
+//        queryCondition.setValid(0).setPosition(position);
+//        List<TopListDO> list = topListDAO.getByCondition(queryCondition);
+//        if(CollectionTools.isEmpty(list)){
+//            return null;
+//        }
+//        for(TopListDO topListDO : list){
+//            if(StringTools.isEmpty(openId) && skvId == null){
+//                continue;
+//            }
+//            if(StringTools.isNotEmpty(openId) && StringTools.isNotEmpty(topListDO.getOpenId())){
+//                if(openId.equals(topListDO.getOpenId())){
+//                    if(topListDO.getUserId() == null){
+//                        continue;
+//                    }
+//                    return userDAO.getById(topListDO.getUserId());
+//                }
+//            }
+//            if(skvId != null && topListDO.getSkvId()!=null){
+//                if(skvId.equals(topListDO.getSkvId()) || skvId.longValue() == topListDO.getSkvId().longValue()){
+//                    if(topListDO.getUserId() == null){
+//                        continue;
+//                    }
+//                    return userDAO.getById(topListDO.getUserId());
+//                }
+//            }
+//        }
+//        int num = (int)(Math.random() * list.size());
+//        TopListDO topListDO = list.get(num);
+//        if(topListDO.getUserId() == null){
+//            return null;
+//        }
+//        return userDAO.getById(topListDO.getUserId());
+//    }
 
     @Override
     public TopListDO getValidTop(Long userId,TopListPositionEnum position) {
