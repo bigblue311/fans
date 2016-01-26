@@ -17,14 +17,60 @@
 </head>
 #set ($userGroup = $form.user.defaultInstance)
 <body>
+	<div>
+		<div class="item_list">
+			<div class="item_box">
+				<div class="left head_portrait">
+					<img src="$!user.headImg" style="max-width:70px;max-height:70px;">
+				</div>
+				<div class="right btn-infor">
+					<h3><a href="/my.htm"><button style="
+					    border: 1px solid lightgrey;
+					    padding: 5px;
+					    background: #E6257D;
+					    color: white;
+					    margin-top: -10px;
+					    margin-right: -10px;">完善个人资料</button></a></h3>
+					<h3><a href="/vip.htm?open=rocketDetail#service2"><button style="
+					    border: 1px solid lightgrey;
+					    padding: 5px;
+					    background: #E6257D;
+					    color: white;
+					    margin-top: 20px;
+					    margin-right: -10px;">开启固定置顶</button></a></h3>
+				</div>
+				<div class="left ft_describe">
+					<h3>
+						<span style="
+    							min-width: 106px;
+    							display: inline-block;">$!user.nickName</span>
+						&nbsp;
+						<span class="city_area location" 
+							  province="$!user.province" 
+							  city="$!user.city"
+							  extCity="$!user.extCity"></span> 
+					</h3>
+					<h3><span style="
+    							min-width: 106px;
+    							display: inline-block;">ID: $!user.id</span>
+    					<span>金币: $!user.coins</span></h3>
+					<h3>二维码: <font color="#if($!user.qrcode) #E6257D #else grey #end">个人</font>&nbsp;
+						<font color="#if($!user.groupQrcode) #E6257D #else grey #end">群</font>
+						&nbsp;
+						状态: <font color="#if($user.isVip()) #E6257D #else grey #end">#if($user.isVip())已#else未#end激活</font>
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
 	#if($!todayTask)
 	<div style="margin: 10px;color: #E6257D;">
-		<a href="/vip.htm">$!todayTask</a>
+		<a href="/vip.htm#task1">$!todayTask</a>
 		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
 	</div>
 	#else
 	<div style="margin: 10px;color: #E6257D;">
-		<a href="/vip.htm">今日任务已经全部完成</a>
+		<a href="/vip.htm#task1">今日任务已经全部完成</a>
 		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
 	</div>
 	#end
@@ -270,22 +316,22 @@
 		<ul>
 			<li><a href="javascript:void(0)" id="zt_top"> 
 				<font class="iconfont">&#xe613;</font>
-				<div style="color:white">置顶<span id="countDown" style="color:white"></span></div>
+				<div style="color:white">本页置顶<span id="countDown" style="color:white"></span></div>
 			</a></li>
 
 			<li><a href="/vip.htm"> 
 				<font class="iconfont">&#xe608;</font>
-				<div style="color:white">VIP</div>
+				<div style="color:white">爆粉服务</div>
 			</a></li>
 
 			<li><a href="/my.htm"> 
 				<font class="iconfont">&#xe615;</font>
-				<div style="color:white">个人</div>
+				<div style="color:white">个人资料</div>
 			</a></li>
 
 			<li><a href="/index.htm"> 
 				<font class="iconfont">&#xe614;</font>
-				<div style="color:white">刷新</div>
+				<div style="color:white">刷新本页</div>
 			</a></li>
 		</ul>
 	</footer>
@@ -526,20 +572,20 @@
 		});	
 	}
 	
-	function showAlert(){
+	function showAlert(msg, linkMsg, href){
 		layer.open({
 		    title: [
-		        '按钮使用说明',
+		        '提示',
 		        'background-color:#F6F6F6; color:#191919;font-weight:bold;'
 		    ],
 		    content: '<div class="ft_detail">'+
-					 '<p>1、置顶刷新可以将您上传的二维码刷新到人脉列表最顶端让更多人看到您。</p>'+
-					 '<p>2、剩余'+countDown+'秒后可使用一次。</p>'+
-					 '<p>3、只有VIP会员才能使用。</p>'+
-					 '<p>4、请上传二维码再置顶。</p>'+
-					 '<p>5、点击本提示框关闭提示。</p>'+
+					 	'<p>'+msg+'</p>'+
+					 	'<a href=\''+href+'\'>'+
+					 	'<button style=\'float: right;margin: 10px 0px 10px 0px;padding: 10px;border: 1px solid white;background: #E5247C;color: white;\'>'+linkMsg+'</button>'+
+					 	'</a>'+
 					 '</div>'
 		});
+		
 	}   
 	
    $(function(){
@@ -597,27 +643,43 @@
 		$(".tc_page").css({ width: $("body").width()-65+"px"});
 		//按钮使用说明
 		$("#zt_top").click(function(){
-			if(countDown <= 0){
+			#if($frientCount>0)
 				#if($user.isVip())
 					#if($!searchType == '0')
 						#if($!user.qrcode)
-							jQuery("#refreshForm").submit();
+							if(countDown <= 0){
+								jQuery("#refreshForm").submit();
+							} else {
+								showAlert('还差'+countDown+'秒后可以置顶','刷新一下','/index.htm');
+							}
 						#else
-							showAlert();
+							showAlert('请先上传个人二维码','去上传个人二维码','/my.htm');
 						#end
 					#else
 						#if($!user.groupQrcode)
-							jQuery("#refreshForm").submit();
+							if(countDown <= 0){
+								jQuery("#refreshForm").submit();
+							} else {
+								showAlert('还差'+countDown+'秒后可以置顶','刷新一下','/index.htm');
+							}
 						#else
-							showAlert();
+							showAlert('请先上传群二维码','去上传群二维码','/my.htm');
 						#end
 					#end
 				#else
-					showAlert();
+					showAlert('您的爆粉激活到期了','激活我的爆粉','/vip.htm?open=vipDetail#service1');
 				#end
-			} else {
-				showAlert();
-			}
+			#else
+				if(friendCount < 5){
+					showAlert('请先加5个好友','刷新一下','/index.htm');
+				} else {
+					if(countDown <= 0){
+						jQuery("#refreshForm").submit();
+					} else {
+						showAlert('还差'+countDown+'秒后可以置顶','刷新一下','/index.htm');
+					}
+				}
+			#end
 		});
 	});
    

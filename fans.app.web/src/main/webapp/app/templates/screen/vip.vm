@@ -17,10 +17,10 @@
 		<img src="images/vip.jpg" alt="" width="100%">
 	</div>
 	<div class="padded">
-		<h2>VIP服务</h2>
+		<h2 id="service1">爆粉激活服务</h2>
 		<div class="blank2"></div>
 		#if($user.isVip())
-		<p>你已成功开通VIP。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
+		<p>你已成功开通爆粉激活。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
 		#else
 		<p>每$!{refreshInterval}分钟更新一次名片可以刷新名片至列表前面！</p>
 		#end
@@ -34,9 +34,9 @@
 		<div class="blank2"></div>
 		<p>
 			#if($user.isVip())
-			当前状态 ：<span class="member">VIP会员</span>
+			当前状态 ：<span class="member">已激活</span>
 			#else
-			当前状态 ：普通会员
+			当前状态 ：未激活
 			#end
 		</p>
 		<div class="blank2"></div>
@@ -45,7 +45,7 @@
 			会员金币 ：<span class="member">$!user.coins</span> <span class="link_btn" for="topupDetail">购买金币</span>
 		</p>
 		<div class="blank2"></div>
-		<div id="topupDetail" style="display:none">
+		<div id="topupDetail" #if($!open != 'topupDetail')style="display:none"#end>
 			#if($!weixinSwitch)
 			<ul>
 				#foreach($item in $!topupSet) 
@@ -89,13 +89,13 @@
 		<div class="blank2"></div>
 		<p>
 			#if($user.isVip())
-			有效期至 ：<span class="member">$dateTools.DateToStringSimple($!user.gmtVipExpire)</span> <span class="link_btn" for="vipDetail">延长时间</span>
+			激活有效 ：<span class="member">$dateTools.DateToStringSimple($!user.gmtVipExpire)</span> <span class="link_btn" for="vipDetail">延长时间</span>
 			#else
-			有效期至 ：<span class="member">已过期</span> <span class="link_btn" for="vipDetail">开通VIP</span>
+			激活有效 ：<span class="member">已过期</span> <span class="link_btn" for="vipDetail">爆粉激活</span>
 			#end
 		</p>
 		<div class="blank2"></div>
-		<div id="vipDetail" style="display:none">
+		<div id="vipDetail" #if($!open != 'vipDetail')style="display:none"#end>
 			<ul>
 				#foreach($item in $!vipSet) 
 				<li class="radio_item" bind="vip">
@@ -123,7 +123,7 @@
 			    	#end
 			    	_cash="" 
 			    	_reUrl="/vip.htm" 
-			    	>开启VIP</button>
+			    	>开启爆粉激活</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg pay" 
 			    	id="vipPayBtn"
@@ -137,18 +137,20 @@
 			    	#end
 			    	_cash="" 
 			    	_reUrl="/vip.htm" 
-			    	_msg="确定购买会员吗?">开启VIP</button>
+			    	_msg="确定购买会员吗?">开启爆粉激活</button>
 			    #end
 			</div>
 		</div>
 		<div class="blank2"></div>
 		<hr class="line_h">
 		<div class="blank2"></div>
-		<h2>开启超级VIP固定置顶首位服务</h2>
+		
+		
+		<h2 id="service2">开启超级固定置顶首位服务</h2>
 		<div class="blank2"></div> 
  		<p>1.在全国相应地区持续置顶第一条</p>
  		<div class="blank2"></div> 
- 		<p>2.必须购买VIP会员</p>
+ 		<p>2.必须购买爆粉激活时间</p>
  		<div class="blank2"></div> 
  		<p>3.名片置顶开始时间支付成功开始计算</p>
  		<div class="blank2"></div> 
@@ -173,7 +175,7 @@
  		<p>当前状态 ：<span class="member">尚未开始</span><span class="link_btn" for="rocketDetail">开启置顶</span></p>
  		<div class="blank2"></div>
  		#end
- 		<div id="rocketDetail" style="display:none">
+ 		<div id="rocketDetail" #if($!open != 'rocketDetail')style="display:none"#end>
 			<ul>
 				#foreach($item in $!rocketSet) 
 				<li class="radio_item" bind="rocket">
@@ -202,7 +204,7 @@
 			    	#end
 			    	_cash="" 
 			    	_reUrl="/index.htm" 
-			    	_msg="确定购买超级置顶吗?">开启VIP置顶</button>
+			    	_msg="确定购买超级置顶吗?">开启固定置顶</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg pay" 
 			    	id="rocketPayBtn"
@@ -216,16 +218,18 @@
 			    	#end
 			    	_cash="" 
 			    	_reUrl="/index.htm" 
-			    	_msg="确定购买超级置顶吗?">开启VIP置顶</button>
+			    	_msg="确定购买超级置顶吗?">开启固定置顶</button>
 			    #end
 			#else
-				<p>您的会员到期了.续期会员,开启VIP置顶</p>
+				<div class="blank2"></div>
+				<p><a href="/vip.htm?open=vipDetail#service1">您的会员到期了.续期爆粉激活,开启固定置顶</a></p>
 			#end
 			</div>
 		</div>
  		<hr class="line_h">
  		<div class="blank2"></div> 
-		<h2>任务1 分享得金币</h2>
+ 		
+		<h2 id="task1">任务1 分享得金币</h2>
  		<div class="blank2"></div> 
  		<p>1.不购买VIP也可以</p>
  		<div class="blank2"></div> 
@@ -237,7 +241,8 @@
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div> 
- 		<h2>任务2 加好友得金币</h2>
+ 		
+ 		<h2 id="task2">任务2 加好友得金币</h2>
  		<div class="blank2"></div> 
  		<p>1.不购买VIP也可以</p>
  		<div class="blank2"></div> 

@@ -5,6 +5,7 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
+import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
 import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
@@ -22,7 +23,7 @@ public class Vip extends RequestSessionBase{
     @Autowired
     private SystemConfigCache systemConfigCache;
     
-    public void execute(Context context){
+    public void execute(@Param("open") String open, Context context){
     	loadPriceSet(context);
         UserDO userDO = RequestSession.userDO();
         context.put("user", userDO);
@@ -65,5 +66,7 @@ public class Vip extends RequestSessionBase{
         
         boolean weixinSwitch = systemConfigCache.getSwitch(SystemConfigKeyEnum.WEIXIN_PAY.getCode());
         context.put("weixinSwitch", weixinSwitch);
+        
+        context.put("open", open);
     }
 }

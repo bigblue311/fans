@@ -42,6 +42,7 @@ public class Index extends RequestSessionBase{
         context.put("user", userDO);
         context.put("nextRefresh", userManager.nextRefresh(userDO));
         context.put("todayTask", userManager.getTodayTask(userDO));
+        context.put("frientCount", userManager.getTodayFriendCount(userDO.getId()));
     }
     
     private UserQueryCondition getQueryCondition(Integer searchType){
