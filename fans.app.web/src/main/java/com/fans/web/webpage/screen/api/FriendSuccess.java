@@ -27,22 +27,25 @@ public class FriendSuccess extends RequestSessionBase{
     @Autowired
     private UserManager userManager;
     
-    public Result<String> execute(){
+    public Result<Integer> execute(){
         UserDO userDO = RequestSession.userDO();
         if(userDO == null || userDO.getId() == null){
-            return Result.newInstance("用户不存在", "用户不存在", false);
+            return Result.newInstance(0, "用户不存在", false);
         }
         
         Integer max = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_MAX.getCode(), 6);
         
         Integer friendCount = userManager.getTodayFriendCount(userDO.getId());
         if(friendCount!=null && friendCount > max){
-            return Result.newInstance("一天最多只能加好友"+max+"次得金币哦", "加好友成功", false);
+            return Result.newInstance(0, "一天最多只能加好友"+max+"次得金币哦", false);
         }
         transactionManager.friend(userDO);
         
         Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_COINS.getCode(), 10);
         userManager.addCoins(userDO.getId(), coins);
-        return Result.newInstance("加好友任务完成+"+friendCount+",获得金币"+coins, "加好友成功", true);
+        
+        friendCount = userManager.getTodayFriendCount(userDO.getId());
+        UserDO updated = userManager.getById(userDO.getId());
+        return Result.newInstance(updated.getCoins(), "加好友任务完成+"+friendCount+",获得金币"+coins, true);
     }
 }

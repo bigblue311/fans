@@ -41,23 +41,19 @@
 				</div>
 				<div class="left ft_describe">
 					<h3>
-						<span style="
-    							min-width: 106px;
-    							display: inline-block;">$!user.nickName</span>
+						<span>$!user.nickName</span>
 						&nbsp;
 						<span class="city_area location" 
 							  province="$!user.province" 
 							  city="$!user.city"
 							  extCity="$!user.extCity"></span> 
 					</h3>
-					<h3><span style="
-    							min-width: 106px;
-    							display: inline-block;">ID: $!user.id</span>
-    					<span>金币: $!user.coins</span></h3>
-					<h3>二维码: <font color="#if($!user.qrcode) #E6257D #else grey #end">个人</font>&nbsp;
-						<font color="#if($!user.groupQrcode) #E6257D #else grey #end">群</font>
+					<h3><span>ID: $!user.id</span>
 						&nbsp;
-						状态: <font color="#if($user.isVip()) #E6257D #else grey #end">#if($user.isVip())已#else未#end激活</font>
+    					<span>金币: <label id="coins">$!user.coins</label></span></h3>
+					<h3>二维码: <font color="#if($!user.qrcode) #E6257D #else grey #end">个人</font>&nbsp;
+						<font color="#if($!user.groupQrcode) #E6257D #else grey #end">群</font>&nbsp;
+						<font color="#if($user.isVip()) #E6257D #else grey #end">#if($user.isVip())已#else未#end激活</font>
 					</h3>
 				</div>
 			</div>
@@ -81,7 +77,7 @@
 				background: #FF5648;
 				color: white;
 				padding: 10px;
-				z-index: 999;
+				z-index: 99999;
 				display:none;
 				">加好友+1</div>
 	<div class="change_tab">
@@ -354,8 +350,8 @@
 
 			</div>
 			<div class="clear"></div>
-			<div class="code_area center">
-				<img id="user_popup_code" src="" alt="" onclick="addFriend()" 
+			<div class="code_area center" onmouseout="addFriend()">
+				<img id="user_popup_code" src="" alt="" 
 					style="max-width: 224px; min-width:224px;">
 			</div>
 			<p class="ft_code">扫一扫上面的二维码图案，或者长按识别二维码，加我微信</p>
@@ -421,7 +417,7 @@
 	function showPopup(msg){
 		$("#popup").empty().append(msg);
 		$("#popup").show();
-		$("#popup").animate({top:"-20px"});
+		$("#popup").animate({top:"-136px"});
 		setTimeout(function(){
 			$("#popup").hide();
 		},5000);
@@ -527,7 +523,7 @@
 	
 	function addFriend(){
 		var timestamp=Math.round(new Date() / 1000);
-		if(ctime && timestamp - ctime >= 2){
+		if(ctime && timestamp - ctime >= 1){
 			friendCount++;
 			showPopup("加好友+"+friendCount);
 			if(friendCount == 5){
@@ -537,7 +533,8 @@
 					  dataType: "json",
 					  success: function(res){
 						  if(res.success){
-							  showPopup(res.dataObject);
+							  showPopup(res.message);
+							  $("#coins").empty().append(res.dataObject);
 						  }
 						  friendCount=0;
 					  }
