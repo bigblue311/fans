@@ -72,8 +72,9 @@
 	#end
 	<div id="popup" style="margin: -5px; 
 				text-align:center;
-				position:relative;
+				position:fixed;
 				top: 350px;
+				width: 101%;
 				background: #FF5648;
 				color: white;
 				padding: 10px;
@@ -412,15 +413,15 @@
 	
 	var countDown = $!nextRefresh;
 	var ctime = 0;
-	var friendCount = 0;
+	var storage = window.localStorage;
 	
 	function showPopup(msg){
 		$("#popup").empty().append(msg);
 		$("#popup").show();
-		$("#popup").animate({top:"-136px"});
-		setTimeout(function(){
+		$("#popup").animate({top:"0px"},3000,function(){
 			$("#popup").hide();
-		},5000);
+			$("#popup").animate({top:"350px"});
+		});
 	}
 	
 	var timer = setInterval("countDownTask()",1000);
@@ -523,8 +524,16 @@
 	
 	function addFriend(){
 		var timestamp=Math.round(new Date() / 1000);
-		if(ctime && timestamp - ctime >= 1){
-			friendCount++;
+		if(ctime && timestamp - ctime >= 3){
+			var friendCount = 0;
+			if(storage.getItem('addfans_num')){
+				friendCount = parseInt(storage.getItem('addfans_num'));
+				friendCount++;
+				storage.setItem('addfans_num',friendCount);
+			}else{
+				storage.setItem('addfans_num',1);
+				friendCount = 1;
+			}
 			showPopup("加好友+"+friendCount);
 			if(friendCount == 5){
 				$.ajax({
@@ -536,7 +545,7 @@
 							  showPopup(res.message);
 							  $("#coins").empty().append(res.dataObject);
 						  }
-						  friendCount=0;
+						  storage.setItem('addfans_num',0);
 					  }
 				});
 			}
@@ -667,6 +676,12 @@
 					showAlert('您的爆粉激活到期了','激活我的爆粉','/vip.htm?open=vipDetail#service1');
 				#end
 			#else
+				var friendCount = 0;
+				if(storage.getItem('addfans_num')){
+					friendCount = parseInt(storage.getItem('addfans_num'));
+				}else{
+					friendCount = 1;
+				}
 				if(friendCount < 5){
 					showAlert('请先加5个好友','刷新一下','/index.htm');
 				} else {
