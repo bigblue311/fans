@@ -120,6 +120,11 @@ public abstract class RequestSessionBase extends CookieBase{
         }
     }
     
+    public boolean isWeixinUser(HttpServletRequest request){
+        Integer version = getWxVersion(request);
+        return version != null;
+    }
+    
     public Boolean isSearchGroup(HttpServletRequest request){
         String searchType = getSearchType(request);
         return SearchTypeEnum.群二维码.getCode().equals(searchType);

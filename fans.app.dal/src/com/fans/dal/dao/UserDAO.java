@@ -33,6 +33,7 @@ public interface UserDAO {
      * @return
      */
     Boolean topup(Long id, Integer amount);
+    Boolean click(Long id);
     Boolean vipExtend(Long id, Date gmtVipExpire);
     
     /**

@@ -62,6 +62,7 @@ public interface UserManager {
 	 * @param minutes
 	 */
 	void addCoins(Long userId, Integer coins);
+	void click(Long userId);
 	Integer getTodayShareCount(Long userId);
 	Integer getTodayFriendCount(Long userId);
 	String getTodayTask(UserDO userDO);

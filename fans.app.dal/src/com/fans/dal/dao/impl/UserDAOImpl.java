@@ -48,6 +48,13 @@ public class UserDAOImpl extends EntityDAO<UserDO,UserQueryCondition> implements
     	forUpdate.setCoins(amount);
         return super.updateBySID("topup", forUpdate);
     }
+    
+    @Override
+    public Boolean click(Long id) {
+        UserDO forUpdate = new UserDO();
+        forUpdate.setId(id);
+        return super.updateBySID("click", forUpdate);
+    }
 
 	@Override
 	public Boolean vipExtend(Long id, Date gmtVipExpire) {

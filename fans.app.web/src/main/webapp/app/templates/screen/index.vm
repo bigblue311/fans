@@ -110,20 +110,31 @@
 									    top: -10px;
 									">
 									<img src="$!each.headImg" style="position: relative; left: -55px;">
+									<br>
+									<span style="
+									    position: relative;
+									    top: -16px;
+									    background: orange;
+									    color: white;
+									    padding: 2px;
+									    font-size: smaller;
+									">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.description"
-										 user_popup_code="$!each.qrcode" >
+										 user_popup_code="$!each.qrcode" 
+										 user_popup_id="$!each.id">
 										<div class="plus"></div>
 									</div>
 									<div class="add_fri"
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.description"
-										 user_popup_code="$!each.qrcode">添加好友</div>
+										 user_popup_code="$!each.qrcode"
+										 user_popup_id="$!each.id">添加好友</div>
 								</div>
 								<div class="left ft_describe" style="position:relative;left:-55px;">
 									<h3>
@@ -142,20 +153,31 @@
 							<div class="item_box">
 								<div class="left head_portrait">
 									<img src="$!each.headImg">
+									<br>
+									<span style="
+									    position: relative;
+									    top: -16px;
+									    background: orange;
+									    color: white;
+									    padding: 2px;
+									    font-size: smaller;
+									">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.description"
-										 user_popup_code="$!each.qrcode" >
+										 user_popup_code="$!each.qrcode" 
+										 user_popup_id="$!each.id">
 										<div class="plus"></div>
 									</div>
 									<div class="add_fri" 
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.description"
-										 user_popup_code="$!each.qrcode">添加好友</div>
+										 user_popup_code="$!each.qrcode"
+										 user_popup_id="$!each.id">添加好友</div>
 								</div>
 								<div class="left ft_describe">
 									<h3>
@@ -185,23 +207,40 @@
 						<li class="item_list">
 							<div class="item_box">
 								<div class="left head_portrait">
-									<img src="$!each.headImg">
+									<img src="/images/vip.png" style="
+									    position: relative;
+									    z-index: 1;
+									    left: -15px;
+									    top: -10px;
+									">
+									<img src="$!each.headImg" style="position: relative; left: -55px;">
+									<br>
+									<span style="
+									    position: relative;
+									    top: -16px;
+									    background: orange;
+									    color: white;
+									    padding: 2px;
+									    font-size: smaller;
+									">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.groupDescription"
-										 user_popup_code="$!each.groupQrcode" >
+										 user_popup_code="$!each.groupQrcode" 
+										 user_popup_id="$!each.id">
 										<div class="plus"></div>
 									</div>
 									<div class="add_fri" 
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.groupDescription"
-										 user_popup_code="$!each.groupQrcode">添加群聊</div>
+										 user_popup_code="$!each.groupQrcode"
+										 user_popup_id="$!each.id">添加群聊</div>
 								</div>
-								<div class="left ft_describe">
+								<div class="left ft_describe" style="position:relative;left:-55px;">
 									<h3>
 										<span class="city_area location" 
 											  province="$!each.province" 
@@ -218,20 +257,31 @@
 							<div class="item_box">
 								<div class="left head_portrait">
 									<img src="$!each.headImg">
+									<br>
+									<span style="
+									    position: relative;
+									    top: -16px;
+									    background: orange;
+									    color: white;
+									    padding: 2px;
+									    font-size: smaller;
+									">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.groupDescription"
-										 user_popup_code="$!each.groupQrcode" >
+										 user_popup_code="$!each.groupQrcode" 
+										 user_popup_id="$!each.id">
 										<div class="plus"></div>
 									</div>
 									<div class="add_fri"
 										 user_popup_nickname="$!each.nickName"
 										 user_popup_headimg="$!each.headImg"
 										 user_popup_description="$!each.groupDescription"
-										 user_popup_code="$!each.groupQrcode">添加群聊</div>
+										 user_popup_code="$!each.groupQrcode"
+										 user_popup_id="$!each.id">添加群聊</div>
 								</div>
 								<div class="left ft_describe">
 									<h3>
@@ -345,6 +395,7 @@
 
 					<div class="left ft_describe">
 						<h2 id="user_popup_nickname"></h2>
+						<input type="hidden" id="user_popup_id" value=""/>
 						<p id="user_popup_description" style="max-width:300px"></p>
 					</div>
 				</div>
@@ -470,21 +521,25 @@
  	 	            		}
  	            		}
  						
+ 	            		var id = list[i].id;
  						var nickName = list[i].nickName;
  						var description = list[i].description;
  						var qrcode = list[i].qrcode;
  						var groupQrcode = list[i].groupQrcode;
+ 						var clickCount = list[i].clickCount;
  						
  						var msg = "<li class='item_list'>";
  						   msg += "	<div class='item_box'>";
  						   msg += "		<div class='left head_portrait'>";
- 						   msg += "			<img src='"+headImg+"'/>";
+ 						  msg += "			<img src='"+headImg+"'/><br>";
+						   msg += "			<span style='position:relative;top:-16px;background:orange;color:white;padding:2px;font-size:smaller;'>"+clickCount+"</span>";
  						   msg += "		</div>";
  						   msg += "	    <div class='right btn-infor'>";
  						   msg += "			<div class='icon'";
  						   msg += "			 	user_popup_nickname='"+nickName+"'";
  						   msg += "			 	user_popup_headimg='"+headImg+"'";
  						   msg += "			 	user_popup_description='"+description+"'";
+ 						   msg += "			 	user_popup_id='"+id+"'";
  					    #if($!searchType == '0')
  						   msg += "			 	user_popup_code='"+qrcode+"'><div class='plus'></div></div>";
  						#else
@@ -494,6 +549,7 @@
  						   msg += "			 	user_popup_nickname='"+nickName+"'";
  						   msg += "			 	user_popup_headimg='"+headImg+"'";
  						   msg += "			 	user_popup_description='"+description+"'";
+ 						   msg += "			 	user_popup_id='"+id+"'";
  					    #if($!searchType == '0')
  						   msg += "			 	user_popup_code='"+qrcode+"'>添加好友</div>";
  						#else
@@ -525,6 +581,7 @@
 	function addFriend(){
 		var timestamp=Math.round(new Date() / 1000);
 		if(ctime && timestamp - ctime >= 3){
+			userClick();
 			var friendCount = 0;
 			if(storage.getItem('addfans_num')){
 				friendCount = parseInt(storage.getItem('addfans_num'));
@@ -552,17 +609,28 @@
 		}
 	}
 	
+	function userClick(){
+		var id = $("#user_popup_id").val();
+		$.ajax({
+			  url: '/api/userClick.json?id='+id,
+			  type: 'POST',
+			  dataType: "json"
+		});
+	}
+	
 	function bindAdd(){
 		$(".icon,.add_fri").unbind("click");
 		$(".icon,.add_fri").click(function(){
 			
 			ctime = Math.round(new Date() / 1000);
 			
+			var user_popup_id = $(this).attr("user_popup_id");
 			var user_popup_nickname = $(this).attr("user_popup_nickname");
 			var user_popup_description = $(this).attr("user_popup_description");
 			var user_popup_headimg = $(this).attr("user_popup_headimg");
 			var user_popup_code = $(this).attr("user_popup_code");
 			
+			$("#user_popup_id").val(user_popup_id);
 			$("#user_popup_nickname").empty().append(user_popup_nickname);
 			$("#user_popup_description").empty().append(user_popup_description);
 			$("#user_popup_headimg").attr("src",user_popup_headimg);

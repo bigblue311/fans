@@ -291,6 +291,11 @@ public class UserManagerImpl implements UserManager{
     public void addCoins(Long userId, Integer coins) {
         userDAO.topup(userId, coins);
     }
+    
+    @Override
+    public void click(Long userId) {
+        userDAO.click(userId);
+    }
 
     @Override
     public UserDO getByExtId(Long extId) {

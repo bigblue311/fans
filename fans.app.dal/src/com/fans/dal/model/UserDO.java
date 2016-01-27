@@ -32,6 +32,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String extCity;             //外部城市
     private String extSource;           //外部来源
     private String domain;              //外部域名
+    private Integer clickCount;         //点击次数
     
     public Long getSkvId() {
         return skvId;
@@ -152,6 +153,12 @@ public class UserDO extends EntityDO implements Serializable{
     }
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+    public Integer getClickCount() {
+        return clickCount;
+    }
+    public void setClickCount(Integer clickCount) {
+        this.clickCount = clickCount;
     }
     public boolean isVip(){
         if(gmtVipExpire == null){

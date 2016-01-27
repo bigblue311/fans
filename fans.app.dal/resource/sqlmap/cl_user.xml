@@ -32,6 +32,7 @@
     <result property="extCity" 				column="ext_city"/>
     <result property="extSource" 			column="ext_source"/>
     <result property="domain" 				column="domain"/>
+    <result property="clickCount" 			column="click_count"/>
   </resultMap>
 
 	<insert id="insert" parameterClass="User">
@@ -58,13 +59,14 @@
 	    ext_id,
 	    ext_city,
 	    ext_source,
-	    domain
+	    domain,
+	    click_count
 	  ) values (
 	    now(), now(), #skvId#,
 	    #openId#, #nickName#, #phone#, #headImg#, #gender#,
 	    #qrcode#, #groupQrcode#, #province#, #city#, #description#, 
 	    #groupDescription#, #weixinId#, #coins#, now(), #gmtVipExpire#,
-	    #extId#, #extCity#, #extSource#, #domain#
+	    #extId#, #extCity#, #extSource#, #domain#, 0
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -158,6 +160,11 @@
 	  
 	  <update id="topup" parameterClass="User">
     	update cl_user set coins = coins + #coins#
+	    where id = #id#
+	  </update>
+	  
+	  <update id="click" parameterClass="User">
+    	update cl_user set click_count = click_count + 1
 	    where id = #id#
 	  </update>
 	  
