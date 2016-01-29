@@ -106,7 +106,7 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
 	        userDO = new UserDO();
 	        userDO.setSkvId(skvUser.getId());
 	        userDO.setPhone(skvUser.getPhone()); 
-	        userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
+	        //userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
 	        userDO.setNickName(skvUser.getUserName());
             return userDO;
         }
@@ -120,7 +120,9 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
         
         userDO.setSkvId(skvUser.getId());
         userDO.setPhone(skvUser.getPhone()); 
-        userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
+//        if(StringUtil.isEmpty(userDO.getHeadImg())){
+//            userDO.setHeadImg("http://wetuan.com/xls/"+skvUser.getUserImage());
+//        }
         userDO.setNickName(skvUser.getUserName());
         return userDO;
 	}

@@ -39,10 +39,14 @@ public class ShareSuccess extends RequestSessionBase{
         if(shareCount!=null && shareCount > max){
             return Result.newInstance("一天最多只能分享置顶"+max+"次哦", "分享置顶成功", false);
         }
-        
         transactionManager.share(userDO);
-        Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
-        userManager.addCoins(userDO.getId(), coins);
-        return Result.newInstance("成功分享, 获得"+coins+"金币", "分享置顶成功", true);
+        if(shareCount == 0){
+            transactionManager.songVip(userDO.getId(), 1);
+            return Result.newInstance("成功分享, 获得激活24小时", "分享置顶成功", true);
+        } else {
+            Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
+            userManager.addCoins(userDO.getId(), coins);
+            return Result.newInstance("成功分享, 获得"+coins+"金币", "分享置顶成功", true);
+        }
     }
 }

@@ -101,6 +101,7 @@ public interface TransactionManager {
 	 * @param month
 	 */
 	PayStatusEnum buyVip(Long userId, Integer date);
+	PayStatusEnum songVip(Long userId, Integer date);
 	
 	/**
 	 * 购买超级置顶

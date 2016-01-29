@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.fans.dal.query.UserQueryCondition;
 import com.victor.framework.common.tools.DateTools;
+import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.dal.basic.EntityDO;
 
 public class UserDO extends EntityDO implements Serializable{
@@ -160,6 +161,16 @@ public class UserDO extends EntityDO implements Serializable{
     public void setClickCount(Integer clickCount) {
         this.clickCount = clickCount;
     }
+    public boolean isValid(){
+        if(StringTools.isEmpty(headImg)){
+            return false;
+        }
+        if(StringTools.isEmpty(qrcode)){
+            return false;
+        }
+        return true;
+    }
+    
     public boolean isVip(){
         if(gmtVipExpire == null){
             return false;

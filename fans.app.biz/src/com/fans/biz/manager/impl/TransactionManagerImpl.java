@@ -341,6 +341,27 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
+    public PayStatusEnum songVip(Long userId, Integer date) {
+        try {
+            if(date==null || date <= 0){
+                return PayStatusEnum.支付失败;
+            }
+            UserDO user = userDao.getById(userId);
+            Date expire = DateTools.todayStart();
+            //如果已经是VIP, 那么再这个时间上续
+            if(user!=null && user.getGmtVipExpire()!=null && user.getGmtVipExpire().after(expire)){
+                expire = user.getGmtVipExpire();
+            }
+            Date vipExpire = DateTools.addDate(expire, date);
+            userDao.vipExtend(userId, vipExpire);
+            return PayStatusEnum.支付成功;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PayStatusEnum.支付失败;
+        }
+    }
+	
+	@Override
 	public PayStatusEnum buyZhuangB(Long userId, Integer minutes) {
 		try {
 			if(minutes == null || minutes <= 0){

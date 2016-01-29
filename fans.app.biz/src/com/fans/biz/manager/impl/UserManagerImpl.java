@@ -1,6 +1,7 @@
 package com.fans.biz.manager.impl;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,7 +165,7 @@ public class UserManagerImpl implements UserManager{
         Integer shareCoins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_COINS.getCode(), 50);
         Integer shareCount = getTodayShareCount(userDO.getId());
 
-        Integer shareLeft = shareMax - shareCount;
+        Integer shareLeft = shareMax - shareCount - 1;
         shareLeft = shareLeft<=0?0:shareLeft;
         
         Integer friendMax = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.FRIEND_MAX.getCode(), 6);
@@ -178,7 +179,7 @@ public class UserManagerImpl implements UserManager{
         Integer taskCoins = (shareLeft*shareCoins) + (friendLeft*friendCoins);
         
         if(taskCount!=null && taskCount.intValue()>0){
-            return "您今日再分享"+shareLeft+"次和加好友"+friendLeft+"次, 还可以获得"+taskCoins+"个金币";
+            return "您今日再分享"+shareLeft+"次和加好友"+friendLeft+"*5个, 还可以获得"+taskCoins+"个金币";
         } else {
             return null;
         }
@@ -197,12 +198,16 @@ public class UserManagerImpl implements UserManager{
         for(TopListDO topListDO : list){
             if(topListDO != null && topListDO.getUserId() != null){
                 UserDO userDO = userDAO.getById(topListDO.getUserId());
-                if(userDO != null){
+                if(userDO != null && 
+                   StringTools.isNotEmpty(userDO.getQrcode()) && 
+                   StringTools.isNotEmpty(userDO.getHeadImg())){
                     result.add(userDO);
                 }
             }
         }
-        
+        if(CollectionTools.isNotEmpty(result)){
+            Collections.reverse(result);
+        }
         return result;
         
 //        UserDO top1 = getRandom(openId,skvId, TopListPositionEnum.充值.getCode());

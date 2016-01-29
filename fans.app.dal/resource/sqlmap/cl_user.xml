@@ -243,7 +243,7 @@
 	      	<isEqual property="searchType" compareValue="0">
 	      		<isNotNull property="valid" prepend="and">
 			    	<![CDATA[
-		        		qrcode is not null 
+		        		(qrcode is not null and head_img is not null) 
 		        	 ]]>
 	        	</isNotNull>
 	        	<isNotNull property="description" prepend="and">  
@@ -257,7 +257,7 @@
 	      	<isEqual property="searchType" compareValue="1">
 	      		<isNotNull property="valid" prepend="and">
 			    	<![CDATA[
-		        	group_qrcode is not null 
+		        	(group_qrcode is not null and head_img is not null)
 		        	 ]]>
 	        	</isNotNull>
 	        	<isNotNull property="description" prepend="and">  

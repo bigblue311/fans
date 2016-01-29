@@ -20,33 +20,14 @@
 	<div>
 		<div class="item_list">
 			<div class="item_box">
-				<div class="left head_portrait">
-					<img src="$!user.headImg" style="max-width:70px;max-height:70px;">
+				<div class="left head_portrait_70">
+					<img src="$!user.headImg">
 					<br>
-					<span style="
-					    position: relative;
-					    top: -16px;
-					    background: orange;
-					    color: white;
-					    padding: 2px;
-					    font-size: smaller;
-					">$!user.clickCount</span>
+					<span class="click_count">$!user.clickCount</span>
 				</div>
 				<div class="right btn-infor">
-					<h3><a href="/my.htm"><button style="
-					    border: 1px solid lightgrey;
-					    padding: 5px;
-					    background: #E6257D;
-					    color: white;
-					    margin-top: -10px;
-					    margin-right: -10px;">完善个人资料</button></a></h3>
-					<h3><a href="/vip.htm?open=rocketDetail#service2"><button style="
-					    border: 1px solid lightgrey;
-					    padding: 5px;
-					    background: #E6257D;
-					    color: white;
-					    margin-top: 20px;
-					    margin-right: -10px;">开启固定置顶</button></a></h3>
+					<h3><a href="/my.htm"><button>完善个人资料</button></a></h3>
+					<h3><a href="/vip.htm?open=rocketDetail#service2"><button style="margin-top:25px;">开启固定置顶</button></a></h3>
 				</div>
 				<div class="left ft_describe">
 					<h3>
@@ -68,28 +49,15 @@
 			</div>
 		</div>
 	</div>
+	<div class="today_task">
 	#if($!todayTask)
-	<div style="margin: 10px;color: #E6257D;">
 		<a href="/vip.htm#task1">$!todayTask</a>
-		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
-	</div>
 	#else
-	<div style="margin: 10px;color: #E6257D;">
 		<a href="/vip.htm#task1">今日任务已经全部完成</a>
+	#end
 		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
 	</div>
-	#end
-	<div id="popup" style="margin: -5px; 
-				text-align:center;
-				position:fixed;
-				top: 350px;
-				width: 101%;
-				background: #FF5648;
-				color: white;
-				padding: 10px;
-				z-index: 99999;
-				display:none;
-				">加好友+1</div>
+	<div id="popup" style="top: 350px;">加好友+1</div>
 	<div class="change_tab">
 		<div class="filter_heard">
 			<ul class="filter-inner-cont">
@@ -112,24 +80,10 @@
 						<li class="item_list">
 							<div class="item_box">
 								<div class="left head_portrait">
-									<img src="/images/vip.png" style="
-									    position: relative;
-									    z-index: 1;
-									    left: -5px;
-									    top: -28px;
-									    width: 25px;
-									    height: 25px;
-									">
+									<img src="/images/vip.png" class="vip">
 									<img src="$!each.headImg" style="position: relative; left: -28px;">
 									<br>
-									<span style="
-									    position: relative;
-									    top: -16px;
-									    background: orange;
-									    color: white;
-									    padding: 2px;
-									    font-size: smaller;
-									">$!each.clickCount</span>
+									<span class="click_count">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
@@ -165,14 +119,7 @@
 								<div class="left head_portrait">
 									<img src="$!each.headImg">
 									<br>
-									<span style="
-									    position: relative;
-									    top: -16px;
-									    background: orange;
-									    color: white;
-									    padding: 2px;
-									    font-size: smaller;
-									">$!each.clickCount</span>
+									<span class="click_count">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
@@ -218,24 +165,10 @@
 						<li class="item_list">
 							<div class="item_box">
 								<div class="left head_portrait">
-									<img src="/images/vip.png" style="
-									    position: relative;
-									    z-index: 1;
-									    left: -5px;
-									    top: -28px;
-									    width: 25px;
-									    height: 25px;
-									">
+									<img src="/images/vip.png" class="vip"/>
 									<img src="$!each.headImg" style="position: relative; left: -28px;">
 									<br>
-									<span style="
-									    position: relative;
-									    top: -16px;
-									    background: orange;
-									    color: white;
-									    padding: 2px;
-									    font-size: smaller;
-									">$!each.clickCount</span>
+									<span class="click_count">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
@@ -271,14 +204,7 @@
 								<div class="left head_portrait">
 									<img src="$!each.headImg">
 									<br>
-									<span style="
-									    position: relative;
-									    top: -16px;
-									    background: orange;
-									    color: white;
-									    padding: 2px;
-									    font-size: smaller;
-									">$!each.clickCount</span>
+									<span class="click_count">$!each.clickCount</span>
 								</div>
 								<div class="right btn-infor">
 									<div class="icon"
@@ -415,9 +341,8 @@
 
 			</div>
 			<div class="clear"></div>
-			<div class="code_area center" onmouseout="addFriend()">
-				<img id="user_popup_code" src="" alt="" 
-					style="max-width: 224px; min-width:224px;">
+			<div class="code_area center">
+				<img id="user_popup_code" src="" style="max-width: 224px; min-width:224px;"/>
 			</div>
 			<p class="ft_code">扫一扫上面的二维码图案，或者长按识别二维码，加我微信</p>
 
@@ -478,6 +403,7 @@
 	var countDown = $!nextRefresh;
 	var ctime = 0;
 	var storage = window.localStorage;
+	var timeout = undefined;
 	
 	function showPopup(msg){
 		$("#popup").empty().append(msg);
@@ -545,7 +471,7 @@
  						   msg += "	<div class='item_box'>";
  						   msg += "		<div class='left head_portrait'>";
  						  msg += "			<img src='"+headImg+"'/><br>";
-						   msg += "			<span style='position:relative;top:-16px;background:orange;color:white;padding:2px;font-size:smaller;'>"+clickCount+"</span>";
+						   msg += "			<span class='click_count'>"+clickCount+"</span>";
  						   msg += "		</div>";
  						   msg += "	    <div class='right btn-infor'>";
  						   msg += "			<div class='icon'";
@@ -593,7 +519,7 @@
 	
 	function addFriend(){
 		var timestamp=Math.round(new Date() / 1000);
-		if(ctime && timestamp - ctime >= 3){
+		if(ctime && timestamp - ctime >= 5){
 			userClick();
 			var friendCount = 0;
 			if(storage.getItem('addfans_num')){
@@ -604,7 +530,6 @@
 				storage.setItem('addfans_num',1);
 				friendCount = 1;
 			}
-			showPopup("加好友+"+friendCount);
 			if(friendCount == 5){
 				$.ajax({
 					  url: '/api/friendSuccess.json',
@@ -615,9 +540,11 @@
 							  showPopup(res.message);
 							  $("#coins").empty().append(res.dataObject);
 						  }
-						  storage.setItem('addfans_num',0);
 					  }
 				});
+			}
+			if(friendCount > 5){
+				storage.setItem('addfans_num',1);
 			}
 		}
 	}
@@ -654,7 +581,10 @@
     			type: 1,
     			content: html_r,
     			anim: true,
-    			style: 'position:fixed; left:0; top:0; width:100%; height:100%;background: rgba(255,255,255,0.1); border:none;'
+    			style: 'position:fixed; left:0; top:0; width:100%; height:100%;background: rgba(255,255,255,0.1); border:none;',
+    			end:function(){
+    				addFriend();
+    			}
 			});
 		});	
 	}
@@ -672,7 +602,6 @@
 					 	'</a>'+
 					 '</div>'
 		});
-		
 	}   
 	
    $(function(){
@@ -730,49 +659,18 @@
 		$(".tc_page").css({ width: $("body").width()-65+"px"});
 		//按钮使用说明
 		$("#zt_top").click(function(){
-			#if($frientCount>0)
-				#if($user.isVip())
-					#if($!searchType == '0')
-						#if($!user.qrcode)
-							if(countDown <= 0){
-								jQuery("#refreshForm").submit();
-							} else {
-								showAlert('还差'+countDown+'秒后可以置顶','刷新一下','/index.htm');
-							}
-						#else
-							showAlert('请先上传个人二维码','去上传个人二维码','/my.htm');
-						#end
-					#else
-						#if($!user.groupQrcode)
-							if(countDown <= 0){
-								jQuery("#refreshForm").submit();
-							} else {
-								showAlert('还差'+countDown+'秒后可以置顶','刷新一下','/index.htm');
-							}
-						#else
-							showAlert('请先上传群二维码','去上传群二维码','/my.htm');
-						#end
-					#end
-				#else
-					showAlert('您的爆粉激活到期了','激活我的爆粉','/vip.htm?open=vipDetail#service1');
-				#end
-			#else
-				var friendCount = 0;
-				if(storage.getItem('addfans_num')){
-					friendCount = parseInt(storage.getItem('addfans_num'));
-				}else{
-					friendCount = 1;
-				}
-				if(friendCount < 5){
-					showAlert('请先加5个好友','刷新一下','/index.htm');
-				} else {
-					if(countDown <= 0){
-						jQuery("#refreshForm").submit();
-					} else {
-						showAlert('还差'+countDown+'秒后可以置顶','刷新一下','/index.htm');
-					}
-				}
-			#end
+			$.ajax({
+				  url: '/api/checkTop.json?',
+				  type: 'POST',
+				  dataType: 'json',
+				  success:function(data){
+					  if(data.success){
+						  $("#refreshForm").submit();
+					  } else {
+						  showAlert(data.message,data.title,data.link);
+					  }
+				  }
+			});
 		});
 	});
    

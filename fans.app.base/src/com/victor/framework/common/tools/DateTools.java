@@ -140,7 +140,7 @@ public class DateTools {
         Date now = today();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) - minLength);
+        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + minLength);
         return now.after(cal.getTime());
     }
 	

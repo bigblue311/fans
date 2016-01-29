@@ -42,15 +42,6 @@ public class Index extends RequestSessionBase{
         context.put("user", userDO);
         context.put("nextRefresh", userManager.nextRefresh(userDO));
         context.put("todayTask", userManager.getTodayTask(userDO));
-        if(userDO!=null){
-            if(userDO.getSkvId() == null){
-                context.put("frientCount", userManager.getTodayFriendCount(userDO.getId()));
-            } else {
-                context.put("frientCount", 1);
-            }
-        } else {
-            context.put("frientCount", 0);
-        }
     }
     
     private UserQueryCondition getQueryCondition(Integer searchType){

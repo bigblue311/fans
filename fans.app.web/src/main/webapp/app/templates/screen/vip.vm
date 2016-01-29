@@ -10,6 +10,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<meta name="format-detection" content="telephone=no" />
 		<link rel="stylesheet" href="css/super_style.css" />
+		<link rel="stylesheet" href="css/layer.css" />
 		<title>躺着加粉</title>
 </head>
 <body>
@@ -20,7 +21,7 @@
 		<h2 id="service1">爆粉激活服务</h2>
 		<div class="blank2"></div>
 		#if($user.isVip())
-		<p>你已成功开通爆粉激活。 每五分钟更新一次名片可以刷新名片至列表前面！</p>
+		<p>你已成功开通爆粉激活。 每$!{refreshInterval}分钟更新一次名片可以刷新名片至列表前面！</p>
 		#else
 		<p>每$!{refreshInterval}分钟更新一次名片可以刷新名片至列表前面！</p>
 		#end
@@ -36,7 +37,8 @@
 			#if($user.isVip())
 			当前状态 ：<span class="member">已激活</span>
 			#else
-			当前状态 ：未激活
+			当前状态 ：<span class="member">未激活</span>
+				#if($!shareCount == 0)<a class="link_btn" href="/share.htm">每天第一次分享可激活24小时</a>#end
 			#end
 		</p>
 		<div class="blank2"></div>
@@ -145,7 +147,6 @@
 		<hr class="line_h">
 		<div class="blank2"></div>
 		
-		
 		<h2 id="service2">开启超级固定置顶首位服务</h2>
 		<div class="blank2"></div> 
  		<p>1.在全国相应地区持续置顶第一条</p>
@@ -192,8 +193,7 @@
 				#end
 			</ul>
 			<div class="padded10">
-			#if($user.isVip())
-				<button class="btn btn-pink btn-lg buy" 
+				<button class="btn btn-pink btn-lg buySuperTop" 
 					id="rocketBuyBtn"
 					_type="2" 
 					#foreach($item in $!rocketSet) 
@@ -206,7 +206,7 @@
 			    	_reUrl="/index.htm" 
 			    	_msg="确定购买超级置顶吗?">开启固定置顶</button>
 			    #if($!weixinSwitch)
-			    <button class="btn btn-pink btn-lg pay" 
+			    <button class="btn btn-pink btn-lg paySuperTop" 
 			    	id="rocketPayBtn"
 			    	style="display:none"
 					_type="2" 
@@ -220,12 +220,9 @@
 			    	_reUrl="/index.htm" 
 			    	_msg="确定购买超级置顶吗?">开启固定置顶</button>
 			    #end
-			#else
-				<div class="blank2"></div>
-				<p><a href="/vip.htm?open=vipDetail#service1">您的会员到期了.续期爆粉激活,开启固定置顶</a></p>
-			#end
 			</div>
 		</div>
+		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div> 
  		
@@ -233,9 +230,11 @@
  		<div class="blank2"></div> 
  		<p>1.不购买VIP也可以</p>
  		<div class="blank2"></div> 
- 		<p>2.每天最多有分享$!shareMax次得金币机会</p>
+ 		<p>2.每天最多有分享$!shareMax次得奖励机会</p>
  		<div class="blank2"></div> 
- 		<p>3.成功分享可获取$!shareCoins金币</p>
+ 		<p>3.第1次分享得24小时激活时间</p>
+ 		<div class="blank2"></div> 
+ 		<p>4.之后成功分享可获取$!shareCoins金币</p>
  		<div class="blank2"></div> 
  		<p>今天任务 ：<span class="member">$!shareCount次 / $!shareMax次</span><span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a></span></p>
  		<div class="blank2"></div> 
@@ -258,6 +257,7 @@
 		<div class="blank2"></div>
 	</div>
 	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="js/layer.m.js"></script>
 	<script type="text/javascript" src="js/pay/coinspay.js"></script>
 	<script type="text/javascript" src="js/pay/weixinpay.js"></script>
 	<script>
