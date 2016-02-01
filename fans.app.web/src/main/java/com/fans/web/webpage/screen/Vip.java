@@ -31,6 +31,8 @@ public class Vip extends RequestSessionBase{
         Integer refreshInterval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.REFRESH_INTERVAL.getCode(), 5);
         context.put("refreshInterval", refreshInterval);
         
+        context.put("vipTopCount", userManager.getTopUsers().size());
+        context.put("vipTopCountPlusOne", userManager.getTopUsers().size()+1);
         context.put("vipTop", userManager.getValidTop(userDO.getId(), TopListPositionEnum.充值));
         
         Integer shareMax = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SHARE_MAX.getCode(), 3);

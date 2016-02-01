@@ -149,7 +149,7 @@
 		
 		<h2 id="service2">开启超级固定置顶首位服务</h2>
 		<div class="blank2"></div> 
- 		<p>1.在全国相应地区持续置顶第一条</p>
+ 		<p>1.目前已有<label style="color:#B4181E">$!{vipTopCount}</label>个用户置顶中,您将排在第<label style="color:#B4181E">$!{vipTopCountPlusOne}</label>个位置</p>
  		<div class="blank2"></div> 
  		<p>2.必须购买爆粉激活时间</p>
  		<div class="blank2"></div> 
@@ -183,8 +183,8 @@
 					<input type="radio" name="rocketship"
 					#if($velocityCount ==1) checked #end
 					data1="$item.value"
-			  		cashMsg="$!item.cashMsg"
-			  		coinsMsg="$!item.coinsMsg"> $item.text 
+			  		cashMsg="目前已有$!{vipTopCount}个用户置顶中,您将排在第$!{vipTopCountPlusOne}个位置,$!item.cashMsg"
+			  		coinsMsg="目前已有$!{vipTopCount}个用户置顶中,您将排在第$!{vipTopCountPlusOne}个位置,$!item.coinsMsg"> $item.text 
 			  	</li>
 				#end
 				#if($!weixinSwitch)
@@ -199,12 +199,11 @@
 					#foreach($item in $!rocketSet) 
 						#if($velocityCount ==1) 
 						_data1="$item.value" 
-						_msg="$!item.coinsMsg"
+						_msg="目前已有$!{vipTopCount}个用户置顶中,您将排在第$!{vipTopCountPlusOne}个位置,$!item.coinsMsg"
 						#end
 			    	#end
 			    	_cash="" 
-			    	_reUrl="/index.htm" 
-			    	_msg="确定购买超级置顶吗?">开启固定置顶</button>
+			    	_reUrl="/index.htm">开启固定置顶</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg paySuperTop" 
 			    	id="rocketPayBtn"
@@ -213,12 +212,11 @@
 			    	#foreach($item in $!rocketSet) 
 						#if($velocityCount ==1) 
 						_data1="$item.value" 
-						_msg="$!item.cashMsg"
+						_msg="目前已有$!{vipTopCount}个用户置顶中,您将排在第$!{vipTopCountPlusOne}个位置,$!item.cashMsg"
 						#end
 			    	#end
 			    	_cash="" 
-			    	_reUrl="/index.htm" 
-			    	_msg="确定购买超级置顶吗?">开启固定置顶</button>
+			    	_reUrl="/index.htm">开启固定置顶</button>
 			    #end
 			</div>
 		</div>

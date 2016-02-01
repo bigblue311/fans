@@ -42,7 +42,7 @@
 	 </insert>
 	 
 	 <update id="extend" parameterClass="TopList">
-    	update cl_top_list set gmt_end = #gmtEnd#
+    	update cl_top_list set gmt_end = #gmtEnd# , gmt_modify = now() 
 	    where id = #id# and position = #position#
 	 </update>
 	  
@@ -128,13 +128,13 @@
   <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
     select * from cl_top_list 
     <include refid="where" />
-    <include refid="orderByEnd" />
+    <include refid="Common.orderByModify" />
   </select>
   
   <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
     select * from cl_top_list 
     <include refid="where" />
-    <include refid="orderByEnd" />
+    <include refid="Common.orderByModify" />
     <include refid="Common.pageSql" />
   </select>
   

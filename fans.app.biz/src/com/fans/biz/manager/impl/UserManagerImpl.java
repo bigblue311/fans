@@ -196,84 +196,34 @@ public class UserManagerImpl implements UserManager{
         }
         List<UserDO> result = Lists.newArrayList();
         for(TopListDO topListDO : list){
-            if(topListDO != null && topListDO.getUserId() != null){
-                UserDO userDO = userDAO.getById(topListDO.getUserId());
-                if(userDO != null && 
-                   StringTools.isNotEmpty(userDO.getQrcode()) && 
-                   StringTools.isNotEmpty(userDO.getHeadImg())){
-                    result.add(userDO);
-                }
+            UserDO userDO = getVipUserDO(topListDO);
+            if(userDO!=null){
+                result.add(userDO);
             }
         }
         if(CollectionTools.isNotEmpty(result)){
             Collections.reverse(result);
         }
         return result;
-        
-//        UserDO top1 = getRandom(openId,skvId, TopListPositionEnum.充值.getCode());
-//        UserDO top2 = getRandom("",null, TopListPositionEnum.充值.getCode());
-//        UserDO top3 = getRandom(openId,skvId, TopListPositionEnum.分享.getCode());
-//        UserDO top4 = getRandom("",null, TopListPositionEnum.分享.getCode());
-//        List<UserDO> list = Lists.newArrayList(top1,top2,top3,top4);
-//        List<UserDO> result = Lists.newArrayList();
-//        for(UserDO userDO : list){
-//            if(!contains(result, userDO)){
-//                result.add(userDO);
-//            }
-//        }
-//        return result;
     }
     
-//    private Boolean contains(List<UserDO> list, UserDO userDO){
-//        if(userDO == null){
-//            return true;
-//        }
-//        if(CollectionTools.isEmpty(list)){
-//            return false;
-//        }
-//        for(UserDO user : list){
-//            if(user.getId().intValue() == userDO.getId().intValue()){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//    
-//    private UserDO getRandom(String openId,Long skvId, Integer position){
-//        TopListQueryCondition queryCondition = new TopListQueryCondition();
-//        queryCondition.setValid(0).setPosition(position);
-//        List<TopListDO> list = topListDAO.getByCondition(queryCondition);
-//        if(CollectionTools.isEmpty(list)){
-//            return null;
-//        }
-//        for(TopListDO topListDO : list){
-//            if(StringTools.isEmpty(openId) && skvId == null){
-//                continue;
-//            }
-//            if(StringTools.isNotEmpty(openId) && StringTools.isNotEmpty(topListDO.getOpenId())){
-//                if(openId.equals(topListDO.getOpenId())){
-//                    if(topListDO.getUserId() == null){
-//                        continue;
-//                    }
-//                    return userDAO.getById(topListDO.getUserId());
-//                }
-//            }
-//            if(skvId != null && topListDO.getSkvId()!=null){
-//                if(skvId.equals(topListDO.getSkvId()) || skvId.longValue() == topListDO.getSkvId().longValue()){
-//                    if(topListDO.getUserId() == null){
-//                        continue;
-//                    }
-//                    return userDAO.getById(topListDO.getUserId());
-//                }
-//            }
-//        }
-//        int num = (int)(Math.random() * list.size());
-//        TopListDO topListDO = list.get(num);
-//        if(topListDO.getUserId() == null){
-//            return null;
-//        }
-//        return userDAO.getById(topListDO.getUserId());
-//    }
+    private UserDO getVipUserDO(TopListDO topListDO){
+        if(topListDO != null && topListDO.getUserId() != null){
+            UserDO userDO = userDAO.getById(topListDO.getUserId());
+            if(userDO != null && 
+               StringTools.isNotEmpty(userDO.getQrcode()) && 
+               StringTools.isNotEmpty(userDO.getHeadImg()) && 
+               topListDO.getGmtEnd() != null){
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(topListDO.getGmtEnd());
+                Long countDown = topListDO.getGmtEnd().getTime() - DateTools.today().getTime();
+                countDown = countDown / 1000;
+                userDO.setVipCountDown(countDown <= 0 ? 0 : countDown.intValue());
+                return userDO;
+            }
+        }
+        return null;
+    }
 
     @Override
     public TopListDO getValidTop(Long userId,TopListPositionEnum position) {

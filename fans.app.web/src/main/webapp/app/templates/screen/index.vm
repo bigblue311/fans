@@ -62,7 +62,7 @@
 		<div class="filter_heard">
 			<ul class="filter-inner-cont">
 				<li #if($!searchType == '0')class="filter-cur"#end>
-					<a href="/index.htm?searchType=0"> 个人二维码</a>
+					<a href="/index.htm?searchType=0">个人二维码</a>
 				</li>
 				<li #if($!searchType == '1')class="filter-cur"#end>
 					<a href="/index.htm?searchType=1">微信群二维码</a>
@@ -109,6 +109,7 @@
 											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
 									</h3>
 									<p>$!each.description</p>
+									<p><span class="vipCountDown">$!each.vipCountDown</span>&nbsp;秒后置顶结束</p>
 								</div>
 							</div>
 						</li>
@@ -403,7 +404,12 @@
 	var countDown = $!nextRefresh;
 	var ctime = 0;
 	var storage = window.localStorage;
-	var timeout = undefined;
+	
+	#if($!searchType == '0')
+   		$("#cont1").show();
+   	#else
+   		$("#cont2").show();	
+   	#end
 	
 	function showPopup(msg){
 		$("#popup").empty().append(msg);
@@ -417,7 +423,7 @@
 	var timer = setInterval("countDownTask()",1000);
 	
 	function countDownTask(){
-		jQuery("#countDown").empty().append("("+countDown+")");
+		$("#countDown").empty().append("("+countDown+")");
 		countDown--;
 		if(countDown == -1) {
 			countDown = 0;
@@ -672,19 +678,25 @@
 				  }
 			});
 		});
+		
+		setInterval(function(){
+			$(".vipCountDown").each(function(){
+				var vipCountDown = parseInt($(this).text());
+				vipCountDown--;
+				if(vipCountDown == -1) {
+					vipCountDown = 0;
+				} 
+				$(this).empty().append(vipCountDown);
+			});
+		},1000);
+		
+		$(".filter-inner-cont li").click(function(){
+	 	   	var _index =$(this).index();
+	 	   	//alert(_index);
+	 	   	$(this).addClass("filter-cur").siblings().removeClass("filter-cur");
+	 	   	$(".tab_cont .cont1").eq(_index).show().siblings().hide();
+	   	});
 	});
-   
-   	#if($!searchType == '0')
-   		$("#cont1").show();
-   	#else
-   		$("#cont2").show();	
-   	#end
-   	$(".filter-inner-cont li").click(function(){
- 	   	var _index =$(this).index();
- 	   	//alert(_index);
- 	   	$(this).addClass("filter-cur").siblings().removeClass("filter-cur");
- 	   	$(".tab_cont .cont1").eq(_index).show().siblings().hide();
-   	});
 </script>
 
 </body>
