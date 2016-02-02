@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="QrcodeScanDO">
+
+  <typeAlias alias="QrcodeScan" type="com.fans.dal.model.QrcodeScanDO"/>
+
+  <resultMap id="RM" class="QrcodeScan">
+    <result property="id" 			column="id"/>
+    <result property="gmtCreate" 	column="gmt_create"/>
+    <result property="gmtModify" 	column="gmt_modify"/>
+    <result property="qrcodeId" 	column="qrcode_id"/>
+    <result property="openId" 		column="open_id"/>
+    <result property="skvId" 		column="skv_id"/>
+    <result property="upperSkvId" 	column="upper_skv_id"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="QrcodeScan">
+    <![CDATA[
+    insert into cl_qrcode_scan (
+      gmt_create,
+      gmt_modify,
+      qrcode_id,
+      open_id,
+      skv_id,
+    ) values (
+      now(), now(), #qrcodeId#, #openId#, #skvId#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="QrcodeScan">
+    update cl_qrcode_scan set 
+    <dynamic>
+      <isNotEmpty property="qrcodeId">  
+         <![CDATA[   
+           qrcode_id = #qrcodeId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="openId">  
+         <![CDATA[   
+           open_id = #openId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="skvId">  
+         <![CDATA[   
+           skv_id = #skvId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="upperSkvId">  
+         <![CDATA[   
+           upper_skv_id = #upperSkvId#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from cl_qrcode_scan where id = #id#  
+  </select>
+  
+  <select id="getByOpenId" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_qrcode_scan where open_id = #openId# limit 1
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="userId" prepend="and">
+        	<![CDATA[ 
+        	(qrcode_id in (select id from cl_qrcode where user_id = #userId#))
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="skvId" prepend="and">  
+         	<![CDATA[   
+            skv_id = #skvId#
+         	]]> 
+        </isNotEmpty>
+	  <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="userId">
+  	<isNull property="skvId">
+        <include refid="Common.validModify" />
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_qrcode_scan 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_qrcode_scan 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from cl_qrcode_scan
+	<include refid="where" />
+  </select>
+</sqlMap>

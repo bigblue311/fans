@@ -11,6 +11,7 @@ public class WxConfig {
     
     private static String JSAPI_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?";
     private static String JSAPI_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?";
+    private static String JSAPI_QRCODE = "https://api.weixin.qq.com/cgi-bin/qrcode/create?";
     
     static{
         OAUTH2_URL += "appid=[APP_ID]&";
@@ -35,6 +36,8 @@ public class WxConfig {
         
         JSAPI_TICKET += "access_token=[ACCESS_TOKEN]&";
         JSAPI_TICKET += "type=jsapi";
+        
+        JSAPI_QRCODE += "access_token=[ACCESS_TOKEN]";
     }
     
     public static String getOauth2Url(String appId, String reUrl){
@@ -93,6 +96,14 @@ public class WxConfig {
             accessToken = "";
         }
         String url = JSAPI_TICKET.replace("[ACCESS_TOKEN]", accessToken);
+        return url;
+    }
+    
+    public static String getJSAPIQrcode(String accessToken){
+        if(StringTools.isEmpty(accessToken)){
+            accessToken = "";
+        }
+        String url = JSAPI_QRCODE.replace("[ACCESS_TOKEN]", accessToken);
         return url;
     }
 }

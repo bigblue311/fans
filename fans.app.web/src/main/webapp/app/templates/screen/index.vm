@@ -195,6 +195,7 @@
 											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
 									</h3>
 									<p>$!each.description</p>
+									<p><span class="vipCountDown">$!each.vipCountDown</span>&nbsp;秒后置顶结束</p>
 								</div>
 							</div>
 						</li>

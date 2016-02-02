@@ -27,6 +27,8 @@
   	<sqlMap resource="sqlmap/cl_coins.xml"/>
     <sqlMap resource="sqlmap/cl_employee.xml"/>
   	<sqlMap resource="sqlmap/cl_location.xml"/>
+  	<sqlMap resource="sqlmap/cl_qrcode_scan.xml"/>
+  	<sqlMap resource="sqlmap/cl_qrcode.xml"/>
   	<sqlMap resource="sqlmap/cl_resource_role.xml"/>
   	<sqlMap resource="sqlmap/cl_role.xml"/>
   	<sqlMap resource="sqlmap/cl_system_config.xml"/>

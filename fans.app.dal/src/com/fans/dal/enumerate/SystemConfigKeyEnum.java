@@ -29,7 +29,8 @@ public enum SystemConfigKeyEnum {
 	KEFU_ONLINE("KEFU_ONLINE","客服上线时间请以HH:mm:ss表示, 用24小时"),
 	KEFU_OFFLINE("KEFU_OFFLINE","客服下线时间请以HH:mm:ss表示, 用24小时"),
 	NEW_COINS("NEW_COINS","新注册用户送金币"),
-	NEW_VIP("NEW_VIP","新注册用户送VIP");
+	NEW_VIP("NEW_VIP","新注册用户送VIP"),
+	SCAN_COINS("SCAN_COINS","扫码关注得金币");
 	
 	private String code;
 	private String desc;

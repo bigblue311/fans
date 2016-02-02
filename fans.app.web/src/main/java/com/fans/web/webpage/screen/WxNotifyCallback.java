@@ -11,11 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fans.biz.manager.TransactionManager;
+import com.fans.biz.manager.UserManager;
 import com.fans.biz.manager.WeixinManager;
-import com.fans.dal.model.TopupDO;
+import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.model.QrcodeDO;
+import com.victor.framework.common.tools.StringTools;
 
-public class WxCallback {
+public class WxNotifyCallback {
 
     @Autowired
     private HttpServletRequest request;
@@ -27,7 +30,10 @@ public class WxCallback {
     private WeixinManager weixinManager;
     
     @Autowired
-    private TransactionManager transactionManager;
+    private UserManager userManager;
+    
+    @Autowired
+    private SystemConfigCache systemConfigCache;
     
     public void execute() throws IOException, JDOMException{
     	try {
@@ -44,23 +50,30 @@ public class WxCallback {
 			String result = new String(outSteam.toByteArray(), "UTF-8");
 			Map<String, String> map = weixinManager.doXMLParse(result);
 			
-			String uuid = map.get("out_trade_no");
-			TopupDO topupDO =  transactionManager.getTopup(uuid);
-			if(topupDO!=null){
-				topupDO.setWeixinPayResult(map.get("result_code"));
-		        transactionManager.updateTopup(topupDO);
+			String openId = map.get("FromUserName");
+			String event = map.get("Event");
+			String eventKey = map.get("EventKey");
+			if(StringTools.isNotEmpty(event) && StringTools.isNotEmpty(eventKey)){
+			    if(event.equals("subscribe") && eventKey.startsWith("qrscene_")){
+	                Long qrcodeId = Long.parseLong(eventKey.replace("qrscene_",""));
+	                weixinManager.doScan(qrcodeId, openId);
+	                scanAddCoins(qrcodeId);
+	            }
 			}
-			
-			if (map.get("result_code").equalsIgnoreCase("SUCCESS")) {
-				String weixinOrderId = map.get("transaction_id");
-				transactionManager.paySuccess(uuid, weixinOrderId);
-				//告诉微信服务器，我收到信息了，不要在调用回调action了
-				response.getWriter().write(setXML("SUCCESS", "")); 
-			}
+			response.getWriter().write(setXML("SUCCESS", "")); 
 		} catch (Exception e) {
 			//告诉微信服务器，我收到信息了，不要在调用回调action了
 			response.getWriter().write(setXML("SUCCESS", "")); 
 		}
+    }
+    
+    private void scanAddCoins(Long qrcodeId){
+        QrcodeDO qrcodeDO = weixinManager.getQrcodeById(qrcodeId);
+        if(qrcodeDO!=null){
+            Long userId = qrcodeDO.getUserId();
+            Integer coins = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.SCAN_COINS.getCode(), 10);
+            userManager.addCoins(userId, coins);
+        }
     }
     
     private String setXML(String return_code, String return_msg) {

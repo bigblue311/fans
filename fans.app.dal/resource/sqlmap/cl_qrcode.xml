@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="QrcodeDO">
+
+  <typeAlias alias="Qrcode" type="com.fans.dal.model.QrcodeDO"/>
+
+  <resultMap id="RM" class="Qrcode">
+    <result property="id" 			column="id"/>
+    <result property="gmtCreate" 	column="gmt_create"/>
+    <result property="gmtModify" 	column="gmt_modify"/>
+    <result property="userId" 		column="user_id"/>
+    <result property="openId" 		column="open_id"/>
+    <result property="skvId" 		column="skv_id"/>
+    <result property="ticket" 		column="ticket"/>
+    <result property="domain" 		column="domain"/>
+  </resultMap>
+
+  <insert id="insert" parameterClass="Qrcode">
+    <![CDATA[
+    insert into cl_qrcode (
+      gmt_create,
+      gmt_modify,
+      user_id,
+      open_id,
+      skv_id,
+      ticket,
+      domain
+    ) values (
+      now(), now(), #userId#, #openId#, 
+      #skvId#, #ticket#, #domain#
+    )
+    ]]>
+    <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="Qrcode">
+    update cl_qrcode set 
+    <dynamic>
+      <isNotEmpty property="userId">  
+         <![CDATA[   
+           user_id = #userId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="openId">  
+         <![CDATA[   
+           open_id = #openId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="skvId">  
+         <![CDATA[   
+           skv_id = #skvId#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="ticket">  
+         <![CDATA[   
+           ticket = #ticket#,
+         ]]> 
+      </isNotEmpty>
+      <isNotEmpty property="domain">  
+         <![CDATA[   
+           domain = #domain#,
+         ]]> 
+      </isNotEmpty>
+    </dynamic>
+    	gmt_modify = now()
+    where
+      id = #id#
+  </update>
+
+  <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
+    select * from cl_qrcode where id = #id#  
+  </select>
+  
+  <sql id="where">
+  	<include refid="validate" />
+  	<dynamic prepend="where">
+	    <isNotEmpty property="userId" prepend="and">
+        	<![CDATA[ 
+        	user_id = #userId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="skvId" prepend="and">
+        	<![CDATA[ 
+        	skv_id = #skvId#
+        	]]>
+	    </isNotEmpty>
+	    <isNotEmpty property="domain" prepend="and">
+        	<![CDATA[ 
+        	domain = #domain#
+        	]]>
+	    </isNotEmpty>
+	    <include refid="Common.queryModify" />
+  	</dynamic>
+  </sql>
+  
+  <sql id="validate">
+  	<isNull property="userId">
+  	<isNull property="domain">
+        <include refid="Common.validModify" />
+    </isNull>
+	</isNull>
+  </sql>
+  
+  <select id="getByCondition" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_qrcode 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+  </select>
+  
+  <select id="getPage" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from cl_qrcode 
+    <include refid="where" />
+    <include refid="Common.orderByModify" />
+    <include refid="Common.pageSql" />
+  </select>
+  
+  <select id="getCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+    select count(*) from cl_qrcode
+	<include refid="where" />
+  </select>
+</sqlMap>

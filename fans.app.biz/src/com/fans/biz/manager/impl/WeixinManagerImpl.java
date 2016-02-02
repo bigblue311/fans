@@ -27,6 +27,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.dal.cache.WeixinConfigCache;
+import com.fans.dal.dao.QrcodeDAO;
+import com.fans.dal.dao.QrcodeScanDAO;
+import com.fans.dal.model.QrcodeDO;
+import com.fans.dal.model.QrcodeScanDO;
+import com.fans.dal.model.UserDO;
 import com.fans.dal.model.WeixinConfigDO;
 import com.google.common.collect.Maps;
 import com.victor.framework.common.tools.DateTools;
@@ -48,6 +53,12 @@ public class WeixinManagerImpl implements WeixinManager{
     
     @Autowired
     private WeixinConfigCache weixinConfigCache;
+    
+    @Autowired
+    private QrcodeDAO qrcodeDao;
+    
+    @Autowired
+    private QrcodeScanDAO qrcodeScanDao;
     
     @Override
     public String getOauth2Url(String domain) {
@@ -331,9 +342,81 @@ public class WeixinManagerImpl implements WeixinManager{
         
         return sb.toString();
     }
+    
+    @Override
+    public QrcodeDO getUserQrcode(String domain, UserDO userDO) {
+        if(userDO == null){
+            return null;
+        }
+        
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        if(configDO == null){
+            return null;
+        }
+        String appId = configDO.getAppId();
+        String appSecret = configDO.getAppSecret();
+        
+        String accessToken = getJsApiAccessToken(appId, appSecret);
+        String url = WxConfig.getJSAPIQrcode(accessToken);
+        
+        QrcodeDO qrcodeDO = new QrcodeDO();
+        qrcodeDO.setUserId(userDO.getId());
+        qrcodeDO.setDomain(domain);
+        qrcodeDO.setSkvId(userDO.getSkvId());
+        qrcodeDO.setOpenId(userDO.getOpenId());
+        Long id = qrcodeDao.insert(qrcodeDO);
+        qrcodeDO.setId(id);
+        
+        String postData = "{\"expire_seconds\": 604800, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": "+qrcodeDO.getId()+"}}}";
+        String result = httpRequest(url, postData);
+        JSONObject json = JSON.parseObject(result);
+        String errmsg = json.getString("errmsg");
+        if(StringTools.isNotEmpty(errmsg)){
+            System.out.println("failed to get jsapi qrcode =" + errmsg);
+            return null;
+        } else {
+            String ticket = json.getString("ticket");
+            qrcodeDO.setTicket(ticket);
+            qrcodeDao.update(qrcodeDO);
+            return qrcodeDO;
+        }
+    }
 
     public static void main(String[] args){
         WeixinManagerImpl test = new WeixinManagerImpl();
         System.out.println(test.getJsApiConfig("wz.wetuan.com","http://wz.wetuan.com/my.htm").getSign());
+    }
+
+    @Override
+    public QrcodeDO getQrcodeById(Long id) {
+        return qrcodeDao.getById(id);
+    }
+
+    @Override
+    public QrcodeScanDO getScanByOpenId(String openId) {
+        return qrcodeScanDao.getByOpenId(openId);
+    }
+
+    @Override
+    public QrcodeScanDO doScan(Long qrcodeId, String openId) {
+        try {
+            QrcodeScanDO qrcodeScanDO = new QrcodeScanDO();
+            qrcodeScanDO.setQrcodeId(qrcodeId);
+            qrcodeScanDO.setOpenId(openId);
+            Long id = qrcodeScanDao.insert(qrcodeScanDO);
+            qrcodeScanDO.setId(id);
+            return qrcodeScanDO;
+        } catch (Exception e) {
+            return getScanByOpenId(openId);
+        }
+    }
+
+    @Override
+    public void updateSkvId(String openId, Long skvId) {
+        QrcodeScanDO qrcodeScanDO = getScanByOpenId(openId);
+        if(qrcodeScanDO != null && qrcodeScanDO.getSkvId() == null){
+            qrcodeScanDO.setSkvId(skvId);
+            qrcodeScanDao.update(qrcodeScanDO);
+        }
     }
 }

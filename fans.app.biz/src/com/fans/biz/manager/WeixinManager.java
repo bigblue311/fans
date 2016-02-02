@@ -6,6 +6,9 @@ import java.util.SortedMap;
 
 import org.jdom.JDOMException;
 
+import com.fans.dal.model.QrcodeDO;
+import com.fans.dal.model.QrcodeScanDO;
+import com.fans.dal.model.UserDO;
 import com.weixin.model.JsApiConfig;
 import com.weixin.model.WxPayResponse;
 import com.weixin.model.WxPayRequest;
@@ -57,4 +60,35 @@ public interface WeixinManager {
      * @return
      */
     JsApiConfig getJsApiConfig(String domain, String url);
+    
+    /**
+     * 获取用户推广二维码
+     * @param domain
+     * @param userDO
+     * @return
+     */
+    QrcodeDO getUserQrcode(String domain, UserDO userDO);
+    
+    /**
+     * 根据ID获取
+     * @param id
+     * @return
+     */
+    QrcodeDO getQrcodeById(Long id);
+    
+    /**
+     * 根据OpenId获取
+     * @param openId
+     * @return
+     */
+    QrcodeScanDO getScanByOpenId(String openId);
+    
+    /**
+     * 创建一条扫码记录
+     * @param qrcodeId
+     * @param openId
+     * @return
+     */
+    QrcodeScanDO doScan(Long qrcodeId, String openId);
+    void updateSkvId(String openId, Long skvId);
 }

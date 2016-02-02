@@ -36,6 +36,14 @@
     	<property name="mySqlMapClient" ref="mySqlMapClient"/>
     </bean>
     
+    <bean id="qrcodeDAO" class="com.fans.dal.dao.impl.QrcodeDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient"/>
+    </bean>
+    
+    <bean id="qrcodeScanDAO" class="com.fans.dal.dao.impl.QrcodeScanDAOImpl">
+    	<property name="mySqlMapClient" ref="mySqlMapClient"/>
+    </bean>
+    
     <bean id="resourceRoleDAO" class="com.fans.dal.dao.impl.ResourceRoleDAOImpl">
     	<property name="mySqlMapClient" ref="mySqlMapClient"/>
     </bean>
