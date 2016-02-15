@@ -378,6 +378,7 @@ public class WeixinManagerImpl implements WeixinManager{
             String ticket = json.getString("ticket");
             qrcodeDO.setTicket(ticket);
             qrcodeDao.update(qrcodeDO);
+            qrcodeDO = qrcodeDao.getById(id);
             return qrcodeDO;
         }
     }
