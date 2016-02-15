@@ -91,4 +91,6 @@ public interface WeixinManager {
      */
     QrcodeScanDO doScan(Long qrcodeId, String openId);
     void updateSkvId(String openId, Long skvId);
+    
+    String publishMenu(String domain);
 }

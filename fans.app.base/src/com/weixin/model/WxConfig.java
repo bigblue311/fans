@@ -8,6 +8,7 @@ public class WxConfig {
     private static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?";
     private static String USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo?";
     private static String UNIFILED_ORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    private static String MENU_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?";
     
     private static String JSAPI_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?";
     private static String JSAPI_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?";
@@ -25,6 +26,8 @@ public class WxConfig {
         ACCESS_TOKEN_URL += "secret=[APP_SECRET]&";
         ACCESS_TOKEN_URL += "code=[CODE]&";
         ACCESS_TOKEN_URL += "grant_type=authorization_code";
+        
+        MENU_CREATE_URL += "access_token=[ACCESS_TOKEN]";
         
         USER_INFO_URL += "access_token=[ACCESS_TOKEN]&";
         USER_INFO_URL += "openid=[OPEN_ID]&";
@@ -62,6 +65,14 @@ public class WxConfig {
             code = "";
         }
         String url = ACCESS_TOKEN_URL.replace("[APP_ID]", appId).replace("[APP_SECRET]", appSecret).replace("[CODE]", code);
+        return url;
+    }
+    
+    public static String getMenuUrl(String accessToken){
+        if(StringTools.isEmpty(accessToken)){
+            accessToken = "";
+        }
+        String url = MENU_CREATE_URL.replace("[ACCESS_TOKEN]", accessToken);
         return url;
     }
     

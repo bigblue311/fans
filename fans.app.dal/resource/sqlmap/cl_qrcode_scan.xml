@@ -25,7 +25,7 @@
       gmt_modify,
       qrcode_id,
       open_id,
-      skv_id,
+      skv_id
     ) values (
       now(), now(), #qrcodeId#, #openId#, #skvId#
     )

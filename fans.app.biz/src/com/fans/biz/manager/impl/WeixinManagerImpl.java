@@ -60,6 +60,14 @@ public class WeixinManagerImpl implements WeixinManager{
     @Autowired
     private QrcodeScanDAO qrcodeScanDao;
     
+    private static final Map<String,String> menu = Maps.newHashMap();
+    private static final String wzMenu = "{\"button\":[{\"name\":\"躺着加粉\",\"type\":\"view\",\"url\":\"http://wz.wetuan.com/?_setOpenId=true\"},{\"name\":\"新手引导\",\"type\":\"view\",\"url\":\"http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339&scene=18#wechat_redirect\"}]}";
+    
+    static{
+        menu.put("wt.wetuan.com", "");
+        menu.put("wz.wetuan.com", wzMenu);
+    }
+    
     @Override
     public String getOauth2Url(String domain) {
         WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
@@ -385,7 +393,7 @@ public class WeixinManagerImpl implements WeixinManager{
 
     public static void main(String[] args){
         WeixinManagerImpl test = new WeixinManagerImpl();
-        System.out.println(test.getJsApiConfig("wz.wetuan.com","http://wz.wetuan.com/my.htm").getSign());
+        System.out.println(test.publishMenu("wz.wetuan.com"));
     }
 
     @Override
@@ -419,5 +427,24 @@ public class WeixinManagerImpl implements WeixinManager{
             qrcodeScanDO.setSkvId(skvId);
             qrcodeScanDao.update(qrcodeScanDO);
         }
+    }
+
+    @Override
+    public String publishMenu(String domain) {
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        if(configDO == null){
+            return "config not found";
+        }
+        String appId = configDO.getAppId();
+        String appSecret = configDO.getAppSecret();
+        
+//        String appId = "wxc06dcf1d1cb28716";
+//        String appSecret = "58e2eda43b8fa9518dd6890f03ab9dce";
+        
+        String accessToken = getJsApiAccessToken(appId, appSecret);
+        String url = WxConfig.getMenuUrl(accessToken);
+        String result = httpRequest(url, menu.get(domain));
+        System.out.println(result);
+        return result;
     }
 }
