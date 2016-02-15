@@ -3,7 +3,9 @@ package com.fans.dal.model;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
+import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.dal.basic.EntityDO;
 
 public class QrcodeDO extends EntityDO implements Serializable{
@@ -48,7 +50,10 @@ public class QrcodeDO extends EntityDO implements Serializable{
     public void setDomain(String domain) {
         this.domain = domain;
     }
-    
+    public Date getExpire() {
+        Date date = this.getGmtModify();
+        return DateTools.addMinute(date, 10080);
+    }
     public String getQrcode(){
         String encoded;
         try {

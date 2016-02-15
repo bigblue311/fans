@@ -14,6 +14,7 @@ import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.model.WeixinConfigDO;
 import com.fans.web.webpage.RequestSessionBase;
+import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
 import com.weixin.model.JsApiConfig;
 
@@ -37,12 +38,14 @@ public class MyShare extends RequestSessionBase{
         String domain = super.getDomain(request);
         
         UserDO userDO = RequestSession.userDO();
-        
+        context.put("user", userDO);
+        context.put("isWeixin", super.isWeixinUser(request));
         QrcodeDO qrcodeDO = weixinManager.getUserQrcode(domain, userDO);
         WeixinConfigDO weixinConfigDO = weixinConfigCache.getCache(domain);
         String shareBgImg = weixinConfigDO.getShareImg();
         if(qrcodeDO!=null && StringTools.isNotEmpty(qrcodeDO.getQrcode())){
             shareBgImg = qrcodeDO.getQrcode();
+            context.put("expire", "二维码有效期至:"+DateTools.DateToString(qrcodeDO.getExpire()));
         }
         
         String shareTitle = systemConfigCache.getCacheString(SystemConfigKeyEnum.SHARE_TITLE.getCode(), "[name]躺着把粉加了");

@@ -234,7 +234,8 @@
  		<div class="blank2"></div> 
  		<p>4.之后成功分享可获取$!shareCoins金币</p>
  		<div class="blank2"></div> 
- 		<p>今天任务 ：<span class="member">$!shareCount次 / $!shareMax次</span><span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a></span></p>
+ 		<p>今天任务 ：<span class="member">$!shareCount次 / $!shareMax次</span>
+ 			<span class="link_btn"><a class="link_btn" href="/share.htm">我要分享</a><a class="link_btn" href="/myShare.htm">&nbsp;</a></span></p>
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div> 

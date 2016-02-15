@@ -2,8 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <title>微赚爆粉管理系统</title>
-<!-- <link rel="icon" href="/img/favicon.ico" mce_href="/img/favicon.ico" type="image/x-icon"/>
-<link rel="shortcut icon" href="/img/favicon.ico" mce_href="/img/favicon.ico" type="image/x-icon"/> -->
 </head>
 <body style="padding:10px">
 $control.setTemplate("resource.vm")

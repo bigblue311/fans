@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
 import com.fans.biz.manager.WeixinManager;
+import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
 
@@ -28,6 +29,10 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 		    String _setOpenId = request.getParameter("_setOpenId");
 		    String domain = super.getDomain(request);
 		    if(StringTools.isNotEmpty(_setOpenId)){
+		        String uri = request.getRequestURI();
+	            if(uri.endsWith(".htm") || uri.endsWith(".html")){
+	                super.setCookie(response, CookieKey.RE_URL, uri);
+	            }
 		        response.sendRedirect(weixinManager.getOauth2Url(domain));
 	            return;
 		    }
