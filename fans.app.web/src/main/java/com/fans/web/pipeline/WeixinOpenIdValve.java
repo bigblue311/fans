@@ -29,8 +29,18 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 		    String _setOpenId = request.getParameter("_setOpenId");
 		    String domain = super.getDomain(request);
 		    if(StringTools.isNotEmpty(_setOpenId)){
+		        
+		        String _goWetuan = request.getParameter("_goWetuan");
 		        String uri = request.getRequestURI();
-	            if(uri.endsWith(".htm") || uri.endsWith(".html")){
+		        if(StringTools.isNotEmpty(_goWetuan)){
+		            if(_goWetuan.equals("1")){
+		                uri = "http://wetuan.com/index.htm?openId=[openId]";
+		            }
+		            if(_goWetuan.equals("2")){
+		                uri = "http://wetuan.com/user/toRegist.htm?upId=[upId]&openId=[openId]";
+		            }
+		        }
+	            if(uri.contains(".htm") || uri.contains(".html")){
 	                super.setCookie(response, CookieKey.RE_URL, uri);
 	            }
 		        response.sendRedirect(weixinManager.getOauth2Url(domain));

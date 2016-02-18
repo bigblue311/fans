@@ -391,11 +391,6 @@ public class WeixinManagerImpl implements WeixinManager{
         }
     }
 
-    public static void main(String[] args){
-        WeixinManagerImpl test = new WeixinManagerImpl();
-        System.out.println(test.publishMenu("wz.wetuan.com"));
-    }
-
     @Override
     public QrcodeDO getQrcodeById(Long id) {
         return qrcodeDao.getById(id);
@@ -409,9 +404,14 @@ public class WeixinManagerImpl implements WeixinManager{
     @Override
     public QrcodeScanDO doScan(Long qrcodeId, String openId) {
         try {
+            QrcodeDO qrcodeDO = qrcodeDao.getById(qrcodeId);
+            
             QrcodeScanDO qrcodeScanDO = new QrcodeScanDO();
             qrcodeScanDO.setQrcodeId(qrcodeId);
             qrcodeScanDO.setOpenId(openId);
+            if(qrcodeDO!=null && qrcodeDO.getSkvId()!=null){
+                qrcodeScanDO.setUpperSkvId(qrcodeDO.getSkvId());
+            }
             Long id = qrcodeScanDao.insert(qrcodeScanDO);
             qrcodeScanDO.setId(id);
             return qrcodeScanDO;
@@ -443,8 +443,11 @@ public class WeixinManagerImpl implements WeixinManager{
         
         String accessToken = getJsApiAccessToken(appId, appSecret);
         String url = WxConfig.getMenuUrl(accessToken);
-        String result = httpRequest(url, menu.get(domain));
-        System.out.println(result);
-        return result;
+        return httpRequest(url, menu.get(domain));
+    }
+    
+    public static void main(String[] args){
+        WeixinManagerImpl test = new WeixinManagerImpl();
+        System.out.println(test.publishMenu("wz.wetuan.com"));
     }
 }

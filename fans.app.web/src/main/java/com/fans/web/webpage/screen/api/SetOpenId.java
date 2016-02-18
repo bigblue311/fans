@@ -13,6 +13,7 @@ import com.fans.biz.manager.UserManager;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.model.QrcodeScanDO;
 import com.fans.dal.model.UserDO;
 import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
@@ -39,12 +40,12 @@ public class SetOpenId extends RequestSessionBase{
     
     public void execute(@Param("code")String code, Navigator nav){
         String domain = super.getDomain(request);
-        
+        String openId = "";
         if(StringTools.isNotEmpty(code)){
             WxUser wxUser = weixinManager.getUserInfo(domain,code);
-            String openId = wxUser.getOpenId();
             UserDO userDO = userManager.getByOpenId(openId);
-            if(userDO == null){
+            if(wxUser!= null && userDO == null){
+                openId = wxUser.getOpenId();
                 userDO = new UserDO();
                 userDO.setOpenId(openId);
                 userDO.setNickName(wxUser.getNickName());
@@ -57,15 +58,12 @@ public class SetOpenId extends RequestSessionBase{
                 userDO.setDomain(domain);
                 userManager.create(userDO);
             }
+            if(openId == null){
+                openId = "";
+            }
             super.setOpenId(response, openId);
         }
-		
-        String reUrl = super.getCookie(request, CookieKey.RE_URL);
-        if(StringTools.isNotEmpty(reUrl)){
-            nav.redirectTo("app").withTarget(reUrl);
-        } else {
-            nav.redirectTo("app").withTarget("index.vm");
-        }
+        nav.redirectTo("app").withTarget(getReUrl(request,openId));
     }
     
     private Integer getSex(Integer wxSex){
@@ -79,5 +77,35 @@ public class SetOpenId extends RequestSessionBase{
             return 1;
         }
         return null;
+    }
+    
+    private String getUpId(String openId){
+        if(StringTools.isEmpty(openId)){
+            return "";
+        }
+        QrcodeScanDO qrcodeScanDO = weixinManager.getScanByOpenId(openId);
+        if(qrcodeScanDO!=null){
+            Long upperSkvId = qrcodeScanDO.getUpperSkvId();
+            if(upperSkvId!=null){
+                return upperSkvId.toString();
+            }
+        }
+        return "";
+    }
+    
+    private String getReUrl(HttpServletRequest request, String openId){
+        String upId = getUpId(openId);
+        String reUrl = super.getCookie(request, CookieKey.RE_URL);
+        if(StringTools.isNotEmpty(reUrl)){
+            if(reUrl.contains("[upId]")){
+                reUrl = reUrl.replace("[upId]", upId);
+            }
+            if(reUrl.contains("[openId]")){
+                reUrl = reUrl.replace("[openId]", openId);
+            }
+            return reUrl;
+        } else {
+            return "index.vm";
+        }
     }
 }
