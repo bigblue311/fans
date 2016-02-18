@@ -1,5 +1,6 @@
 package com.fans.web.webpage.screen.api;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ public class SetOpenId extends RequestSessionBase{
     @Autowired
     private SystemConfigCache systemConfigCache;
     
-    public void execute(@Param("code")String code, Navigator nav){
+    public void execute(@Param("code")String code, Navigator nav) throws IOException{
         String domain = super.getDomain(request);
         String openId = "";
         if(StringTools.isNotEmpty(code)){
@@ -63,7 +64,12 @@ public class SetOpenId extends RequestSessionBase{
             }
             super.setOpenId(response, openId);
         }
-        nav.redirectTo("app").withTarget(getReUrl(request,openId));
+        String reUrl = getReUrl(request,openId);
+        if(reUrl.startsWith("http")){
+            response.sendRedirect(reUrl);
+        } else {
+            nav.redirectTo("app").withTarget(reUrl);
+        }
     }
     
     private Integer getSex(Integer wxSex){
