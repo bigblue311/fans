@@ -37,6 +37,9 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 		                uri = "http://wetuan.com/index.htm?openId=[openId]";
 		            }
 		            if(_goWetuan.equals("2")){
+                        uri = "http://wetuan.com/user/login.htm?upId=[upId]&openId=[openId]";
+                    }
+		            if(_goWetuan.equals("3")){
 		                uri = "http://wetuan.com/user/toRegist.htm?upId=[upId]&openId=[openId]";
 		            }
 		        }

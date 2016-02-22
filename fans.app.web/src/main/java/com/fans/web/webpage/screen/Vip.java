@@ -24,7 +24,7 @@ public class Vip extends RequestSessionBase{
     private SystemConfigCache systemConfigCache;
     
     public void execute(@Param("open") String open, Context context){
-    	loadPriceSet(context);
+        loadPriceSet(context);
         UserDO userDO = RequestSession.userDO();
         context.put("user", userDO);
         

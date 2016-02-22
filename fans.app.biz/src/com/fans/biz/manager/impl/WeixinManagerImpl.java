@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fans.biz.manager.WeixinManager;
+import com.fans.biz.model.WeixinMenus;
 import com.fans.dal.cache.WeixinConfigCache;
 import com.fans.dal.dao.QrcodeDAO;
 import com.fans.dal.dao.QrcodeScanDAO;
@@ -61,11 +62,10 @@ public class WeixinManagerImpl implements WeixinManager{
     private QrcodeScanDAO qrcodeScanDao;
     
     private static final Map<String,String> menu = Maps.newHashMap();
-    private static final String wzMenu = "{\"button\":[{\"name\":\"躺着加粉\",\"type\":\"view\",\"url\":\"http://wz.wetuan.com/?_setOpenId=true\"},{\"name\":\"新手引导\",\"type\":\"view\",\"url\":\"http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339&scene=18#wechat_redirect\"}]}";
     
     static{
-        menu.put("wt.wetuan.com", "");
-        menu.put("wz.wetuan.com", wzMenu);
+        menu.put("wt.wetuan.com", WeixinMenus.getWtMenuJson());
+        menu.put("wz.wetuan.com", WeixinMenus.getWzMenuJson());
     }
     
     @Override

@@ -39,6 +39,11 @@ public class MyShare extends RequestSessionBase{
         
         UserDO userDO = RequestSession.userDO();
         context.put("user", userDO);
+        if(userDO != null){
+            context.put("isWeiTuan", userDO.getSkvId()!=null);
+        } else {
+            context.put("isWeiTuan", false);
+        }
         context.put("isWeixin", super.isWeixinUser(request));
         QrcodeDO qrcodeDO = weixinManager.getUserQrcode(domain, userDO);
         WeixinConfigDO weixinConfigDO = weixinConfigCache.getCache(domain);
