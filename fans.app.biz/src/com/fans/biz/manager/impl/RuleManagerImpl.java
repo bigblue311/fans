@@ -96,7 +96,7 @@ public class RuleManagerImpl implements RuleManager{
         } else {
             Integer shareCount = userManager.getTodayShareCount(userDO.getId());
             if(shareCount != null && shareCount == 0){
-                result.setLink("/myShare.htm");
+                result.setLink("/myShare.htm?id="+userDO.getId());
                 result.setTitle("我要分享");
                 result.setMessage("您的爆粉激活到期了,每天第一次分享可激活24小时");
                 result.setSuccess(false);
@@ -182,7 +182,7 @@ public class RuleManagerImpl implements RuleManager{
             int shareCoins = getTaskShareCoins(userDO);
             int friendCoins = getTaskFriendCoins(userDO);
             if(shareCoins > 0){
-                result.setLink("/myShare.htm");
+                result.setLink("/myShare.htm?id="+userDO.getId());
                 result.setTitle("去分享");
                 result.setMessage("分享任务还可得"+shareCoins+",快去赚金币吧");
                 result.setSuccess(false);

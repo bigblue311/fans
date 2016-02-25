@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
+import com.alibaba.citrus.turbine.dataresolver.Param;
+import com.fans.biz.manager.UserManager;
 import com.fans.biz.manager.WeixinManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.cache.WeixinConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
@@ -32,12 +33,15 @@ public class MyShare extends RequestSessionBase{
     @Autowired
     private WeixinConfigCache weixinConfigCache;
     
+    @Autowired
+    private UserManager userManager;
+    
     private final String defaultImg = "http://wetuan123.oss-cn-hangzhou.aliyuncs.com/fans/system/logo.jpeg";
     
-    public void execute(Context context){
+    public void execute(@Param("id") Long id,
+                        Context context){
         String domain = super.getDomain(request);
-        
-        UserDO userDO = RequestSession.userDO();
+        UserDO userDO = userManager.getById(id);
         context.put("user", userDO);
         if(userDO != null){
             context.put("isWeiTuan", userDO.getSkvId()!=null);
@@ -64,6 +68,7 @@ public class MyShare extends RequestSessionBase{
         
         String requestUrl = request.getRequestURL().toString();
         requestUrl+=(request.getQueryString()==null?"":"?"+request.getQueryString());
+        context.put("requestUrl", requestUrl);
         JsApiConfig config = weixinManager.getJsApiConfig(domain,requestUrl);
         context.put("jsApiConfig", config);
     }

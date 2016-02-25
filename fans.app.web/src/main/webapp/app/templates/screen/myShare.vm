@@ -1,4 +1,17 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<title>躺着加粉</title>
+</head>
+<body>
 <style>
 	div{
 		text-align: center;
@@ -6,6 +19,7 @@
 	}
 	
 	body{
+		margin:0px;
 		padding: 10px;
 		font-family: "Microsoft YaHei" ! important;
 	}
@@ -25,14 +39,6 @@
 		color:#E0147E;
 	}
 </style>
-<title>躺着加粉</title>
-<style>
-	body{
-		margin:0px;
-		padding:0px;
-	}
-</style>
-#if($isWeixin)
 <div id="my">
 	<div>
 		<h1>
@@ -49,15 +55,15 @@
 <div style="line-height:150%">
 	扫描或长按下方二维码, 关注"躺着加粉". 加入到爆粉行列中来吧, 完全免费的微商平台!
 </div>
-<div class="pink">二维码有效期至:$!{expire}</div>
+<div class="pink">$!{expire}</div>
 <div>
 	<img src="${shareBgImg}" width="100%">
 </div>
-#else
-<div>请从微信服务号中打开</div>
-#end
+<div class="bshare-custom" title="$!shareTitle" url="$!requestUrl" summary="$!shareTitle" pic="$!shareImg"></div>  
 <script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" ckharset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&uuid=&pophcol=2&lang=zh"></script>  
+<script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>  
 <script>
   // 注意：所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。 
   // 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
@@ -130,4 +136,37 @@ function shareSuccess(){
 		  }
 	});
 }
+
+$(document).ready(function() {
+    iBShare.init();    //初始化
+});
+
+//bShare分享
+var iBShare = {
+    //初始化
+    init: function() {
+        var shareBox = $(".bshare-custom");
+        //加载分享工具
+        var tools = '<a title="分享到微信" class="bshare-weixin"></a>';
+        tools += '<a title="分享到QQ空间" class="bshare-qzone"></a>';
+        tools += '<a title="分享到新浪微博" class="bshare-sinaminiblog"></a>';
+        tools += '<a title="分享到人人网" class="bshare-renren"></a>';
+        tools += '<a title="分享到腾讯微博" class="bshare-qqmb"></a>';
+        tools += '<a title="分享到网易微博" class="bshare-neteasemb"></a>';
+        tools += '<a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a>';
+        shareBox.append(tools);
+        //绑定分享事件
+        shareBox.children("a").click(function() {
+            var parents = $(this).parent();
+            bShare.addEntry({
+                title: parents.attr("title"),
+                url: parents.attr("url"),
+                summary: parents.attr("summary"),
+                pic: parents.attr("pic")
+            });
+        });
+    }
+}
 </script>
+</body>
+</html>
