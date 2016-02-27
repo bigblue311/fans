@@ -15,7 +15,6 @@
 <style>
 	div{
 		text-align: center;
-		margin:10px;
 	}
 	
 	body{
@@ -27,6 +26,7 @@
 	#my{
 		background:#ECEDEE;
 		padding: 20px;
+		margin:10px;
 	}
 	
 	.to{
@@ -52,11 +52,11 @@
 	<div>就可以日<span class="pink">加粉300+!</span></div>
 </div>
 <hr>
-<div style="line-height:150%">
+<div style="line-height:150%;margin:10px;">
 	扫描或长按下方二维码, 关注"躺着加粉". 加入到爆粉行列中来吧, 完全免费的微商平台!
 </div>
-<div class="pink">$!{expire}</div>
-<div>
+<div style="margin:10px;" class="pink">$!{expire}</div>
+<div style="margin:10px;">
 	<img src="${shareBgImg}" width="100%">
 </div>
 <div class="bshare-custom" title="$!shareTitle" url="$!requestUrl" summary="$!shareTitle" pic="$!shareImg"></div>  
