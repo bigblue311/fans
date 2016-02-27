@@ -12,7 +12,7 @@ public class TopupQueryCondition extends QueryCondition implements Serializable{
      * 
      */
     private static final long serialVersionUID = 4331737247122405493L;
-
+    
     public TopupQueryCondition setId(Long id) {
 		put("id",id);
 		return this;

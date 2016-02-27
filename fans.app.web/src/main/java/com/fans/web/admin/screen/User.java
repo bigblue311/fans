@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Context;
 import com.alibaba.citrus.turbine.dataresolver.Params;
 import com.alibaba.fastjson.JSONObject;
+import com.fans.admin.model.form.UserQueryFormBean;
 import com.fans.admin.model.json.CrumbJson;
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.enumerate.ResourceEnum;
@@ -21,8 +22,10 @@ public class User {
     @Autowired
     private UserManager userManager;
     
-    public void execute(@Params UserQueryCondition queryCondition,
+    public void execute(@Params UserQueryFormBean userQueryFormBean,
                         Context context){
+        UserQueryCondition queryCondition = userQueryFormBean.toQuery();
+        
         setCrumb(context,queryCondition.getId());
         
         Paging<UserDO> pageList = Paging.emptyPage();

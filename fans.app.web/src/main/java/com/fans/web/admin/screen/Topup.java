@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Context;
 import com.alibaba.citrus.turbine.dataresolver.Params;
 import com.alibaba.fastjson.JSONObject;
+import com.fans.admin.model.form.TopupQueryFormBean;
 import com.fans.admin.model.json.CrumbJson;
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.manager.UserManager;
@@ -27,9 +28,11 @@ public class Topup {
     @Autowired
     private TransactionManager transactionManager;
     
-    public void execute(@Params TopupQueryCondition queryCondition,
+    public void execute(@Params TopupQueryFormBean topupQueryFormBean,
                         Context context){
-        setCrumb(context,queryCondition.getId());
+        TopupQueryCondition queryCondition = topupQueryFormBean.toQuery();
+        
+        setCrumb(context,queryCondition.getUserId());
         
         Paging<TopupVO> pageList = Paging.emptyPage();
         pageList = transactionManager.getVOPage(queryCondition);
