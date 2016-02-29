@@ -52,8 +52,17 @@
 	<div>就可以日<span class="pink">加粉300+!</span></div>
 </div>
 <hr>
+#if(!$isWeixin)
 <div style="line-height:150%;margin:10px;">
-	扫描或长按下方二维码, 关注"躺着加粉". 加入到爆粉行列中来吧, 完全免费的微商平台!
+	复制下面链接,在微信中分享到朋友圈吧. <br>加入到爆粉行列中来吧, 完全免费的微商平台!
+</div>	
+<div style="line-height:150%;margin:10px;">
+	${requestUrl}
+</div>
+<hr>
+#end
+<div style="line-height:150%;margin:10px;">
+	#if(!$isWeixin)或#end扫描或长按下方二维码, 关注"躺着加粉". <br>加入到爆粉行列中来吧, 完全免费的微商平台!
 </div>
 <div style="margin:10px;" class="pink">$!{expire}</div>
 <div style="margin:10px;">

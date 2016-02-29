@@ -6,7 +6,8 @@ import com.google.common.collect.Lists;
 
 public enum SearchTypeEnum {
 	个人二维码("0","个人二维码"),
-	群二维码("1","群二维码");
+	群二维码("1","群二维码"),
+	关注我的("2","关注我的");
 	
 	private String code;
 	private String desc;

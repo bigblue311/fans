@@ -67,6 +67,9 @@
 				<li #if($!searchType == '1')class="filter-cur"#end>
 					<a href="/index.htm?searchType=1">微信群二维码</a>
 				</li>
+				<li #if($!searchType == '2')class="filter-cur"#end>
+					<a href="/index.htm?searchType=2">关注我的</a>
+				</li>
 				<li class=""><a href="#">高级筛选</a></li>
 			</ul>
 		</div>
@@ -243,6 +246,57 @@
 					#end
 				</div>
 			</div>
+			<div class="cont1" id="cont3">
+				<div>
+					#if($!searchType == '2')
+					<ul class="block_fr">
+						<div class="today_task">
+							以下是从您分享二维码扫码加入的用户<a href="/myShare.htm?id=$!user.id" style="float:right">去分享</a>
+						</div>
+						#foreach($each in $list)
+						<li class="item_list">
+							<div class="item_box">
+								<div class="left head_portrait">
+									<img src="$!each.headImg">
+									<br>
+									<span class="click_count">$!each.clickCount</span>
+								</div>
+								<div class="right btn-infor">
+									<div class="icon"
+										 user_popup_nickname="$!each.nickName"
+										 user_popup_headimg="$!each.headImg"
+										 user_popup_description="$!each.description"
+										 user_popup_code="$!each.qrcode" 
+										 user_popup_id="$!each.id">
+										<div class="plus"></div>
+									</div>
+									<div class="add_fri" 
+										 user_popup_nickname="$!each.nickName"
+										 user_popup_headimg="$!each.headImg"
+										 user_popup_description="$!each.description"
+										 user_popup_code="$!each.qrcode"
+										 user_popup_id="$!each.id">添加好友</div>
+								</div>
+								<div class="left ft_describe">
+									<h3>
+										<span class="city_area location" 
+											  province="$!each.province" 
+											  city="$!each.city"
+											  extCity="$!each.extCity"></span> &nbsp;$!each.nickName
+									</h3>
+									<p>$!each.description</p>
+								</div>
+							</div>
+						</li>
+						#end
+					</ul>
+					<ul id="more" page="2">
+						
+					</ul>
+					#end
+				</div>
+				<div class="blank4"></div>
+			</div>
 			<div class="cont1">
 				<div class="folder_cont">
 					<form action="/index.htm" method="post" class="form-inline" id="searchForm">
@@ -408,8 +462,12 @@
 	
 	#if($!searchType == '0')
    		$("#cont1").show();
-   	#else
+   	#end
+   	#if($!searchType == '1')
    		$("#cont2").show();	
+   	#end
+   	#if($!searchType == '2')
+   		$("#cont3").show();	
    	#end
 	
 	function showPopup(msg){
@@ -486,20 +544,20 @@
  						   msg += "			 	user_popup_headimg='"+headImg+"'";
  						   msg += "			 	user_popup_description='"+description+"'";
  						   msg += "			 	user_popup_id='"+id+"'";
- 					    #if($!searchType == '0')
- 						   msg += "			 	user_popup_code='"+qrcode+"'><div class='plus'></div></div>";
+ 					    #if($!searchType == '1')
+ 					       msg += "			 	user_popup_code='"+groupQrcode+"'><div class='plus'></div></div>";
  						#else
- 						   msg += "			 	user_popup_code='"+groupQrcode+"'><div class='plus'></div></div>";
+ 						   msg += "			 	user_popup_code='"+qrcode+"'><div class='plus'></div></div>";
  						#end
  						   msg += "			<div class='add_fri'";
  						   msg += "			 	user_popup_nickname='"+nickName+"'";
  						   msg += "			 	user_popup_headimg='"+headImg+"'";
  						   msg += "			 	user_popup_description='"+description+"'";
  						   msg += "			 	user_popup_id='"+id+"'";
- 					    #if($!searchType == '0')
- 						   msg += "			 	user_popup_code='"+qrcode+"'>添加好友</div>";
+ 					    #if($!searchType == '1')
+ 					       msg += "			 	user_popup_code='"+groupQrcode+"'>添加群聊</div>";
  						#else
- 						   msg += "			 	user_popup_code='"+groupQrcode+"'>添加群聊</div>";
+ 						   msg += "			 	user_popup_code='"+qrcode+"'>添加好友</div>";
  						#end
  						   msg += "		</div>";
  						   msg += "	    <div class='left ft_describe'>";

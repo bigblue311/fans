@@ -20,6 +20,10 @@ public class UserService {
     public Result<List<UserDO>> execute(@Param(name="page", defaultValue="2") int page){
         UserQueryCondition userQueryCondition = RequestSession.queryCondition();
         userQueryCondition.valid().setPage(page);
+        UserDO userDO = RequestSession.userDO();
+        if(userDO != null && userDO.getId()!=null){
+            userQueryCondition.setShareUserId(userDO.getId());
+        }
         Paging<UserDO> paging = userManager.getPage(userQueryCondition);
         return Result.newInstance(paging.getData(), "获取用户数据成功", true);
     }

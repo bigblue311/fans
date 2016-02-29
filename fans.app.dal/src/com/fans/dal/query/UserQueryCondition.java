@@ -122,6 +122,11 @@ public class UserQueryCondition extends QueryCondition implements Serializable{
         super.put("searchType", SearchTypeEnum.个人二维码.getCode());
         return this;
     }
+    
+    public UserQueryCondition searchFans(){
+        super.put("searchType", SearchTypeEnum.关注我的.getCode());
+        return this;
+    }
 
 	public UserQueryCondition setGmtCreateStart(Date from){
 		put("gmtCreateStart", DateTools.getDayBegin(from));
@@ -139,6 +144,15 @@ public class UserQueryCondition extends QueryCondition implements Serializable{
 	
 	public Date getGmtCreateEnd(){
 		return getDate("gmtCreateEnd");
+	}
+	
+	public UserQueryCondition setShareUserId(Long userId){
+	    put("shareUserId", userId);
+	    return this;
+	}
+	
+	public Long getShareUserId(){
+	    return getLong("shareUserId");
 	}
 	
 	@Override

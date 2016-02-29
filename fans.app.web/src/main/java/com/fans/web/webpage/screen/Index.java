@@ -56,6 +56,14 @@ public class Index extends RequestSessionBase{
                 userQueryCondition.searchGroup();
                 super.setSearchType(response, SearchTypeEnum.群二维码.getCode());
                 break;
+            case 2:
+                userQueryCondition.searchFans();
+                super.setSearchType(response, SearchTypeEnum.关注我的.getCode());
+                UserDO userDO = RequestSession.userDO();
+                if(userDO != null && userDO.getId()!=null){
+                    userQueryCondition.setShareUserId(userDO.getId());
+                }
+                break;
             default:
                 break;
             }
