@@ -13,11 +13,16 @@
     <result property="userImage" 			column="userImage"/>
     <result property="userName" 			column="userName"/>
     <result property="phone" 				column="phone"/>
+    <result property="userPassword"			column="user_password"/>
     <result property="shoppingLevel" 		column="shoppingLevel_"/>
   </resultMap>
 	  
   <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
     select * from customer where id = #id#  
+  </select>
+  
+  <select id="getByPassword" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from customer where phone = #phone# and user_password = #userPassword# limit 1
   </select>
 
 </sqlMap>

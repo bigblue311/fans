@@ -101,6 +101,18 @@
 					</dd>
 				</dl>
 				<dl>
+					<dd class="dd1">微团ID</dd>
+					<dd>
+						<input type="text"
+				    	size="25" 
+				    	class="dd2 form-control"
+				    	value="$!{user.skvId}" disabled/>
+					</dd>
+					<dd>
+					  <a href="/bind.htm" style="color: blue;padding-right: 5px;">去绑定</a>
+					</dd>
+				</dl>
+				<dl>
 					<dd class="dd1">昵称</dd>
 					<dd>
 						<input type="text" placeholder="昵称" 

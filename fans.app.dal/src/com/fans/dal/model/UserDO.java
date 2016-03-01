@@ -34,7 +34,7 @@ public class UserDO extends EntityDO implements Serializable{
     private String extSource;           //外部来源
     private String domain;              //外部域名
     private Integer clickCount;         //点击次数
-    private Integer vipCountDown = 0;       //vip置顶倒计时
+    private Integer vipCountDown = 0;   //vip置顶倒计时
     
     public Long getSkvId() {
         return skvId;

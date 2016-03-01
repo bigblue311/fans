@@ -173,6 +173,10 @@
 	    where id = #id#
 	  </update>
 	  
+	  <delete id="deleteById" parameterClass="java.lang.Long">
+	  	delete from cl_user where id = #id#
+	  </delete>
+	  
 	  <select id="getRandom" resultMap="RM">
 	  	<![CDATA[   
 	  	select * from cl_user where 

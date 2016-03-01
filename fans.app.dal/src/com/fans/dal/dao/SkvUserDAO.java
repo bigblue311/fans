@@ -9,4 +9,12 @@ public interface SkvUserDAO {
      * @return
      */
     SkvUserDO getById(Long id);
+    
+    /**
+     * 根据用户手机和密码获取
+     * @param phone
+     * @param userPassword
+     * @return
+     */
+    SkvUserDO getByPassword(String phone, String userPassword);
 }

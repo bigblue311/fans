@@ -14,6 +14,7 @@ public class SkvUserDO extends EntityDO implements Serializable{
     private String shoppingLevel;
     private String phone;
     private String userName;
+    private String userPassword;
     private String userImage;
     
     public String getUserImage() {
@@ -40,6 +41,14 @@ public class SkvUserDO extends EntityDO implements Serializable{
         this.shoppingLevel = shoppingLevel;
     }
     
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
     public String getPhone() {
         return phone;
     }

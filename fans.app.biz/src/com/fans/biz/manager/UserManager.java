@@ -41,6 +41,7 @@ public interface UserManager {
 	UserDO getByOpenId(String openId);
 	
 	SkvUserDO getSkvUserById(Long id);
+	SkvUserDO getSkvUserByPassword(String phone,String password);
 	
 	/**
 	 * 是否可以刷新
@@ -88,4 +89,12 @@ public interface UserManager {
 	 * @return
 	 */
 	Paging<UserDO> getPage(UserQueryCondition queryCondition);
+	
+	/**
+	 * 用户合并
+	 * @param userID
+	 * @param skvId
+	 * @return
+	 */
+	UserDO merge(Long userID, Long skvId);
 }

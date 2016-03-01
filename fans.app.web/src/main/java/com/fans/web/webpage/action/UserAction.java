@@ -35,30 +35,6 @@ public class UserAction extends RequestSessionBase{
     }
     
     public void doUpdate(@FormGroup("user") UserDO userDO){
-//        if(StringTools.isNotEmpty(userDO.getHeadImg()) && userDO.getHeadImg().contains("temp/")){
-//            Result<String> result = fileStorageRepository.copyTemp(userDO.getHeadImg());
-//            if(result.isSuccess()){
-//                userDO.setHeadImg(result.getDataObject());
-//            } else {
-//                userDO.setHeadImg("");
-//            }
-//        }
-//        if(StringTools.isNotEmpty(userDO.getQrcode()) && userDO.getQrcode().contains("temp/")){
-//            Result<String> result = fileStorageRepository.copyTemp(userDO.getQrcode());
-//            if(result.isSuccess()){
-//                userDO.setQrcode(result.getDataObject());
-//            } else {
-//                userDO.setQrcode("");
-//            }
-//        }
-//        if(StringTools.isNotEmpty(userDO.getGroupQrcode()) && userDO.getGroupQrcode().contains("temp/")){
-//            Result<String> result = fileStorageRepository.copyTemp(userDO.getGroupQrcode());
-//            if(result.isSuccess()){
-//                userDO.setGroupQrcode(result.getDataObject());
-//            } else {
-//                userDO.setGroupQrcode("");
-//            }
-//        }
         if(StringTools.isEmpty(userDO.getOpenId())){
             userDO.setOpenId(super.getOpenId(request));
         }

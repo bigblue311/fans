@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="css/new_pro.css">
+		<link rel="stylesheet" href="css/ectouch.css">
+		<link rel="stylesheet" href="css/layer.css" />
+		<link rel="stylesheet" href="css/my.css" />
+		<title>躺着加粉</title>
+</head>
+<body>
+	<div class="padded" style="margin:10px">
+		<h2 id="service1">微团用户有什么特权?</h2>
+		<div class="blank2"></div>
+		<p>如果您已有微团账号,在绑定微团账号后可以享受以下特权</p>
+		<p>1. 特权1</p>
+		<p>2. 特权2</p>
+		<p>3. 特权3</p>
+		<p>另外,微团网是xxx,开始介绍微团</p>
+		<p><a href="/my.htm">不了,谢谢</a></p>
+	</div>
+	<section class="order_box padd1" style="padding-top: 0; padding-bottom: 0;">
+		<div class="table_box table_box2">
+			<dl>
+				<dd class="dd1">微团手机号</dd>
+				<dd class="padded">
+					<input type="text" id="phone" size="25" class="dd2 form-control" value=""/>
+				</dd>
+			</dl>
+			<dl>
+				<dd class="dd1">微团密码</dd>
+				<dd class="padded">
+					<input type="password" id="password" size="25" class="dd2 form-control" value=""/>
+				</dd>
+			</dl>
+		</div>
+	</section>
+	<div class="blank1"></div>
+
+	<div style="padding: 10px 36px 0px 36px;">
+		<button id="submitBtn" class="btn btn-pink btn-lg">绑&nbsp;定&nbsp;账&nbsp;号</button>
+	</div>
+	<div class="blank3"></div>
+	<div class="blank3"></div>
+	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="js/layer.m.js"></script>
+	<script type="text/javascript" src="/js/Location/location.js"></script>
+	<script>
+		jQuery(function(){
+			$("#submitBtn").click(function(){
+				var phone = $("#phone").val();
+				var password = $("#password").val();
+				if(phone == ''){
+					alert('请输入手机号码');
+					return;
+				}
+				if(password == ''){
+					alert('请输入密码');
+					return;
+				}
+				$.ajax({
+					  url: '/api/UserMerge.json?phone='+phone+'&password='+password,
+					  type: 'get',
+					  success: function(data){
+						  alert(data.message);
+						  if(data.success){
+							window.location.replace('/my.htm');
+						  }
+					  },
+					  dataType: "json"
+				});
+			});
+		});
+	</script>
+	$control.setTemplate("home.vm")
+</body>
+</html>

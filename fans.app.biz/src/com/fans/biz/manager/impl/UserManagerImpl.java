@@ -1,5 +1,7 @@
 package com.fans.biz.manager.impl;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +23,7 @@ import com.fans.dal.query.UserQueryCondition;
 import com.google.common.collect.Lists;
 import com.victor.framework.common.tools.CollectionTools;
 import com.victor.framework.common.tools.DateTools;
+import com.victor.framework.common.tools.MD5;
 import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.dal.basic.Paging;
 
@@ -260,5 +263,84 @@ public class UserManagerImpl implements UserManager{
     @Override
     public UserDO getBySkvId(Long skvId) {
         return userDAO.getBySkvId(skvId);
+    }
+
+    @Override
+    public SkvUserDO getSkvUserByPassword(String phone, String password) {
+        password = MD5.getMD5(password);
+        return skvUserDAO.getByPassword(phone, password);
+    }
+
+    @Override
+    public UserDO merge(Long userID, Long skvId) {
+        UserDO weixinUser = userDAO.getById(userID);
+        UserDO skvUser = userDAO.getBySkvId(skvId);
+        if(weixinUser==null){
+            //不是从微信进入的用户, 不合并
+            return null;
+        }
+        if(weixinUser!=null && skvUser == null){
+            //不需要合并
+            return weixinUser;
+        }
+        if(weixinUser.getId().longValue() == skvUser.getId().longValue()){
+            //已经合并过了
+            return weixinUser;
+        }
+        //假如是两个账号,那么合并
+        Integer coins = skvUser.getCoins();
+        if(coins!=null && coins>50){
+            Integer coinsToAdd = coins - 50;
+            addCoins(userID,coinsToAdd);
+        }
+        weixinUser = userMerge(weixinUser, skvUser);
+        //直接删了
+        userDAO.delete(skvUser.getId());
+        update(weixinUser);
+        return userDAO.getById(userID);
+    }
+    
+    private UserDO userMerge(UserDO user1, UserDO user2){
+        UserDO merged = user1;
+        Field[] fields = user1.getClass().getDeclaredFields();
+        for(Field field : fields){
+            String getMethod = "get"+field.getName();
+            String setMethod = "set"+field.getName();
+            Object obj1 = doGetMethod(user1,getMethod);
+            Object obj2 = doGetMethod(user2,getMethod);
+            if(obj1 == null && obj2 != null){
+                doSetMethod(merged,setMethod,obj2);
+            }
+        }
+        return merged;
+    }
+    
+    private Object doGetMethod(UserDO userDO, String methodName){
+        Method[] methods = userDO.getClass().getDeclaredMethods();
+        for(Method method : methods){
+            if(!method.getName().equalsIgnoreCase(methodName)){
+                continue;
+            }
+            try {
+                return method.invoke(userDO, new Object[0]);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+    }
+    
+    private void doSetMethod(UserDO userDO, String methodName, Object value){
+        Method[] methods = userDO.getClass().getDeclaredMethods();
+        for(Method method : methods){
+            if(!method.getName().equalsIgnoreCase(methodName)){
+                continue;
+            }
+            try {
+                method.invoke(userDO, value);
+            } catch (Exception e) {
+                return;
+            }
+        }
     }
 }

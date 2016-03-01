@@ -21,6 +21,13 @@ public interface UserDAO {
     Boolean update(UserDO userDO);
     
     /**
+     * 根据id删除
+     * @param id
+     * @return
+     */
+    Boolean delete(Long id);
+    
+    /**
      * 刷新置顶
      * @param id
      * @return
