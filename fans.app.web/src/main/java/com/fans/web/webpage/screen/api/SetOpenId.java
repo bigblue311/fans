@@ -44,6 +44,7 @@ public class SetOpenId extends RequestSessionBase{
         String openId = "";
         if(StringTools.isNotEmpty(code)){
             WxUser wxUser = weixinManager.getUserInfo(domain,code);
+            openId = wxUser.getOpenId();
             UserDO userDO = userManager.getByOpenId(openId);
             if(wxUser!= null && userDO == null){
                 openId = wxUser.getOpenId();
