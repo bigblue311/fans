@@ -428,6 +428,7 @@ public class WeixinManagerImpl implements WeixinManager{
 
     @Override
     public void updateSkvId(String openId, Long skvId) {
+        qrcodeDao.updateByOpenId(openId, skvId);
         qrcodeScanDao.updateByOpenId(openId,skvId);
     }
 
