@@ -400,10 +400,16 @@ public class WeixinManagerImpl implements WeixinManager{
     public QrcodeScanDO getScanByOpenId(String openId) {
         return qrcodeScanDao.getByOpenId(openId);
     }
+    
+    @Override
+    public QrcodeScanDO getSkvScanByOpenId(String openId) {
+        return qrcodeScanDao.getValidUpId(openId);
+    }
 
     @Override
     public QrcodeScanDO doScan(Long qrcodeId, String openId) {
         try {
+            //openId是扫码的人的
             QrcodeDO qrcodeDO = qrcodeDao.getById(qrcodeId);
             
             QrcodeScanDO qrcodeScanDO = new QrcodeScanDO();
@@ -422,11 +428,7 @@ public class WeixinManagerImpl implements WeixinManager{
 
     @Override
     public void updateSkvId(String openId, Long skvId) {
-        QrcodeScanDO qrcodeScanDO = getScanByOpenId(openId);
-        if(qrcodeScanDO != null && qrcodeScanDO.getSkvId() == null){
-            qrcodeScanDO.setSkvId(skvId);
-            qrcodeScanDao.update(qrcodeScanDO);
-        }
+        qrcodeScanDao.updateByOpenId(openId,skvId);
     }
 
     @Override

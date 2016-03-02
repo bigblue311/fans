@@ -64,13 +64,27 @@
     where
       id = #id#
   </update>
+  
+  <update id="updateByOpenId" parameterClass="QrcodeScan">
+  	update cl_qrcode_scan set 
+  		skv_id = #skvId# ,gmt_modify = now() 
+  	where 
+  		open_id = #openId# and skv_id is null
+  </update>
 
   <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
     select * from cl_qrcode_scan where id = #id#  
   </select>
   
   <select id="getByOpenId" parameterClass="java.util.HashMap" resultMap="RM">
-    select * from cl_qrcode_scan where open_id = #openId# limit 1
+    select * from cl_qrcode_scan where open_id = #openId# order by gmt_create desc limit 1
+  </select>
+  
+  <select id="getValidUpId" parameterClass="java.util.HashMap" resultMap="RM">
+  	select s.* from cl_qrcode_scan s, cl_qrcode q 
+  	where 
+  	s.qrcode_id = q.id and q.skv_id is not null and s.open_id = #openId#
+  	order by gmt_create desc limit 1
   </select>
   
   <sql id="where">

@@ -14,6 +14,7 @@ import com.fans.biz.manager.UserManager;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
+import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.QrcodeScanDO;
 import com.fans.dal.model.UserDO;
 import com.fans.web.constant.CookieKey;
@@ -90,11 +91,11 @@ public class SetOpenId extends RequestSessionBase{
         if(StringTools.isEmpty(openId)){
             return "";
         }
-        QrcodeScanDO qrcodeScanDO = weixinManager.getScanByOpenId(openId);
+        QrcodeScanDO qrcodeScanDO = weixinManager.getSkvScanByOpenId(openId);
         if(qrcodeScanDO!=null){
-            Long upperSkvId = qrcodeScanDO.getUpperSkvId();
-            if(upperSkvId!=null){
-                return upperSkvId.toString();
+            QrcodeDO qrcodeDO = weixinManager.getQrcodeById(qrcodeScanDO.getQrcodeId());
+            if(qrcodeDO!=null && qrcodeDO.getSkvId() != null){
+                return qrcodeDO.getSkvId().toString();
             }
         }
         return "";

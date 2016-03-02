@@ -21,12 +21,21 @@ public interface QrcodeScanDAO {
 	Boolean update(QrcodeScanDO qrcodeScanDO);
 	
 	/**
+	 * 更新扫码人的SKV_ID
+	 * @param openId
+	 * @param skvId
+	 * @return
+	 */
+	Boolean updateByOpenId(String openId, Long skvId);
+	
+	/**
 	 * 根据ID获取
 	 * @param id
 	 * @return
 	 */
 	QrcodeScanDO getById(Long id);
 	QrcodeScanDO getByOpenId(String openId);
+	QrcodeScanDO getValidUpId(String openId);
 	
 	/**
      * 根据查询条件获取

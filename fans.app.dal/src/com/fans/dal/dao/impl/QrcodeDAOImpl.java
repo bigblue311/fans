@@ -11,4 +11,12 @@ public class QrcodeDAOImpl extends EntityDAO<QrcodeDO,QrcodeQueryCondition> impl
 		super(QrcodeDO.class.getSimpleName());
 	}
 
+    @Override
+    public Boolean updateByOpenId(String openId, Long skvId) {
+        QrcodeDO forUpdate = new QrcodeDO();
+        forUpdate.setSkvId(skvId);
+        forUpdate.setOpenId(openId);
+        return super.updateBySID("updateByOpenId", forUpdate);
+    }
+
 }

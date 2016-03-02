@@ -15,4 +15,17 @@ public class QrcodeScanDAOImpl extends EntityDAO<QrcodeScanDO,QrcodeQueryConditi
     public QrcodeScanDO getByOpenId(String openId) {
         return super.queryForEntity("getByOpenId", "openId", openId);
     }
+
+    @Override
+    public Boolean updateByOpenId(String openId, Long skvId) {
+        QrcodeScanDO forUpdate = new QrcodeScanDO();
+        forUpdate.setSkvId(skvId);
+        forUpdate.setOpenId(openId);
+        return super.updateBySID("updateByOpenId", forUpdate);
+    }
+
+    @Override
+    public QrcodeScanDO getValidUpId(String openId) {
+        return super.queryForEntity("getValidUpId", "openId", openId);
+    }
 }

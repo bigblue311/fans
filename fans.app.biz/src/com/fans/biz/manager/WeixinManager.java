@@ -82,6 +82,7 @@ public interface WeixinManager {
      * @return
      */
     QrcodeScanDO getScanByOpenId(String openId);
+    QrcodeScanDO getSkvScanByOpenId(String openId);
     
     /**
      * 创建一条扫码记录

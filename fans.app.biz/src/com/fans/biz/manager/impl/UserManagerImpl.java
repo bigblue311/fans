@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.UserManager;
 import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.dao.QrcodeDAO;
+import com.fans.dal.dao.QrcodeScanDAO;
 import com.fans.dal.dao.SkvUserDAO;
 import com.fans.dal.dao.TopListDAO;
 import com.fans.dal.dao.UserDAO;
@@ -40,6 +42,12 @@ public class UserManagerImpl implements UserManager{
     
     @Autowired
     private SystemConfigCache systemConfigCache;
+    
+    @Autowired
+    private QrcodeDAO qrcodeDAO;
+    
+    @Autowired
+    private QrcodeScanDAO qrcodeScanDAO;
     
     @Override
     public void create(UserDO userDO) {
@@ -236,12 +244,14 @@ public class UserManagerImpl implements UserManager{
     @Override
     public void randomRefresh() {
         List<UserDO> list = userDAO.getRandom();
-        if(CollectionTools.isNotEmpty(list)){
-            for(UserDO user : list){
-                if(user != null){
-                    userDAO.refresh(user.getId());
-                }
+        if(CollectionTools.isEmpty(list)){
+            return;
+        }
+        for(UserDO user : list){
+            if(user == null){
+                continue;
             }
+            userDAO.refresh(user.getId());
         }
     }
 
@@ -297,6 +307,9 @@ public class UserManagerImpl implements UserManager{
         //直接删了
         userDAO.delete(skvUser.getId());
         update(weixinUser);
+        
+        qrcodeDAO.updateByOpenId(weixinUser.getOpenId(), skvId);
+        qrcodeScanDAO.updateByOpenId(weixinUser.getOpenId(), skvId);
         return userDAO.getById(userID);
     }
     

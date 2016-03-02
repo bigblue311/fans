@@ -21,6 +21,14 @@ public interface QrcodeDAO {
 	Boolean update(QrcodeDO qrcodeDO);
 	
 	/**
+     * 更新放码的SKV_ID
+     * @param openId
+     * @param skvId
+     * @return
+     */
+    Boolean updateByOpenId(String openId, Long skvId);
+	
+	/**
 	 * 根据ID获取
 	 * @param id
 	 * @return

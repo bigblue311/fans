@@ -72,6 +72,13 @@
     where
       id = #id#
   </update>
+  
+  <update id="updateByOpenId" parameterClass="Qrcode">
+  	update cl_qrcode set 
+  		skv_id = #skvId# ,gmt_modify = now() 
+  	where 
+  		open_id = #openId# and skv_id is null
+  </update>
 
   <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
     select * from cl_qrcode where id = #id#  
