@@ -101,7 +101,7 @@
 					</dd>
 				</dl>
 				<dl>
-					<dd class="dd1">微团ID</dd>
+					<dd class="dd1" style="color:#E5247C">个人微团邀请码</dd>
 					<dd>
 						<input type="text"
 				    	size="25" 

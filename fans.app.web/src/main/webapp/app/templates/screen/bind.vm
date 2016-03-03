@@ -20,24 +20,24 @@
 		<h2 id="service1">微团用户有什么特权?</h2>
 		<div class="blank2"></div>
 		<p>如果您已有微团账号,在绑定微团账号后可以享受以下特权</p>
-		<p>1. 特权1</p>
-		<p>2. 特权2</p>
-		<p>3. 特权3</p>
-		<p>另外,微团网是xxx,开始介绍微团</p>
-		<p><a href="/my.htm">不了,谢谢</a></p>
+		<p>1. 不同级别的微团会员级别可以享受每天不同的免费置顶服务</p>
+		<p>2. 通过分享二维码,扫码新加入的会员,自动成为团队成员</p>
+		<div class="blank3"></div>
+		<div class="blank3"></div>
+		<p><a href="/my.htm">不了,谢谢</a><a style="float:right" href="/index.htm?_setOpenId=true&_goWetuan=3">加入微团</a></p>
 	</div>
 	<section class="order_box padd1" style="padding-top: 0; padding-bottom: 0;">
 		<div class="table_box table_box2">
 			<dl>
-				<dd class="dd1">微团手机号</dd>
+				<dd class="dd1">微团账号</dd>
 				<dd class="padded">
-					<input type="text" id="phone" size="25" class="dd2 form-control" value=""/>
+					<input type="text" id="phone" size="25" class="dd2 form-control" value="" style="border:1px solid #8d8d8d;width: 15em;"/>
 				</dd>
 			</dl>
 			<dl>
 				<dd class="dd1">微团密码</dd>
 				<dd class="padded">
-					<input type="password" id="password" size="25" class="dd2 form-control" value=""/>
+					<input type="password" id="password" size="25" class="dd2 form-control" value="" style="border:1px solid #8d8d8d;width: 15em;"/>
 				</dd>
 			</dl>
 		</div>

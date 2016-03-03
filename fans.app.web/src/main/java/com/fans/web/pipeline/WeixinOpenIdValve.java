@@ -1,6 +1,5 @@
 package com.fans.web.pipeline;
 
-import static com.alibaba.citrus.turbine.util.TurbineUtil.getTurbineRunData;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
-import com.alibaba.citrus.turbine.TurbineRunDataInternal;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
@@ -31,16 +29,16 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 		try {
 		    String _setOpenId = request.getParameter("_setOpenId");
 		    String domain = super.getDomain(request);
-		    boolean isWeixin = super.isWeixinUser(request);
-		    if(!isWeixin){
-		        String path = request.getRequestURI();
-		        if(path.equals("/weixin.htm")){
-		            return;
-		        }
-		        TurbineRunDataInternal rundata = (TurbineRunDataInternal) getTurbineRunData(request);
-		        rundata.redirectTo("app").withTarget("weixin.htm");
-		        return;
-		    }
+//		    boolean isWeixin = super.isWeixinUser(request);
+//		    if(!isWeixin){
+//		        String path = request.getRequestURI();
+//		        if(path.equals("/weixin.htm")){
+//		            return;
+//		        }
+//		        TurbineRunDataInternal rundata = (TurbineRunDataInternal) getTurbineRunData(request);
+//		        rundata.redirectTo("app").withTarget("weixin.htm");
+//		        return;
+//		    }
 		    if(StringTools.isNotEmpty(_setOpenId)){
 		        
 		        String _goWetuan = request.getParameter("_goWetuan");
