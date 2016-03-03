@@ -50,12 +50,20 @@
 		</div>
 	</div>
 	<div class="today_task">
+		<span id="taskMsg1">
 	#if($!todayTask)
 		<a href="/vip.htm#task1">$!todayTask</a>
 	#else
 		<a href="/vip.htm#task1">今日任务已经全部完成</a>
 	#end
 		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
+		</span>
+	#if(!$!user.skvId)
+		<span id="taskMsg2" style="display:none">
+			<a href="/bind.htm">绑定微团账号获取更多权益</a>
+			<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
+		</span>
+	#end
 	</div>
 	<div id="popup" style="top: 350px;">加好友+1</div>
 	<div class="change_tab">
@@ -489,6 +497,19 @@
 			clearInterval(timer);
 		} 
 	}
+	
+	#if(!$!user.skvId)
+	setInterval(function(){
+		if($("#taskMsg1").is(':hidden')){
+			$("#taskMsg1").show();
+			$("#taskMsg2").hide();
+		} else {
+			$("#taskMsg2").show();
+			$("#taskMsg1").hide();
+		}
+		
+	},5000);
+	#end
 	
 	function loadMore(){
 		var timestamp = getTimestamp();
