@@ -26,8 +26,8 @@
 					<span class="click_count">$!user.clickCount</span>
 				</div>
 				<div class="right btn-infor">
-					<h3><a href="/my.htm"><button>完善个人资料</button></a></h3>
-					<h3><a href="/vip.htm?open=rocketDetail#service2"><button style="margin-top:25px;">开启固定置顶</button></a></h3>
+					<h3><a href="${contextRoot}/my.htm"><button>完善个人资料</button></a></h3>
+					<h3><a href="${contextRoot}/vip.htm?open=rocketDetail#service2"><button style="margin-top:25px;">开启固定置顶</button></a></h3>
 				</div>
 				<div class="left ft_describe">
 					<h3>
@@ -52,15 +52,15 @@
 	<div class="today_task">
 		<span id="taskMsg1">
 	#if($!todayTask)
-		<a href="/vip.htm#task1">$!todayTask</a>
+		<a href="${contextRoot}/vip.htm#task1">$!todayTask</a>
 	#else
-		<a href="/vip.htm#task1">今日任务已经全部完成</a>
+		<a href="${contextRoot}/vip.htm#task1">今日任务已经全部完成</a>
 	#end
 		<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
 		</span>
 	#if(!$!user.skvId)
 		<span id="taskMsg2" style="display:none">
-			<a href="/bind.htm">绑定微团账号获取更多权益</a>
+			<a href="${contextRoot}/bind.htm">绑定微团账号获取更多权益</a>
 			<a href="http://mp.weixin.qq.com/s?__biz=MzIzOTE2MzQyNQ==&mid=402379059&idx=1&sn=f104591f94ca2e59dd055e3149e03339#rd" style="float:right">帮助</a>
 		</span>
 	#end
@@ -70,13 +70,13 @@
 		<div class="filter_heard">
 			<ul class="filter-inner-cont">
 				<li #if($!searchType == '0')class="filter-cur"#end>
-					<a href="/index.htm?searchType=0">个人二维码</a>
+					<a href="${contextRoot}/index.htm?searchType=0">个人二维码</a>
 				</li>
 				<li #if($!searchType == '1')class="filter-cur"#end>
-					<a href="/index.htm?searchType=1">微信群二维码</a>
+					<a href="${contextRoot}/index.htm?searchType=1">微信群二维码</a>
 				</li>
 				<li #if($!searchType == '2')class="filter-cur"#end>
-					<a href="/index.htm?searchType=2">关注我的</a>
+					<a href="${contextRoot}/index.htm?searchType=2">关注我的</a>
 				</li>
 				<li class=""><a href="#">高级筛选</a></li>
 			</ul>
@@ -91,7 +91,7 @@
 						<li class="item_list">
 							<div class="item_box">
 								<div class="left head_portrait">
-									<img src="/images/vip.png" class="vip">
+									<img src="images/vip.png" class="vip">
 									<img src="$!each.headImg" style="position: relative; left: -28px;">
 									<br>
 									<span class="click_count">$!each.clickCount</span>
@@ -177,7 +177,7 @@
 						<li class="item_list">
 							<div class="item_box">
 								<div class="left head_portrait">
-									<img src="/images/vip.png" class="vip"/>
+									<img src="images/vip.png" class="vip"/>
 									<img src="$!each.headImg" style="position: relative; left: -28px;">
 									<br>
 									<span class="click_count">$!each.clickCount</span>
@@ -259,7 +259,7 @@
 					#if($!searchType == '2')
 					<ul class="block_fr">
 						<div class="today_task">
-							以下是从您分享二维码扫码加入的用户<a href="/myShare.htm?id=$!user.id" style="float:right">去分享</a>
+							以下是从您分享二维码扫码加入的用户<a href="${contextRoot}/myShare.htm?id=$!user.id" style="float:right">去分享</a>
 						</div>
 						#foreach($each in $list)
 						<li class="item_list">
@@ -307,7 +307,7 @@
 			</div>
 			<div class="cont1">
 				<div class="folder_cont">
-					<form action="/index.htm" method="post" class="form-inline" id="searchForm">
+					<form action="${contextRoot}/index.htm" method="post" class="form-inline" id="searchForm">
 						$csrfToken.hiddenField
 						<input type="hidden" name="action" value="userAction"/>
 						<input type="hidden" name="event_submit_do_query" value="true"/>
@@ -369,17 +369,17 @@
 				<div style="color:white">本页置顶<span id="countDown" style="color:white"></span></div>
 			</a></li>
 
-			<li><a href="/vip.htm"> 
+			<li><a href="${contextRoot}/vip.htm"> 
 				<font class="iconfont">&#xe608;</font>
 				<div style="color:white">爆粉服务</div>
 			</a></li>
 
-			<li><a href="/my.htm"> 
+			<li><a href="${contextRoot}/my.htm"> 
 				<font class="iconfont">&#xe615;</font>
 				<div style="color:white">个人资料</div>
 			</a></li>
 
-			<li><a href="/index.htm"> 
+			<li><a href="${contextRoot}/index.htm"> 
 				<font class="iconfont">&#xe614;</font>
 				<div style="color:white">刷新本页</div>
 			</a></li>
@@ -414,7 +414,7 @@
 
 		</div>
 	</div>
-    <form action="/index.htm" method="post" class="am-form am-form-horizontal" id="refreshForm">
+    <form action="${contextRoot}/index.htm" method="post" class="am-form am-form-horizontal" id="refreshForm">
       	$csrfToken.hiddenField
 		<input type="hidden" name="action" value="userAction"/>
 		<input type="hidden" name="event_submit_do_refresh" value="true"/>
@@ -424,7 +424,7 @@
 
 	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
 	<script type="text/javascript" src="js/layer.m.js"></script>
-	<script type="text/javascript" src="/js/Location/location.js"></script>
+	<script type="text/javascript" src="js/Location/location.js"></script>
 	<script>
 	function currentDate(){
 		var d = new Date(),str = '';
@@ -518,7 +518,7 @@
  	    para += "&page=" + page;
 		jQuery.ajax({
  			type: "get",
- 			url: '/api/userService.json'+ para,
+ 			url:'api/userService.json'+ para,
  			success:function(data, textStatus){
  				if(data.success){
  					var list = data.dataObject;
@@ -618,7 +618,7 @@
 			}
 			if(friendCount == 5){
 				$.ajax({
-					  url: '/api/friendSuccess.json',
+					  url:'api/friendSuccess.json',
 					  type: 'POST',
 					  dataType: "json",
 					  success: function(res){
@@ -638,7 +638,7 @@
 	function userClick(){
 		var id = $("#user_popup_id").val();
 		$.ajax({
-			  url: '/api/userClick.json?id='+id,
+			  url:'api/userClick.json?id='+id,
 			  type: 'POST',
 			  dataType: "json"
 		});
@@ -746,7 +746,7 @@
 		//按钮使用说明
 		$("#zt_top").click(function(){
 			$.ajax({
-				  url: '/api/checkTop.json?',
+				  url:'api/checkTop.json?',
 				  type: 'POST',
 				  dataType: 'json',
 				  success:function(data){

@@ -81,7 +81,7 @@
 		</div>
 	</section>
 	<div class="blank3"></div>
-	<form action="/my.htm?success=true" method="post" id="myForm">
+	<form action="${contextRoot}/my.htm?success=true" method="post" id="myForm">
 		$csrfToken.hiddenField
 		<input type="hidden" name="$!userGroup.id.key" value="$!{user.id}"/>
 		<input type="hidden" name="$!userGroup.headImg.key" value="$!{user.headImg}" id="headImgText"/>
@@ -109,7 +109,7 @@
 				    	value="$!{user.skvId}" disabled/>
 					</dd>
 					<dd>
-					  <a href="/bind.htm" style="color: blue;padding-right: 5px;">去绑定</a>
+					  <a href="${contextRoot}/bind.htm" style="color: blue;padding-right: 5px;">去绑定</a>
 					</dd>
 				</dl>
 				<dl>
@@ -204,7 +204,7 @@
 	</form>
 	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
 	<script type="text/javascript" src="js/layer.m.js"></script>
-	<script type="text/javascript" src="/js/Location/location.js"></script>
+	<script type="text/javascript" src="js/Location/location.js"></script>
 	<script>
 		#if($!success)
 			alert("更新成功!");
@@ -223,7 +223,7 @@
 				var label = jQuery(this).attr("label");
 				var text = jQuery(this).attr("text");
 				$.ajax({
-					  url: '/api/fileService.json',
+					  url:'api/fileService.json',
 					  type: 'POST',
 					  data: new FormData($('#'+form)[0]),
 					  async: false,

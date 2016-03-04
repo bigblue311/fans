@@ -3,7 +3,7 @@
 <div class="crumb">
 	<i class="icon-home"></i>
 	<span class="divider">/</span>
-	<a href="/admin/welcome.htm">管理系统</a>
+	<a href="${contextRoot}/admin/welcome.htm">管理系统</a>
 	#if(${crumbs})
 		#foreach($crumb in $crumbs)
 			<span class="divider">/</span> <a href="$crumb.link">$!{crumb.name}</a>

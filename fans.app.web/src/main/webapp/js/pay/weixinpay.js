@@ -16,7 +16,7 @@ function onBridgeReady(){
 		var msg = $(this).attr('_msg');
 		if(confirm(msg)){
 			$.ajax({
-				  url: '/api/getPrepay.json?type='+type+'&cash='+cash+'&data1='+data1,
+				  url: contextRoot+'/api/getPrepay.json?type='+type+'&cash='+cash+'&data1='+data1,
 				  type: 'POST',
 				  success: function(res){
 					  if(!res.success){
@@ -59,14 +59,14 @@ function onBridgeReady(){
 		var reUrl = $(this).attr('_reUrl');
 		var msg = $(this).attr('_msg');
 		$.ajax({
-			  url: '/api/checkSuperTopMoney.json',
+			  url: contextRoot+'/api/checkSuperTopMoney.json',
 			  type: 'POST',
 			  dataType: 'json',
 			  success:function(data){
 				  if(data.success){
 					  if(confirm(msg)){
 							$.ajax({
-								  url: '/api/getPrepay.json?type='+type+'&cash='+cash+'&data1='+data1,
+								  url: contextRoot+'/api/getPrepay.json?type='+type+'&cash='+cash+'&data1='+data1,
 								  type: 'POST',
 								  success: function(res){
 									  if(!res.success){

@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="css/iconfont.css">
 <div class="footer_top"> 
   <div id="goHome">
-       <a href="/index.htm">
+       <a href="${contextRoot}/index.htm">
           <i class="icon iconfont">&#xe60c;</i>
        </a>
   </div>

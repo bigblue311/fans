@@ -6,7 +6,7 @@ $(function(){
 		var msg = $(this).attr('_msg');
 		if(confirm(msg)){
 			$.ajax({
-				  url: '/api/paycoins.json?type='+type+'&data1='+data1,
+				  url: contextRoot+'/api/paycoins.json?type='+type+'&data1='+data1,
 				  type: 'POST',
 				  success: function(res){
 					  alert(res.message);
@@ -26,14 +26,14 @@ $(function(){
 		var reUrl = $(this).attr('_reUrl');
 		var msg = $(this).attr('_msg');
 		$.ajax({
-			  url: '/api/checkSuperTopCoins.json?coins='+data1,
+			  url: contextRoot+'/api/checkSuperTopCoins.json?coins='+data1,
 			  type: 'POST',
 			  dataType: 'json',
 			  success:function(data){
 				  if(data.success){
 					  if(confirm(msg)){
 							$.ajax({
-								  url: '/api/paycoins.json?type='+type+'&data1='+data1,
+								  url: contextRoot+'/api/paycoins.json?type='+type+'&data1='+data1,
 								  type: 'POST',
 								  dataType: 'json',
 								  success: function(res){

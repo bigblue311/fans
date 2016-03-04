@@ -38,7 +38,7 @@
 			当前状态 ：<span class="member">已激活</span>
 			#else
 			当前状态 ：<span class="member">未激活</span>
-				#if($!shareCount == 0)<a class="link_btn" href="/myShare.htm?id=$!user.id">每天第一次分享可激活24小时</a>#end
+				#if($!shareCount == 0)<a class="link_btn" href="${contextRoot}/myShare.htm?id=$!user.id">每天第一次分享可激活24小时</a>#end
 			#end
 		</p>
 		<div class="blank2"></div>
@@ -67,7 +67,7 @@
 					_type="0" 
 			    	_data1="" 
 			    	_cash="10" 
-			    	_reUrl="/vip.htm" 
+			    	_reUrl="${contextRoot}/vip.htm" 
 			    	_msg="确定充值吗?">充值</button>
 			</div>
 			#else
@@ -77,7 +77,7 @@
 			#end
 			</ul>
 			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;margin:10px 5px 10px 5px;clear:both;" />
-			<div style="float:left"><img src="/images/kefu.jpg" style="width:140px"></div>
+			<div style="float:left"><img src="images/kefu.jpg" style="width:140px"></div>
 			<div style="float:left;margin-left:5px;">
 				<div style="margin-bottom:12px;">客服微信号 <font color="red">tangzhejiafen_1</font></div>
 				<div style="margin-bottom:12px;">工作时间 <font #if($!isKefuOnline)color="red"#else color="grey"#end>$kefuOnline - $kefuOffline</font></div>
@@ -124,7 +124,7 @@
 						#end
 			    	#end
 			    	_cash="" 
-			    	_reUrl="/vip.htm" 
+			    	_reUrl="${contextRoot}/vip.htm" 
 			    	>开启爆粉激活</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg pay" 
@@ -138,7 +138,7 @@
 						#end
 			    	#end
 			    	_cash="" 
-			    	_reUrl="/vip.htm" 
+			    	_reUrl="${contextRoot}/vip.htm" 
 			    	_msg="确定购买会员吗?">开启爆粉激活</button>
 			    #end
 			</div>
@@ -203,7 +203,7 @@
 						#end
 			    	#end
 			    	_cash="" 
-			    	_reUrl="/index.htm">开启固定置顶</button>
+			    	_reUrl="${contextRoot}/index.htm">开启固定置顶</button>
 			    #if($!weixinSwitch)
 			    <button class="btn btn-pink btn-lg paySuperTop" 
 			    	id="rocketPayBtn"
@@ -216,7 +216,7 @@
 						#end
 			    	#end
 			    	_cash="" 
-			    	_reUrl="/index.htm">开启固定置顶</button>
+			    	_reUrl="${contextRoot}/index.htm">开启固定置顶</button>
 			    #end
 			</div>
 		</div>
@@ -235,7 +235,7 @@
  		<p>4.之后成功分享可获取$!shareCoins金币</p>
  		<div class="blank2"></div> 
  		<p>今天任务 ：<span class="member">$!shareCount次 / $!shareMax次</span>
- 			<span class="link_btn"><a class="link_btn" href="/myShare.htm?id=$!user.id">我要分享</a></span></p>
+ 			<span class="link_btn"><a class="link_btn" href="${contextRoot}/myShare.htm?id=$!user.id">我要分享</a></span></p>
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div> 
@@ -248,7 +248,7 @@
  		<div class="blank2"></div> 
  		<p>3.成功加好友5人可获取$!friendCoins金币</p>
  		<div class="blank2"></div> 
- 		<p>今天任务 ：<span class="member">$!friendCount次 / $!friendMax次</span><span class="link_btn"><a class="link_btn" href="/index.htm">去加好友</a></span></p>
+ 		<p>今天任务 ：<span class="member">$!friendCount次 / $!friendMax次</span><span class="link_btn"><a class="link_btn" href="${contextRoot}/index.htm">去加好友</a></span></p>
  		<div class="blank2"></div> 
  		<hr class="line_h">
  		<div class="blank2"></div>
@@ -257,9 +257,8 @@
 	</div>
 	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
 	<script type="text/javascript" src="js/layer.m.js"></script>
-	<script type="text/javascript" src="js/pay/coinspay.js"></script>
-	<script type="text/javascript" src="js/pay/weixinpay.js"></script>
 	<script>
+		var contextRoot = '$!{contextRoot}';
 		$(function(){
 			$(".link_btn").click(function(){
 				var forItem = $(this).attr("for");
@@ -299,6 +298,8 @@
 			})
 		})
 	</script>
+	<script type="text/javascript" src="js/pay/coinspay.js"></script>
+	<script type="text/javascript" src="js/pay/weixinpay.js"></script>
 	$control.setTemplate("home.vm")
 </body>
 </html>

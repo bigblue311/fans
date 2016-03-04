@@ -1,5 +1,7 @@
 package com.fans.web.pipeline;
 
+import static com.alibaba.citrus.turbine.util.TurbineUtil.getTurbineRunData;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
+import com.alibaba.citrus.turbine.TurbineRunDataInternal;
 import com.fans.biz.manager.UserManager;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.biz.threadLocal.RequestSession;
@@ -40,9 +43,12 @@ public class RequestSessionValve extends RequestSessionBase implements Valve {
     @Override
     public void invoke(PipelineContext pipelineContext) throws Exception {
         try {
+            TurbineRunDataInternal rundata = (TurbineRunDataInternal) getTurbineRunData(request);
+            rundata.getContext().put("contextRoot", request.getContextPath());
+            
             String openId = super.getOpenId(request);
             Long skvId = super.getSkvId(request);
-            
+
             if(systemConfigCache.getSwitch(SystemConfigKeyEnum.DEBUG_MODE.getCode())){
                 if(StringTools.isEmpty(openId)){
                     openId = "ogOTHwaJi6KDLOjDu-59Nze0YW8M";
