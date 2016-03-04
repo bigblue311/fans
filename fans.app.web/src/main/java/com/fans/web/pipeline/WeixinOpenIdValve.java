@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.service.pipeline.PipelineContext;
 import com.alibaba.citrus.service.pipeline.Valve;
 import com.fans.biz.manager.WeixinManager;
+import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
@@ -24,34 +26,28 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 	@Autowired
 	private WeixinManager weixinManager;
 	
+	@Autowired
+    private SystemConfigCache systemConfigCache;
+	
 	@Override
 	public void invoke(PipelineContext pipelineContext) throws Exception {
 		try {
 		    String _setOpenId = request.getParameter("_setOpenId");
 		    String domain = super.getDomain(request);
-//		    boolean isWeixin = super.isWeixinUser(request);
-//		    if(!isWeixin){
-//		        String path = request.getRequestURI();
-//		        if(path.equals("/weixin.htm")){
-//		            return;
-//		        }
-//		        TurbineRunDataInternal rundata = (TurbineRunDataInternal) getTurbineRunData(request);
-//		        rundata.redirectTo("app").withTarget("weixin.htm");
-//		        return;
-//		    }
 		    if(StringTools.isNotEmpty(_setOpenId)){
 		        
 		        String _goWetuan = request.getParameter("_goWetuan");
 		        String uri = request.getRequestURI();
 		        if(StringTools.isNotEmpty(_goWetuan)){
+		            String wetuanHost = systemConfigCache.getCacheString(SystemConfigKeyEnum.WETUAN_HOST.getCode(), "wetuan.com");
 		            if(_goWetuan.equals("1")){
-		                uri = "http://wetuan.com/index.htm?openId=[openId]";
+		                uri = "http://"+wetuanHost+"/index.htm?openId=[openId]";
 		            }
 		            if(_goWetuan.equals("2")){
-                        uri = "http://wetuan.com/user/login.htm?upId=[upId]&openId=[openId]";
+                        uri = "http://"+wetuanHost+"/user/login.htm?upId=[upId]&openId=[openId]";
                     }
 		            if(_goWetuan.equals("3")){
-		                uri = "http://wetuan.com/user/toRegist.htm?upId=[upId]&openId=[openId]";
+		                uri = "http://"+wetuanHost+"/user/toRegist.htm?upId=[upId]&openId=[openId]";
 		            }
 		        }
 	            if(uri.contains(".htm") || uri.contains(".html")){

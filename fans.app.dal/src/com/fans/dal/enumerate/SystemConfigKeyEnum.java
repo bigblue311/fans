@@ -30,7 +30,8 @@ public enum SystemConfigKeyEnum {
 	KEFU_OFFLINE("KEFU_OFFLINE","客服下线时间请以HH:mm:ss表示, 用24小时"),
 	NEW_COINS("NEW_COINS","新注册用户送金币"),
 	NEW_VIP("NEW_VIP","新注册用户送VIP"),
-	SCAN_COINS("SCAN_COINS","扫码关注得金币");
+	SCAN_COINS("SCAN_COINS","扫码关注得金币"),
+	WETUAN_HOST("WETUAN_HOST","微团域名");
 	
 	private String code;
 	private String desc;
