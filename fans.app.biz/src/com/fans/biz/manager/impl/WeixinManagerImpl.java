@@ -66,6 +66,7 @@ public class WeixinManagerImpl implements WeixinManager{
     static{
         menu.put("wt.wetuan.com", WeixinMenus.getWtMenuJson());
         menu.put("wz.wetuan.com", WeixinMenus.getWzMenuJson());
+        menu.put("www.17yunshang.com", WeixinMenus.getTestMenuJson());
     }
     
     @Override
