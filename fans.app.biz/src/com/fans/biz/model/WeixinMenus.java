@@ -121,7 +121,7 @@ public class WeixinMenus {
         WeixinMenuVO btn31 = new WeixinMenuVO();
         btn31.setName("躺着加粉");
         btn31.setType("view");
-        btn31.setUrl("http://www.17yunshang.com/test/?_setOpenId=true");
+        btn31.setUrl("http://www.17yunshang.com/test/index.htm?_setOpenId=true");
         
         WeixinMenuVO btn32 = new WeixinMenuVO();
         btn32.setName("新手引导");

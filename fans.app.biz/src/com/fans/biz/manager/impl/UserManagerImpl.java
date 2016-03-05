@@ -290,12 +290,18 @@ public class UserManagerImpl implements UserManager{
             return null;
         }
         if(weixinUser!=null && skvUser == null){
-            //不需要合并
+            //绑定SKVID
+            if(weixinUser.getSkvId() == null){
+                weixinUser.setSkvId(skvId);
+                update(weixinUser);
+            }
             return weixinUser;
         }
-        if(weixinUser.getId().longValue() == skvUser.getId().longValue()){
-            //已经合并过了
-            return weixinUser;
+        if(weixinUser.getSkvId()!=null){
+            if(weixinUser.getSkvId().longValue() == skvUser.getId().longValue()){
+                //已经合并过了
+                return weixinUser;
+            }
         }
         //假如是两个账号,那么合并
         Integer coins = skvUser.getCoins();

@@ -23,6 +23,7 @@
 				<dd class="dd1">修改头像</dd>
 				<dd class="padded">
 					<form id='form_headImg_uploader' method='post' enctype='multipart/form-data'>
+						<input type="hidden" name="imgType" value="headImg"/>
 					#if($!{user.headImg})
 						<span style="float:right;display:none" id="headImgLabel">上传</span>
 						<img src="$!{user.headImg}" class="head_portraits" id="headImgShow" />
@@ -42,6 +43,7 @@
 				<dd class="dd1">微信二维码</dd>
 				<dd class="padded">
 				<form id='form_qrcode_uploader' method='post' enctype='multipart/form-data'>
+						<input type="hidden" name="imgType" value="qrcode"/>
 					#if($!{user.qrcode})
 						<span style="float:right;display:none" id="qrcodeLabel">上传</span>
 						<img src="$!{user.qrcode}" class="head_portraits" id="qrcodeShow" />
@@ -63,6 +65,7 @@
 				</dd>
 				<dd class="padded">
 				<form id='form_groupQrcode_uploader' method='post' enctype='multipart/form-data'>
+					<input type="hidden" name="imgType" value="groupQrcode"/>
 					#if($!{user.groupQrcode})
 						<span style="float:right;display:none" id="groupQrcodeLabel">上传</span>
 						<img src="$!{user.groupQrcode}" class="head_portraits" id="groupQrcodeShow" />

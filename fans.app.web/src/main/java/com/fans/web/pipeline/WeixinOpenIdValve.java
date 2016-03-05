@@ -51,6 +51,10 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
 		            }
 		        }
 	            if(uri.contains(".htm") || uri.contains(".html")){
+	                String contextRoot = request.getContextPath();
+	                if(StringTools.isNotEmpty(contextRoot)){
+	                    uri = uri.replace(contextRoot, "");
+	                }
 	                super.setCookie(response, CookieKey.RE_URL, uri);
 	            }
 		        response.sendRedirect(weixinManager.getOauth2Url(domain));
