@@ -130,7 +130,7 @@ wx.ready(function () {
 
 function shareSuccess(){
 	$.ajax({
-		  url: '/api/shareSuccess.json',
+		  url:'${contextRoot}/api/shareSuccess.json',
 		  type: 'POST',
 		  dataType: "json",
 		  success: function(res){
@@ -139,7 +139,7 @@ function shareSuccess(){
 				  return;
 			  } else {
 				  alert(res.dataObject);
-				  window.location.href="/index.htm";
+				  window.location.href="${contextRoot}/index.htm";
 				  return;
 			  }
 		  }

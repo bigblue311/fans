@@ -297,11 +297,9 @@ public class UserManagerImpl implements UserManager{
             }
             return weixinUser;
         }
-        if(weixinUser.getSkvId()!=null){
-            if(weixinUser.getSkvId().longValue() == skvUser.getId().longValue()){
-                //已经合并过了
-                return weixinUser;
-            }
+        if(weixinUser.getId().longValue() == skvUser.getId().longValue()){
+            //已经合并过了
+            return weixinUser;
         }
         //假如是两个账号,那么合并
         Integer coins = skvUser.getCoins();

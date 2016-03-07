@@ -112,7 +112,7 @@
 				    	value="$!{user.skvId}" disabled/>
 					</dd>
 					<dd>
-					  <a href="${contextRoot}/bind.htm" style="color: blue;padding-right: 5px;">去绑定</a>
+					  <a href="${contextRoot}/bind.htm" style="color: blue;padding-right: 5px;">绑定</a>
 					</dd>
 				</dl>
 				<dl>
