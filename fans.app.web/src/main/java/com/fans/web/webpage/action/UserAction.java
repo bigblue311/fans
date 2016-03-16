@@ -43,6 +43,10 @@ public class UserAction extends RequestSessionBase{
         if(userDO.getId() == null){
             userManager.create(userDO);
         } else {
+            if(StringTools.isNotEmpty(userDO.getPhone())){
+                //假如修改了手机号码, 那么要合并
+                userManager.mergeSkvUser(userDO.getPhone(), userDO.getOpenId());
+            }
             userManager.update(userDO);
         }
         updateRequestSession();

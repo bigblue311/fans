@@ -40,7 +40,12 @@ public interface UserManager {
 	UserDO getBySkvId(Long skvId);
 	UserDO getByOpenId(String openId);
 	
+	void createSkvUser(String openId, String upId);
+	void mergeSkvUser(String phone,String openId);
+	void updateUsername(String userName, String phone);
 	SkvUserDO getSkvUserById(Long id);
+	SkvUserDO getSkvUserByPhone(String phone);
+	SkvUserDO getSkvUserByOpenId(String openId);
 	SkvUserDO getSkvUserByPassword(String phone,String password);
 	
 	/**

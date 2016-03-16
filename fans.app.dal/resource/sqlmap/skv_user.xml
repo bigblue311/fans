@@ -15,8 +15,41 @@
     <result property="phone" 				column="phone"/>
     <result property="userPassword"			column="user_password"/>
     <result property="shoppingLevel" 		column="shoppingLevel_"/>
+    <result property="upId" 				column="upId_"/>
   </resultMap>
-	  
+  
+  <insert id="insert" parameterClass="SkvUser">
+	  <![CDATA[
+	  insert into customer (
+	  	phone,
+	  	user_password,
+	  	upId_
+	  ) values (
+	  	#phone#,#userPassword#,#upId#
+	  )
+	  ]]>
+	  <selectKey resultClass="long" keyProperty="id">    
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+	  </selectKey>
+  </insert>
+  
+  <update id="updateUsername" parameterClass="SkvUser">
+   	update customer set userName = #userName#
+    where phone = #phone#
+  </update>
+  
+  <update id="update" parameterClass="SkvUser">
+   	update customer set phone = #phone# where id = #id#
+  </update>
+  
+  <delete id="deleteById" parameterClass="java.lang.Long">
+  	delete from customer where id = #id#
+  </delete>
+  
+  <select id="getByPhone" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from customer where phone = #phone# limit 1 
+  </select>
+  
   <select id="getById" parameterClass="java.lang.Long" resultMap="RM">
     select * from customer where id = #id#  
   </select>

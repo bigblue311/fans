@@ -280,6 +280,55 @@ public class UserManagerImpl implements UserManager{
         password = MD5.getMD5(password);
         return skvUserDAO.getByPassword(phone, password);
     }
+    
+    @Override
+    public void createSkvUser(String openId, String upId) {
+        SkvUserDO forCreate = new SkvUserDO();
+        forCreate.setPhone(openId);
+        forCreate.setUserPassword(MD5.getMD5("123456"));
+        forCreate.setUpId(upId);
+        skvUserDAO.insert(forCreate);
+    }
+
+    @Override
+    public void mergeSkvUser(String phone, String openId) {
+        SkvUserDO phoneUser = getSkvUserByPhone(phone);
+        SkvUserDO weixinUser = getSkvUserByOpenId(openId);
+        if(phoneUser == null && weixinUser == null){
+            return;
+        }
+        if(phoneUser != null && weixinUser == null){
+            return;
+        }
+        if(phoneUser == null && weixinUser != null){
+            weixinUser.setPhone(phone);
+            skvUserDAO.update(weixinUser);
+            UserDO userDO = userDAO.getByOpenId(openId);
+            userDO.setSkvId(weixinUser.getId());
+            userDAO.update(userDO);
+        }
+        if(phoneUser != null && weixinUser != null){
+            skvUserDAO.delete(weixinUser.getId());
+            UserDO userDO = userDAO.getByOpenId(openId);
+            userDO.setSkvId(phoneUser.getId());
+            userDAO.update(userDO);
+        }
+    }
+    
+    @Override
+    public void updateUsername(String userName, String phone) {
+        skvUserDAO.updateUsername(userName, phone);
+    }
+
+    @Override
+    public SkvUserDO getSkvUserByPhone(String phone) {
+        return skvUserDAO.getByPhone(phone);
+    }
+
+    @Override
+    public SkvUserDO getSkvUserByOpenId(String openId) {
+        return getSkvUserByPhone(openId);
+    }
 
     @Override
     public UserDO merge(Long userID, Long skvId) {

@@ -20,6 +20,7 @@ import com.fans.biz.manager.WeixinManager;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.QrcodeDO;
+import com.fans.dal.model.UserDO;
 import com.victor.framework.common.tools.StringTools;
 
 public class WxNotifyCallback {
@@ -74,6 +75,7 @@ public class WxNotifyCallback {
                         Long qrcodeId = Long.parseLong(eventKey.replace("qrscene_",""));
                         weixinManager.doScan(qrcodeId, openId);
                         scanAddCoins(qrcodeId);
+                        createSkvUser(qrcodeId, openId);
                     }
                 }
             } catch (Exception e) {
@@ -84,6 +86,17 @@ public class WxNotifyCallback {
         }
         out.close();  
         out = null; 
+    }
+    
+    private void createSkvUser(Long qrcodeId, String openId){
+        QrcodeDO qrcodeDO = weixinManager.getQrcodeById(qrcodeId);
+        if(qrcodeDO!=null){
+            Long userId = qrcodeDO.getUserId();
+            UserDO userDO = userManager.getById(userId);
+            if(userDO != null && userDO.getSkvId() != null){
+                userManager.createSkvUser(openId, userDO.getSkvId().toString());
+            }
+        }
     }
     
     private void scanAddCoins(Long qrcodeId){

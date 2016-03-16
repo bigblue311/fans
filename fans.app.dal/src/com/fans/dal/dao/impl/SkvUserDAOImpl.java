@@ -20,4 +20,19 @@ public class SkvUserDAOImpl extends EntityDAO<SkvUserDO,SkvUserQueryCondition> i
         return super.queryForEntity("getByPassword", query);
     }
 
+    @Override
+    public SkvUserDO getByPhone(String phone) {
+        SkvUserDO query = new SkvUserDO();
+        query.setPhone(phone);
+        return super.queryForEntity("getByPhone", query);
+    }
+
+    @Override
+    public Boolean updateUsername(String userName, String phone) {
+        SkvUserDO forUpdate = new SkvUserDO();
+        forUpdate.setUserName(userName);
+        forUpdate.setPhone(phone);
+        return super.updateBySID("updateUsername", forUpdate);
+    }
+
 }

@@ -16,6 +16,7 @@ import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.QrcodeScanDO;
+import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
@@ -59,7 +60,10 @@ public class SetOpenId extends RequestSessionBase{
                 Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
                 userDO.setGmtVipExpire(vipExpire);
                 userDO.setDomain(domain);
+                userDO.setSkvId(getSkvId(openId));
                 userManager.create(userDO);
+                
+                userManager.updateUsername(wxUser.getNickName(), openId);
             }
             if(openId == null){
                 openId = "";
@@ -72,6 +76,14 @@ public class SetOpenId extends RequestSessionBase{
         } else {
             nav.redirectTo("app").withTarget(reUrl);
         }
+    }
+    
+    private Long getSkvId(String openId){
+        SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
+        if(skvUserDO!=null){
+            return skvUserDO.getId();
+        }
+        return null;
     }
     
     private Integer getSex(Integer wxSex){
