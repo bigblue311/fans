@@ -21,7 +21,7 @@ public interface SkvUserDAO {
      * @param skvUserDO
      */
     Boolean update(SkvUserDO skvUserDO);
-    Boolean updateUsername(String userName,String phone);
+    Boolean updateUserInfo(String userName, String userImage,String phone);
     /**
      * 根据手机号码也可能是微信openId
      * @param phone

@@ -316,8 +316,8 @@ public class UserManagerImpl implements UserManager{
     }
     
     @Override
-    public void updateUsername(String userName, String phone) {
-        skvUserDAO.updateUsername(userName, phone);
+    public void updateUserInfo(String userName,  String userImage, String phone) {
+        skvUserDAO.updateUserInfo(userName,userImage,phone);
     }
 
     @Override

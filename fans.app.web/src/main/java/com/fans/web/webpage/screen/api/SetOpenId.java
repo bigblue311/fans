@@ -60,10 +60,17 @@ public class SetOpenId extends RequestSessionBase{
                 Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
                 userDO.setGmtVipExpire(vipExpire);
                 userDO.setDomain(domain);
-                userDO.setSkvId(getSkvId(openId));
+                userDO.setSkvId(getSkvId(request, openId));
                 userManager.create(userDO);
                 
-                userManager.updateUsername(wxUser.getNickName(), openId);
+                userManager.updateUserInfo(wxUser.getNickName(),wxUser.getHeadImgUrl(), openId);
+            }
+            if(userDO!=null){
+                Long skvId = getSkvId(request, openId);
+                if(userDO.getSkvId() == null && skvId != null){
+                    userDO.setSkvId(skvId);
+                    userManager.update(userDO);
+                }
             }
             if(openId == null){
                 openId = "";
@@ -78,12 +85,13 @@ public class SetOpenId extends RequestSessionBase{
         }
     }
     
-    private Long getSkvId(String openId){
+    private Long getSkvId(HttpServletRequest request, String openId){
         SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
         if(skvUserDO!=null){
             return skvUserDO.getId();
+        } else {
+            return super.getSkvId(request);
         }
-        return null;
     }
     
     private Integer getSex(Integer wxSex){

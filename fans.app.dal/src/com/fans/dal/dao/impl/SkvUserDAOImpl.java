@@ -28,9 +28,10 @@ public class SkvUserDAOImpl extends EntityDAO<SkvUserDO,SkvUserQueryCondition> i
     }
 
     @Override
-    public Boolean updateUsername(String userName, String phone) {
+    public Boolean updateUserInfo(String userName, String userImage, String phone) {
         SkvUserDO forUpdate = new SkvUserDO();
         forUpdate.setUserName(userName);
+        forUpdate.setUserImage(userImage);
         forUpdate.setPhone(phone);
         return super.updateBySID("updateUsername", forUpdate);
     }

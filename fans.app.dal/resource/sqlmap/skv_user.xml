@@ -34,7 +34,19 @@
   </insert>
   
   <update id="updateUsername" parameterClass="SkvUser">
-   	update customer set userName = #userName#
+   	update customer set 
+   	 <dynamic>
+	      <isNotEmpty property="userName" prepend=",">  
+	         <![CDATA[   
+	           userName = #userName#
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="userImage" prepend=",">  
+	         <![CDATA[   
+	           userImage = #userImage#
+	         ]]> 
+	      </isNotEmpty>
+	</dynamic>
     where phone = #phone#
   </update>
   
