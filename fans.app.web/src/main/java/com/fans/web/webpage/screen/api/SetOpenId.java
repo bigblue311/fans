@@ -62,8 +62,6 @@ public class SetOpenId extends RequestSessionBase{
                 userDO.setDomain(domain);
                 userDO.setSkvId(getSkvId(request, openId));
                 userManager.create(userDO);
-                
-                userManager.updateUserInfo(wxUser.getNickName(),wxUser.getHeadImgUrl(), openId);
             }
             if(userDO!=null){
                 Long skvId = getSkvId(request, openId);
@@ -74,6 +72,15 @@ public class SetOpenId extends RequestSessionBase{
             }
             if(openId == null){
                 openId = "";
+            }
+            if(StringTools.isNotEmpty(openId)){
+                SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
+                if(skvUserDO != null && StringTools.isEmpty(skvUserDO.getUserName())){
+                    System.out.println(wxUser.getNickName());
+                    skvUserDO.setUserName(wxUser.getNickName());
+                    skvUserDO.setUserImage(wxUser.getHeadImgUrl());
+                    userManager.updateSkvUser(skvUserDO);
+                }
             }
             super.setOpenId(response, openId);
         }

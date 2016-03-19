@@ -283,11 +283,19 @@ public class UserManagerImpl implements UserManager{
     
     @Override
     public void createSkvUser(String openId, String upId) {
-        SkvUserDO forCreate = new SkvUserDO();
-        forCreate.setPhone(openId);
-        forCreate.setUserPassword(MD5.getMD5("123456"));
-        forCreate.setUpId(upId);
-        skvUserDAO.insert(forCreate);
+        SkvUserDO skvUserDO = skvUserDAO.getByOpenId(openId);
+        if(skvUserDO == null){ //防止重复创建
+            SkvUserDO forCreate = new SkvUserDO();
+            forCreate.setOpenId(openId);
+            forCreate.setUserPassword(MD5.getMD5("123456"));
+            forCreate.setUpId(upId);
+            skvUserDAO.insert(forCreate);
+        }
+    }
+    
+    @Override
+    public void updateSkvUser(SkvUserDO skvUserDO) {
+        skvUserDAO.update(skvUserDO);
     }
 
     @Override
@@ -301,6 +309,7 @@ public class UserManagerImpl implements UserManager{
             return;
         }
         if(phoneUser == null && weixinUser != null){
+            weixinUser.setUserName("");
             weixinUser.setPhone(phone);
             skvUserDAO.update(weixinUser);
             UserDO userDO = userDAO.getByOpenId(openId);
@@ -309,17 +318,16 @@ public class UserManagerImpl implements UserManager{
         }
         if(phoneUser != null && weixinUser != null){
             skvUserDAO.delete(weixinUser.getId());
+            phoneUser.setUserName("");
+            phoneUser.setOpenId(openId);
+            skvUserDAO.update(phoneUser);
             UserDO userDO = userDAO.getByOpenId(openId);
             userDO.setSkvId(phoneUser.getId());
+            userDO.setPhone(phone);
             userDAO.update(userDO);
         }
     }
     
-    @Override
-    public void updateUserInfo(String userName,  String userImage, String phone) {
-        skvUserDAO.updateUserInfo(userName,userImage,phone);
-    }
-
     @Override
     public SkvUserDO getSkvUserByPhone(String phone) {
         return skvUserDAO.getByPhone(phone);
@@ -327,7 +335,7 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public SkvUserDO getSkvUserByOpenId(String openId) {
-        return getSkvUserByPhone(openId);
+        return skvUserDAO.getByOpenId(openId);
     }
 
     @Override

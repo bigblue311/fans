@@ -24,6 +24,8 @@ public class UserMerge {
         }
         Long skvId = skvUserDO.getId();
         userManager.merge(userDO.getId(), skvId);
+        userManager.mergeSkvUser(phone, userDO.getOpenId());
+        
         return Result.newInstance(true, "绑定账号成功", true);
     }
 }

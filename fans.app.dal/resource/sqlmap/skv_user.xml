@@ -16,16 +16,20 @@
     <result property="userPassword"			column="user_password"/>
     <result property="shoppingLevel" 		column="shoppingLevel_"/>
     <result property="upId" 				column="upId_"/>
+    <result property="openId" 				column="opId_"/>
   </resultMap>
   
   <insert id="insert" parameterClass="SkvUser">
 	  <![CDATA[
 	  insert into customer (
-	  	phone,
+	  	opId_,
 	  	user_password,
-	  	upId_
+	  	upId_,
+	  	shoppingLevel_,
+	  	level_
 	  ) values (
-	  	#phone#,#userPassword#,#upId#
+	  	#openId#,#userPassword#,#upId#,
+	  	'2005','1000'
 	  )
 	  ]]>
 	  <selectKey resultClass="long" keyProperty="id">    
@@ -33,25 +37,32 @@
 	  </selectKey>
   </insert>
   
-  <update id="updateUsername" parameterClass="SkvUser">
+  <update id="update" parameterClass="SkvUser">
    	update customer set 
    	 <dynamic>
-	      <isNotEmpty property="userName" prepend=",">  
+	      <isNotEmpty property="userName">  
 	         <![CDATA[   
-	           userName = #userName#
+	           userName = #userName#,
 	         ]]> 
 	      </isNotEmpty>
-	      <isNotEmpty property="userImage" prepend=",">  
+	      <isNotEmpty property="userImage">  
 	         <![CDATA[   
-	           userImage = #userImage#
+	           userImage = #userImage#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="phone">  
+	         <![CDATA[   
+	           phone = #phone#,
+	         ]]> 
+	      </isNotEmpty>
+	      <isNotEmpty property="openId">  
+	         <![CDATA[   
+	           opId_ = #openId#,
 	         ]]> 
 	      </isNotEmpty>
 	</dynamic>
-    where phone = #phone#
-  </update>
-  
-  <update id="update" parameterClass="SkvUser">
-   	update customer set phone = #phone# where id = #id#
+	gmtModified = now()
+    where id = #id#
   </update>
   
   <delete id="deleteById" parameterClass="java.lang.Long">
@@ -60,6 +71,10 @@
   
   <select id="getByPhone" parameterClass="java.util.HashMap" resultMap="RM">
     select * from customer where phone = #phone# limit 1 
+  </select>
+  
+  <select id="getByOpenId" parameterClass="java.util.HashMap" resultMap="RM">
+    select * from customer where opId_ = #openId# limit 1 
   </select>
   
   <select id="getById" parameterClass="java.lang.Long" resultMap="RM">

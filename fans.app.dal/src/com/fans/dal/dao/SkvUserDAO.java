@@ -21,13 +21,13 @@ public interface SkvUserDAO {
      * @param skvUserDO
      */
     Boolean update(SkvUserDO skvUserDO);
-    Boolean updateUserInfo(String userName, String userImage,String phone);
     /**
      * 根据手机号码也可能是微信openId
      * @param phone
      * @return
      */
     SkvUserDO getByPhone(String phone);
+    SkvUserDO getByOpenId(String openId);
     /**
      * 根据ID获取
      * @param id

@@ -17,6 +17,7 @@ public class SkvUserDO extends EntityDO implements Serializable{
     private String userPassword;
     private String userImage;
     private String upId;
+    private String openId;
     
     public String getUserImage() {
         return userImage;
@@ -64,6 +65,14 @@ public class SkvUserDO extends EntityDO implements Serializable{
 
     public void setUpId(String upId) {
         this.upId = upId;
+    }
+    
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public SkvUserQueryCondition toQueryCondition(){

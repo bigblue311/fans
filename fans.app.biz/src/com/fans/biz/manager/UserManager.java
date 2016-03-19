@@ -42,7 +42,7 @@ public interface UserManager {
 	
 	void createSkvUser(String openId, String upId);
 	void mergeSkvUser(String phone,String openId);
-	void updateUserInfo(String userName, String userImage, String phone);
+	void updateSkvUser(SkvUserDO skvUserDO);
 	SkvUserDO getSkvUserById(Long id);
 	SkvUserDO getSkvUserByPhone(String phone);
 	SkvUserDO getSkvUserByOpenId(String openId);
