@@ -76,7 +76,6 @@ public class SetOpenId extends RequestSessionBase{
             if(StringTools.isNotEmpty(openId)){
                 SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
                 if(skvUserDO != null && StringTools.isEmpty(skvUserDO.getUserName())){
-                    System.out.println(wxUser.getNickName());
                     skvUserDO.setUserName(wxUser.getNickName());
                     skvUserDO.setUserImage(wxUser.getHeadImgUrl());
                     userManager.updateSkvUser(skvUserDO);
