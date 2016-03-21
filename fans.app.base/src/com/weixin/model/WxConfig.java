@@ -9,6 +9,7 @@ public class WxConfig {
     private static String USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo?";
     private static String UNIFILED_ORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     private static String MENU_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?";
+    private static String MESSAGE_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/custom/send?";
     
     private static String JSAPI_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?";
     private static String JSAPI_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?";
@@ -28,6 +29,7 @@ public class WxConfig {
         ACCESS_TOKEN_URL += "grant_type=authorization_code";
         
         MENU_CREATE_URL += "access_token=[ACCESS_TOKEN]";
+        MESSAGE_SEND_URL += "access_token=[ACCESS_TOKEN]";
         
         USER_INFO_URL += "access_token=[ACCESS_TOKEN]&";
         USER_INFO_URL += "openid=[OPEN_ID]&";
@@ -73,6 +75,14 @@ public class WxConfig {
             accessToken = "";
         }
         String url = MENU_CREATE_URL.replace("[ACCESS_TOKEN]", accessToken);
+        return url;
+    }
+    
+    public static String getMessageSendUrl(String accessToken){
+        if(StringTools.isEmpty(accessToken)){
+            accessToken = "";
+        }
+        String url = MESSAGE_SEND_URL.replace("[ACCESS_TOKEN]", accessToken);
         return url;
     }
     

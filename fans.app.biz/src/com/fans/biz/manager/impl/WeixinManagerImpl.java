@@ -27,6 +27,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.biz.model.WeixinMenus;
+import com.fans.biz.model.WeixinMessageVO;
+import com.fans.biz.model.WeixinMsgContentVO;
 import com.fans.dal.cache.WeixinConfigCache;
 import com.fans.dal.dao.QrcodeDAO;
 import com.fans.dal.dao.QrcodeScanDAO;
@@ -450,8 +452,30 @@ public class WeixinManagerImpl implements WeixinManager{
         return httpRequest(url, menu.get(domain));
     }
     
+    @Override
+    public void sendText(String domain, String openId, String msg) {
+        WeixinConfigDO configDO = weixinConfigCache.getCache(domain);
+        if(configDO == null || StringTools.isEmpty(openId) || StringTools.isEmpty(msg)){
+            return;
+        }
+        String appId = configDO.getAppId();
+        String appSecret = configDO.getAppSecret();
+        
+        String accessToken = getJsApiAccessToken(appId, appSecret);
+        String url = WxConfig.getMessageSendUrl(accessToken);
+        httpRequest(url, menu.get(domain));
+        WeixinMessageVO messageVO = new WeixinMessageVO();
+        WeixinMsgContentVO content = new WeixinMsgContentVO();
+        content.setContent(msg);
+        messageVO.setText(content);
+        messageVO.setTouser(openId);
+        httpRequest(url, messageVO.toJson());
+    }
+    
     public static void main(String[] args){
         WeixinManagerImpl test = new WeixinManagerImpl();
         System.out.println(test.publishMenu("wz.wetuan.com"));
     }
+
+    
 }

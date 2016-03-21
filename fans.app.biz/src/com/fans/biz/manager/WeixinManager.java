@@ -94,4 +94,6 @@ public interface WeixinManager {
     void updateSkvId(String openId, Long skvId);
     
     String publishMenu(String domain);
+    
+    void sendText(String domain, String openId, String msg);
 }

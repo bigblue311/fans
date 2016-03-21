@@ -21,9 +21,10 @@ import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.UserDO;
+import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
 
-public class WxNotifyCallback {
+public class WxNotifyCallback extends RequestSessionBase{
 
     @Autowired
     private HttpServletRequest request;
@@ -76,6 +77,7 @@ public class WxNotifyCallback {
                         weixinManager.doScan(qrcodeId, openId);
                         scanAddCoins(qrcodeId);
                         createSkvUser(qrcodeId, openId);
+                        weixinManager.sendText(super.getDomain(request), openId, "欢迎使用躺着加粉");
                     }
                 }
             } catch (Exception e) {
