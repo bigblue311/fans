@@ -79,6 +79,7 @@ public class SetOpenId extends RequestSessionBase{
                     skvUserDO.setUserName(userDO.getNickName());
                     skvUserDO.setUserImage(userDO.getHeadImg());
                     userManager.updateSkvUser(skvUserDO);
+                    sendAddFriendMsg(userDO.getNickName(),openId);
                 }
             }
             super.setOpenId(response, openId);
@@ -141,5 +142,19 @@ public class SetOpenId extends RequestSessionBase{
         } else {
             return "index.vm";
         }
+    }
+    
+    private void sendAddFriendMsg(String nickName, String openId){
+        if(StringTools.isEmpty(openId)){
+            return;
+        }
+        QrcodeScanDO qrcodeScanDO = weixinManager.getSkvScanByOpenId(openId);
+        if(qrcodeScanDO!=null){
+            QrcodeDO qrcodeDO = weixinManager.getQrcodeById(qrcodeScanDO.getQrcodeId());
+            if(qrcodeDO!=null && qrcodeDO.getOpenId() != null){
+                weixinManager.sendText(super.getDomain(request), openId, "["+nickName+"]通过您分享的二维码,加入了躺着加粉");
+            }
+        }
+        return;
     }
 }
