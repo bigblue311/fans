@@ -9,13 +9,13 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<meta name="format-detection" content="telephone=no" />
-		<link rel="stylesheet" href="css/super_style.css" />
-		<link rel="stylesheet" href="css/layer.css" />
+		<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/super_style.css" />
+		<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/layer.css" />
 		<title>躺着加粉</title>
 </head>
 <body>
 	<div>
-		<img src="images/vip.jpg" alt="" width="100%">
+		<img src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/images/vip.jpg" alt="" width="100%">
 	</div>
 	<div class="padded">
 		<h2 id="service1">爆粉激活服务</h2>
@@ -77,7 +77,7 @@
 			#end
 			</ul>
 			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;margin:10px 5px 10px 5px;clear:both;" />
-			<div style="float:left"><img src="images/kefu.jpg" style="width:140px"></div>
+			<div style="float:left"><img src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/images/kefu.jpg" style="width:140px"></div>
 			<div style="float:left;margin-left:5px;">
 				<div style="margin-bottom:12px;">客服微信号 <font color="red">tangzhejiafen_1</font></div>
 				<div style="margin-bottom:12px;">工作时间 <font #if($!isKefuOnline)color="red"#else color="grey"#end>$kefuOnline - $kefuOffline</font></div>
@@ -256,7 +256,7 @@
 		<div class="blank2"></div>
 	</div>
 	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
-	<script type="text/javascript" src="js/layer.m.js"></script>
+	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/layer.m.js"></script>
 	<script>
 		var contextRoot = '$!{contextRoot}';
 		$(function(){
@@ -298,8 +298,8 @@
 			})
 		})
 	</script>
-	<script type="text/javascript" src="js/pay/coinspay.js"></script>
-	<script type="text/javascript" src="js/pay/weixinpay.js"></script>
+	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/pay/coinspay.js"></script>
+	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/pay/weixinpay.js"></script>
 	$control.setTemplate("home.vm")
 </body>
 </html>

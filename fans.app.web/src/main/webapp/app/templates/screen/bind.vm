@@ -9,10 +9,10 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<meta name="format-detection" content="telephone=no" />
-		<link rel="stylesheet" href="css/new_pro.css">
-		<link rel="stylesheet" href="css/ectouch.css">
-		<link rel="stylesheet" href="css/layer.css" />
-		<link rel="stylesheet" href="css/my.css" />
+		<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/new_pro.css">
+		<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/ectouch.css">
+		<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/layer.css" />
+		<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/my.css" />
 		<title>躺着加粉</title>
 </head>
 <body>
@@ -50,8 +50,8 @@
 	<div class="blank3"></div>
 	<div class="blank3"></div>
 	<script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
-	<script type="text/javascript" src="js/layer.m.js"></script>
-	<script type="text/javascript" src="js/Location/location.js"></script>
+	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/layer.m.js"></script>
+	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/Location/location.js"></script>
 	<script>
 		jQuery(function(){
 			$("#submitBtn").click(function(){

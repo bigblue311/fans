@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/iconfont.css">
+<link rel="stylesheet" href="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/css/iconfont.css">
 <div class="footer_top"> 
   <div id="goHome">
        <a href="${contextRoot}/index.htm">

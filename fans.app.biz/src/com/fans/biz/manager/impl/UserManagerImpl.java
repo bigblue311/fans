@@ -348,10 +348,8 @@ public class UserManagerImpl implements UserManager{
         }
         if(weixinUser!=null && skvUser == null){
             //绑定SKVID
-            if(weixinUser.getSkvId() == null){
-                weixinUser.setSkvId(skvId);
-                update(weixinUser);
-            }
+            weixinUser.setSkvId(skvId);
+            update(weixinUser);
             return weixinUser;
         }
         if(weixinUser.getId().longValue() == skvUser.getId().longValue()){
@@ -367,6 +365,7 @@ public class UserManagerImpl implements UserManager{
         weixinUser = userMerge(weixinUser, skvUser);
         //直接删了
         userDAO.delete(skvUser.getId());
+        weixinUser.setSkvId(skvId);
         update(weixinUser);
         
         qrcodeDAO.updateByOpenId(weixinUser.getOpenId(), skvId);

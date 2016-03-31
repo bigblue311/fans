@@ -78,11 +78,21 @@ public class WxNotifyCallback extends RequestSessionBase{
                         scanAddCoins(qrcodeId);
                         createSkvUser(qrcodeId, openId);
                         weixinManager.sendText(super.getDomain(request), openId, "欢迎使用躺着加粉");
+                    } else {
+                        out.print("");  
+                        out.close();  
+                        out = null;
+                        return;
                     }
+                    
                 }
             } catch (Exception e) {
                 //告诉微信服务器，我收到信息了，不要在调用回调action了
                 e.printStackTrace();
+                out.print("");  
+                out.close();  
+                out = null;
+                return;
             }
             out.print(echostr);  
         }

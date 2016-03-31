@@ -152,7 +152,14 @@ public class SetOpenId extends RequestSessionBase{
         if(qrcodeScanDO!=null){
             QrcodeDO qrcodeDO = weixinManager.getQrcodeById(qrcodeScanDO.getQrcodeId());
             if(qrcodeDO!=null && qrcodeDO.getOpenId() != null){
-                weixinManager.sendText(super.getDomain(request), openId, "["+nickName+"]通过您分享的二维码,加入了躺着加粉");
+                weixinManager.sendText(super.getDomain(request), qrcodeDO.getOpenId(), "["+nickName+"]通过您分享的二维码,加入了躺着加粉");
+            }
+            if(qrcodeDO != null && qrcodeDO.getUserId() != null){
+                Long userId = qrcodeDO.getUserId();
+                UserDO user = userManager.getById(userId);
+                if(user!=null){
+                    weixinManager.sendText(super.getDomain(request), openId, "通过扫描["+user.getNickName()+"]的二维码,加入了躺着加粉");
+                }
             }
         }
         return;
