@@ -301,5 +301,6 @@
 	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/pay/coinspay.js"></script>
 	<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/pay/weixinpay.js"></script>
 	$control.setTemplate("home.vm")
+	$control.setTemplate("cnzz.vm")
 </body>
 </html>

@@ -177,5 +177,6 @@ var iBShare = {
     }
 }
 </script>
+$control.setTemplate("cnzz.vm")
 </body>
 </html>

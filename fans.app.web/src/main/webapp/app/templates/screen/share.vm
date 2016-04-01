@@ -82,3 +82,4 @@ function shareSuccess(){
 	});
 }
 </script>
+$control.setTemplate("cnzz.vm")

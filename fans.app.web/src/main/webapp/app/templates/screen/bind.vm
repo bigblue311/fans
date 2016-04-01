@@ -80,5 +80,6 @@
 		});
 	</script>
 	$control.setTemplate("home.vm")
+	$control.setTemplate("cnzz.vm")
 </body>
 </html>

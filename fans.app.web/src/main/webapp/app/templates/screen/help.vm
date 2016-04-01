@@ -117,5 +117,6 @@
 <p>快来关注我们吧</p>
 <p>微信号: $!{weixin}</p>
 <img src="$!{qrcode}?t=$!{ts}" />
+$control.setTemplate("cnzz.vm")
 </body>
 </html>
