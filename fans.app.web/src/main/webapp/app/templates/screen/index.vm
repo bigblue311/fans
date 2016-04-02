@@ -20,8 +20,11 @@
 	<div>
 		<div class="item_list">
 			<div class="item_box">
+				
 				<div class="left head_portrait_70">
+					<a href="${contextRoot}/myShare.htm?id=$!user.id">
 					<img src="$!user.headImg">
+					</a>
 					<br>
 					<span class="click_count">$!user.clickCount</span>
 				</div>

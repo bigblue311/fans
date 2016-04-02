@@ -72,6 +72,7 @@ public class SetOpenId extends RequestSessionBase{
             if(openId == null){
                 openId = "";
             }
+            
             if(userDO!=null){
                 updateQrcodeScan(userDO);
                 if(userDO.getSkvId() == null && skvId != null){
