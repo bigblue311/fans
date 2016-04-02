@@ -67,7 +67,7 @@
   </update>
   
   <delete id="deleteById" parameterClass="java.lang.Long">
-  	delete from customer where id = #id#
+  	delete from customer where id = #id# and phone is null
   </delete>
   
   <select id="getByPhone" parameterClass="java.util.HashMap" resultMap="RM">

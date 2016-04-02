@@ -13,8 +13,8 @@ import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.manager.PriceManager;
 import com.fans.biz.manager.WeixinManager;
 import com.fans.biz.model.PriceSetVO;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.enumerate.TopupStatusEnum;
 import com.fans.dal.enumerate.TopupTypeEnum;
@@ -59,7 +59,9 @@ public class GetPrepay extends RequestSessionBase{
     							 		 @Param("data1") Integer data1){
         String domain = super.getDomain(request);
         
-    	UserDO userDO = RequestSession.userDO();
+    	UserDO userDO = super.getUserDO(request);
+    	ShoppingLevelEnum level = super.getLevel(request);
+    	
     	if(userDO == null || userDO.getId() == null || StringTools.isEmpty(userDO.getOpenId())){
     		return Result.newInstance(null, "用户不存在", false);
     	}
@@ -68,7 +70,7 @@ public class GetPrepay extends RequestSessionBase{
     	if(topupType == null){
     		return Result.newInstance(null, "业务类型不存在", false);
     	}
-    	cash = getPrice(topupType,data1,cash);
+    	cash = getPrice(userDO, level, topupType,data1,cash);
     	if(cash < 0){
     		return Result.newInstance(null, "交易金额不能为负数", false);
     	}
@@ -119,7 +121,7 @@ public class GetPrepay extends RequestSessionBase{
         return Result.newInstance(wxPay, "交易成功", true);
     }
     
-    private Integer getPrice(TopupTypeEnum topupType, Integer data1, Integer cash){
+    private Integer getPrice(UserDO userDO, ShoppingLevelEnum level, TopupTypeEnum topupType, Integer data1, Integer cash){
     	if(topupType.getCode() == TopupTypeEnum.金币充值.getCode()){
     		return cash;
     	}
@@ -127,7 +129,7 @@ public class GetPrepay extends RequestSessionBase{
     		return priceManager.buyVipUseMoney(data1);
     	}
     	if(topupType.getCode() == TopupTypeEnum.购买置顶.getCode()){
-    	    PriceSetVO freeSet = priceManager.getSkvPriceSetVO();
+    	    PriceSetVO freeSet = priceManager.getSkvPriceSetVO(userDO, level);
             if(freeSet != null){
                 data1 = freeSet.getValue();
                 return 0;

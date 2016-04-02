@@ -17,6 +17,7 @@ import com.fans.dal.dao.TopupDAO;
 import com.fans.dal.dao.UserDAO;
 import com.fans.dal.enumerate.CoinsTypeEnum;
 import com.fans.dal.enumerate.PayStatusEnum;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.enumerate.TopListPositionEnum;
 import com.fans.dal.enumerate.TopupStatusEnum;
 import com.fans.dal.enumerate.TopupTypeEnum;
@@ -300,7 +301,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	@Override
-	public PayStatusEnum buy(Long userId, Integer data1, Integer type) {
+	public PayStatusEnum buy(Long userId, Integer data1, Integer type, ShoppingLevelEnum level) {
 		TopupTypeEnum topupType = TopupTypeEnum.getByCode(type);
     	if(topupType == null){
     		return PayStatusEnum.支付失败;
@@ -309,7 +310,7 @@ public class TransactionManagerImpl implements TransactionManager{
     		return buyVip(userId,data1);
     	}
     	if(topupType.getCode().intValue() == TopupTypeEnum.购买置顶.getCode().intValue()){
-    		return buyZhuangB(userId,data1);
+    		return buyZhuangB(userId,data1,level);
     	}
     	return PayStatusEnum.支付失败;
 	}
@@ -362,17 +363,17 @@ public class TransactionManagerImpl implements TransactionManager{
     }
 	
 	@Override
-	public PayStatusEnum buyZhuangB(Long userId, Integer minutes) {
+	public PayStatusEnum buyZhuangB(Long userId, Integer minutes, ShoppingLevelEnum level) {
 		try {
 			if(minutes == null || minutes <= 0){
 				return PayStatusEnum.支付失败;
 			}
-			UserDO user = userDao.getById(userId);
-            if(user == null) {
+			UserDO userDO = userDao.getById(userId);
+            if(userDO == null) {
                 return PayStatusEnum.支付失败;
             }
 			Integer coins = priceManager.buyZhuangBUseCoins(minutes);
-			PriceSetVO freeSet = priceManager.getSkvPriceSetVO();
+			PriceSetVO freeSet = priceManager.getSkvPriceSetVO(userDO, level);
 			if(freeSet != null){
 			    coins = 0;
 			    minutes = freeSet.getValue();
@@ -380,8 +381,8 @@ public class TransactionManagerImpl implements TransactionManager{
 	            forCreate.setGmtStart(DateTools.today());
 	            forCreate.setGmtEnd(DateTools.addMinute(DateTools.today(), minutes));
 	            forCreate.setUserId(userId);
-	            forCreate.setSkvId(user.getSkvId());
-	            forCreate.setOpenId(user.getOpenId());
+	            forCreate.setSkvId(userDO.getSkvId());
+	            forCreate.setOpenId(userDO.getOpenId());
 	            forCreate.setPosition(TopListPositionEnum.SKV置顶.getCode());
 	            topListDao.insert(forCreate);
 			}
@@ -400,7 +401,7 @@ public class TransactionManagerImpl implements TransactionManager{
 					forCreate.setGmtStart(expire);
 					forCreate.setGmtEnd(gmtEnd);
 					forCreate.setUserId(userId);
-					forCreate.setOpenId(user.getOpenId());
+					forCreate.setOpenId(userDO.getOpenId());
 					forCreate.setPosition(TopListPositionEnum.充值.getCode());
 					topListDao.insert(forCreate);
 				}

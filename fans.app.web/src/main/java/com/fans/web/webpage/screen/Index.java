@@ -1,5 +1,6 @@
 package com.fans.web.webpage.screen;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Context;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.LocationCache;
 import com.fans.dal.enumerate.SearchTypeEnum;
 import com.fans.dal.model.LocationDO;
@@ -25,14 +25,17 @@ public class Index extends RequestSessionBase{
     private HttpServletResponse response;
     
     @Autowired
+    private HttpServletRequest request;
+    
+    @Autowired
     private LocationCache locationCache;
     
     public void execute(@Param("searchType") Integer searchType, Context context){
         UserQueryCondition userQueryCondition = getQueryCondition(searchType);
         Paging<UserDO> paging = userManager.getPage(userQueryCondition);
-        UserDO userDO = RequestSession.userDO();
+        UserDO userDO = super.getUserDO(request);
         
-        loadPriceSet(context);
+        loadPriceSet(request, context);
         context.put("searchType", userQueryCondition.getSearchType());
         context.put("query", userQueryCondition);
         if(userDO != null){
@@ -45,7 +48,7 @@ public class Index extends RequestSessionBase{
     }
     
     private UserQueryCondition getQueryCondition(Integer searchType){
-        UserQueryCondition userQueryCondition = RequestSession.queryCondition();
+        UserQueryCondition userQueryCondition = super.getQuery(request);
         if(searchType != null){
             switch(searchType){
             case 0:
@@ -59,7 +62,7 @@ public class Index extends RequestSessionBase{
             case 2:
                 userQueryCondition.searchFans();
                 super.setSearchType(response, SearchTypeEnum.关注我的.getCode());
-                UserDO userDO = RequestSession.userDO();
+                UserDO userDO = super.getUserDO(request);
                 if(userDO != null && userDO.getId()!=null){
                     userQueryCondition.setShareUserId(userDO.getId());
                 }

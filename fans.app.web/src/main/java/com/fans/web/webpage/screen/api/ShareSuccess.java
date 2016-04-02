@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fans.biz.manager.TransactionManager;
 import com.fans.biz.manager.UserManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.UserDO;
@@ -28,7 +27,7 @@ public class ShareSuccess extends RequestSessionBase{
     private UserManager userManager;
     
     public Result<String> execute(){
-        UserDO userDO = RequestSession.userDO();
+        UserDO userDO = super.getUserDO(request);
         if(userDO == null || userDO.getId() == null){
             return Result.newInstance("用户不存在", "用户不存在", false);
         }

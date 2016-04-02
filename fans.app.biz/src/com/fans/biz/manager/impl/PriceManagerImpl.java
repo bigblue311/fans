@@ -11,7 +11,6 @@ import com.fans.biz.manager.PriceManager;
 import com.fans.biz.model.PriceSetVO;
 import com.fans.biz.model.PromteVO;
 import com.fans.biz.model.SkvTopVO;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.dao.TopListDAO;
 import com.fans.dal.enumerate.ShoppingLevelEnum;
@@ -164,9 +163,9 @@ public class PriceManagerImpl implements PriceManager{
 	}
 
 	@Override
-	public List<PriceSetVO> getZhuangBSet() {
+	public List<PriceSetVO> getZhuangBSet(UserDO userDO, ShoppingLevelEnum level) {
 		List<PriceSetVO> list = Lists.newArrayList();
-		PriceSetVO free = getSkvPriceSetVO();
+		PriceSetVO free = getSkvPriceSetVO(userDO, level);
 		if(free!=null){
 		    list.add(free);
 		    return list;
@@ -251,16 +250,11 @@ public class PriceManagerImpl implements PriceManager{
 	}
 
 	@Override
-	public PriceSetVO getSkvPriceSetVO(){
+	public PriceSetVO getSkvPriceSetVO(UserDO userDO, ShoppingLevelEnum level){
+	    if(userDO == null || level == null){
+	        return null;
+	    }
 	    PriceSetVO priceSetVO = new PriceSetVO();
-	    UserDO userDO = RequestSession.userDO();
-	    if(userDO == null){
-	        return null;
-	    }
-	    ShoppingLevelEnum level = RequestSession.level();
-	    if(level == null){
-	        return null;
-	    }
 	    TopListDO topList = topListDAO.getLatestByUserId(userDO.getId(), TopListPositionEnum.SKV置顶.getCode());
 	    
 	    String configValue = systemConfigCache.getCacheString(SystemConfigKeyEnum.SVK_TOP.getCode(),"");
@@ -299,13 +293,8 @@ public class PriceManagerImpl implements PriceManager{
 	}
 
     @Override
-    public String getSkvPriceMsg() {
-        UserDO userDO = RequestSession.userDO();
-        if(userDO == null){
-            return null;
-        }
-        ShoppingLevelEnum level = RequestSession.level();
-        if(level == null){
+    public String getSkvPriceMsg(UserDO userDO, ShoppingLevelEnum level) {
+        if(userDO == null || level == null){
             return null;
         }
         TopListDO topList = topListDAO.getLatestByUserId(userDO.getId(), TopListPositionEnum.SKV置顶.getCode());

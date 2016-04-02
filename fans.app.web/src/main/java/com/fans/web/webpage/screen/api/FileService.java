@@ -15,7 +15,6 @@ import com.alibaba.citrus.turbine.TurbineRunDataInternal;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.aliyun.service.FileStorageRepository;
 import com.fans.biz.manager.UserManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.shared.Result;
@@ -39,7 +38,7 @@ public class FileService extends RequestSessionBase{
 		}
 		InputStream in = uploadFile.getInputStream();
 		Result<String> result = fileStorageRepository.uploadImg(uploadFile.getName(), in);
-		UserDO userDO = RequestSession.userDO();
+		UserDO userDO = super.getUserDO(request);
 		if(userDO != null){
 		    if(imgType.equals("headImg")){
 	            userDO.setHeadImg(result.getDataObject());

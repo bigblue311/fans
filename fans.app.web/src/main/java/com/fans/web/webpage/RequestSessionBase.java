@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
 import com.fans.biz.manager.PriceManager;
+import com.fans.biz.manager.UserManager;
 import com.fans.dal.enumerate.SearchTypeEnum;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
+import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.constant.CookieKey;
@@ -22,11 +25,17 @@ public abstract class RequestSessionBase extends CookieBase{
 	@Autowired
     private PriceManager priceManager;
 	
-	public void loadPriceSet(Context context){
+	@Autowired
+    private UserManager userManager;
+	
+	public void loadPriceSet(HttpServletRequest request, Context context){
+	    UserDO userDO = getUserDO(request);
+	    ShoppingLevelEnum level = getLevel(request);
+	    
 		context.put("topupSet", priceManager.getTopupSet());
 		context.put("vipSet", priceManager.getVipSet());
-		context.put("rocketSet", priceManager.getZhuangBSet());
-		context.put("skvPriceMsg", priceManager.getSkvPriceMsg());
+		context.put("rocketSet", priceManager.getZhuangBSet(userDO,level));
+		context.put("skvPriceMsg", priceManager.getSkvPriceMsg(userDO,level));
 	}
 	
 	/**
@@ -60,8 +69,19 @@ public abstract class RequestSessionBase extends CookieBase{
         }
         return InetAddresses.isInetAddress(ip);
     } 
+    
+    public UserDO getUserDO(HttpServletRequest request){
+        String openId = getOpenId(request);
+        return userManager.getByOpenId(openId);
+    }
 	
 	public Long getSkvId(HttpServletRequest request) {
+	    UserDO userDO = getUserDO(request);
+        if(userDO != null){
+            if(userDO.getSkvId()!=null){
+                return userDO.getSkvId();
+            }
+        }
 	    String skvId = request.getParameter(CookieKey.SKV_ID);
 	    if(StringTools.isEmpty(skvId)){
 	        skvId = super.getCookie(request, CookieKey.SKV_ID);
@@ -76,6 +96,18 @@ public abstract class RequestSessionBase extends CookieBase{
 	    } else {
 	        return null;
 	    }
+	}
+	
+	public ShoppingLevelEnum getLevel(HttpServletRequest request){
+	    Long skvId = getSkvId(request);
+	    if(skvId!=null){
+            SkvUserDO skvUser = userManager.getSkvUserById(skvId);
+            if(skvUser!=null){
+                String shoppingLevel = skvUser.getShoppingLevel();
+                return ShoppingLevelEnum.getByCode(shoppingLevel);
+            }
+        }
+	    return null;
 	}
 	
 	private String trim0(String bigInt){

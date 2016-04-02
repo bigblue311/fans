@@ -24,9 +24,6 @@
         <valve class="com.fans.web.pipeline.WeixinOpenIdValve" 
         	   xmlns="http://www.alibaba.com/schema/services/pipeline/valves"/>
        	
-       	<valve class="com.fans.web.pipeline.RequestSessionValve" 
-        	   xmlns="http://www.alibaba.com/schema/services/pipeline/valves"/>
-        	   
         <!-- 分析URL，取得target。 -->
         <pl-valves:analyzeURL />
         

@@ -3,6 +3,8 @@ package com.fans.biz.manager;
 import java.util.List;
 
 import com.fans.biz.model.PriceSetVO;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
+import com.fans.dal.model.UserDO;
 
 /**
  * 定价中心
@@ -50,9 +52,9 @@ public interface PriceManager {
 	 * 购买超级置顶面板
 	 * @return
 	 */
-	List<PriceSetVO> getZhuangBSet();
+	List<PriceSetVO> getZhuangBSet(UserDO userDO, ShoppingLevelEnum level);
 	
 	
-	PriceSetVO getSkvPriceSetVO();
-	String getSkvPriceMsg();
+	PriceSetVO getSkvPriceSetVO(UserDO userDO, ShoppingLevelEnum level);
+	String getSkvPriceMsg(UserDO userDO, ShoppingLevelEnum level);
 }

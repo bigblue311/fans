@@ -3,6 +3,7 @@ package com.fans.biz.manager;
 import com.fans.biz.model.OrderStatisticVO;
 import com.fans.biz.model.TopupVO;
 import com.fans.dal.enumerate.PayStatusEnum;
+import com.fans.dal.enumerate.ShoppingLevelEnum;
 import com.fans.dal.model.TopupDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.TopupQueryCondition;
@@ -93,7 +94,7 @@ public interface TransactionManager {
 	 * @param type
 	 * @return
 	 */
-	PayStatusEnum buy(Long userId, Integer data1, Integer type);
+	PayStatusEnum buy(Long userId, Integer data1, Integer type,ShoppingLevelEnum level);
 	
 	/**
 	 * 购买VIP
@@ -110,7 +111,7 @@ public interface TransactionManager {
 	 * @param minute
 	 * @return
 	 */
-	PayStatusEnum buyZhuangB(Long userId, Integer minutes);
+	PayStatusEnum buyZhuangB(Long userId, Integer minutes, ShoppingLevelEnum level);
 	
 	/**
 	 * 获取统计数据

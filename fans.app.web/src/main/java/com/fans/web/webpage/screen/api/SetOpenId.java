@@ -48,6 +48,12 @@ public class SetOpenId extends RequestSessionBase{
             WxUser wxUser = weixinManager.getUserInfo(domain,code);
             openId = wxUser.getOpenId();
             UserDO userDO = userManager.getByOpenId(openId);
+            
+            Long skvId = super.getSkvId(request);
+            SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
+            if(skvUserDO!=null){
+                skvId = skvUserDO.getId();
+            }
             if(wxUser!= null && userDO == null){
                 openId = wxUser.getOpenId();
                 userDO = new UserDO();
@@ -60,26 +66,38 @@ public class SetOpenId extends RequestSessionBase{
                 Date vipExpire = DateTools.addDate(DateTools.today(), dayToAdd);
                 userDO.setGmtVipExpire(vipExpire);
                 userDO.setDomain(domain);
-                userDO.setSkvId(getSkvId(request, openId));
+                userDO.setSkvId(skvId);
                 userManager.create(userDO);
             }
+            if(openId == null){
+                openId = "";
+            }
             if(userDO!=null){
-                Long skvId = getSkvId(request, openId);
+                updateQrcodeScan(userDO);
                 if(userDO.getSkvId() == null && skvId != null){
                     userDO.setSkvId(skvId);
                     userManager.update(userDO);
                 }
             }
-            if(openId == null){
-                openId = "";
-            }
             if(StringTools.isNotEmpty(openId)){
-                SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
-                if(skvUserDO != null && StringTools.isEmpty(skvUserDO.getUserName())){
-                    skvUserDO.setUserName(userDO.getNickName());
-                    skvUserDO.setUserImage(userDO.getHeadImg());
-                    userManager.updateSkvUser(skvUserDO);
-                    sendAddFriendMsg(userDO.getNickName(),openId);
+                if(skvUserDO != null){
+                    boolean toUpdate = false;
+                    if(StringTools.isEmpty(skvUserDO.getUserName())){
+                        skvUserDO.setUserName(userDO.getNickName());
+                        toUpdate = true;
+                    }
+                    if(StringTools.isEmpty(skvUserDO.getUserImage())){
+                        skvUserDO.setUserImage(userDO.getHeadImg());
+                        toUpdate = true;
+                    }
+                    if(StringTools.isEmpty(skvUserDO.getOpenId())){
+                        skvUserDO.setOpenId(openId);
+                        toUpdate = true;
+                    }
+                    if(toUpdate){
+                        userManager.updateSkvUser(skvUserDO);
+                    }
+                    //sendAddFriendMsg(userDO.getNickName(),openId);
                 }
             }
             super.setOpenId(response, openId);
@@ -89,15 +107,6 @@ public class SetOpenId extends RequestSessionBase{
             response.sendRedirect(reUrl);
         } else {
             nav.redirectTo("app").withTarget(reUrl);
-        }
-    }
-    
-    private Long getSkvId(HttpServletRequest request, String openId){
-        SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
-        if(skvUserDO!=null){
-            return skvUserDO.getId();
-        } else {
-            return super.getSkvId(request);
         }
     }
     
@@ -144,6 +153,13 @@ public class SetOpenId extends RequestSessionBase{
         }
     }
     
+    private void updateQrcodeScan(UserDO userDO){
+        if(userDO != null && userDO.getSkvId() != null && StringTools.isNotEmpty(userDO.getOpenId())){
+            weixinManager.updateSkvId(userDO.getOpenId(), userDO.getSkvId());
+        }
+    }
+    
+    @SuppressWarnings("unused")
     private void sendAddFriendMsg(String nickName, String openId){
         if(StringTools.isEmpty(openId)){
             return;

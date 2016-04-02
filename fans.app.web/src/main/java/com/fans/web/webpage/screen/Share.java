@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
 import com.fans.biz.manager.WeixinManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.cache.WeixinConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
@@ -35,7 +34,7 @@ public class Share extends RequestSessionBase{
         String domain = super.getDomain(request);
         WeixinConfigDO weixinConfigDO = weixinConfigCache.getCache(domain);
         
-        UserDO userDO = RequestSession.userDO();
+        UserDO userDO = super.getUserDO(request);
         
         String shareTitle = systemConfigCache.getCacheString(SystemConfigKeyEnum.SHARE_TITLE.getCode(), "[name]躺着把粉加了");
         if(userDO != null && shareTitle.contains("[name]")){

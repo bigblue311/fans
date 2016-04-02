@@ -2,12 +2,13 @@ package com.fans.web.webpage.screen;
 
 import java.text.ParseException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.citrus.turbine.Context;
 import com.alibaba.citrus.turbine.dataresolver.Param;
 import com.fans.biz.manager.UserManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.enumerate.TopListPositionEnum;
@@ -18,14 +19,17 @@ import com.victor.framework.common.tools.DateTools;
 public class Vip extends RequestSessionBase{
 
     @Autowired
+    private HttpServletRequest request;
+    
+    @Autowired
     private UserManager userManager;
     
     @Autowired
     private SystemConfigCache systemConfigCache;
     
     public void execute(@Param("open") String open, Context context){
-        loadPriceSet(context);
-        UserDO userDO = RequestSession.userDO();
+        loadPriceSet(request, context);
+        UserDO userDO = super.getUserDO(request);
         context.put("user", userDO);
         
         Integer refreshInterval = systemConfigCache.getCacheInteger(SystemConfigKeyEnum.REFRESH_INTERVAL.getCode(), 5);

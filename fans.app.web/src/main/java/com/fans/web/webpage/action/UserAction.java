@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.dataresolver.FormGroup;
 import com.aliyun.service.FileStorageRepository;
 import com.fans.biz.manager.UserManager;
-import com.fans.biz.threadLocal.RequestSession;
 import com.fans.dal.model.UserDO;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
@@ -49,21 +48,9 @@ public class UserAction extends RequestSessionBase{
             }
             userManager.update(userDO);
         }
-        updateRequestSession();
     }
     
     public void doRefresh(@FormGroup("user") UserDO userDO){
         userManager.refresh(userDO.getId());
-        updateRequestSession();
-    }
-    
-    private void updateRequestSession(){
-        String openId = super.getOpenId(request);
-        Long skvId = super.getSkvId(request);
-        UserDO userDO = userManager.getByOpenId(openId);
-        if(userDO == null){
-            userDO = userManager.getBySkvId(skvId);
-        }
-        RequestSession.userDO(userDO);
     }
 }

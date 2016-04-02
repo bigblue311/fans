@@ -311,6 +311,7 @@ public class UserManagerImpl implements UserManager{
         if(phoneUser == null && weixinUser != null){
             weixinUser.setUserName("");
             weixinUser.setPhone(phone);
+            weixinUser.setOpenId(openId);
             skvUserDAO.update(weixinUser);
             UserDO userDO = userDAO.getByOpenId(openId);
             userDO.setSkvId(weixinUser.getId());
@@ -318,7 +319,7 @@ public class UserManagerImpl implements UserManager{
         }
         if(phoneUser != null && weixinUser != null){
             if(weixinUser.getId() != phoneUser.getId()){
-                //skvUserDAO.delete(weixinUser.getId());
+                skvUserDAO.delete(weixinUser.getId());
                 phoneUser.setUserName("");
                 phoneUser.setOpenId(openId);
                 skvUserDAO.update(phoneUser);
