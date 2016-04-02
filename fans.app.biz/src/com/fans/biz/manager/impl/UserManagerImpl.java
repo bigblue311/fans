@@ -317,14 +317,16 @@ public class UserManagerImpl implements UserManager{
             userDAO.update(userDO);
         }
         if(phoneUser != null && weixinUser != null){
-            skvUserDAO.delete(weixinUser.getId());
-            phoneUser.setUserName("");
-            phoneUser.setOpenId(openId);
-            skvUserDAO.update(phoneUser);
-            UserDO userDO = userDAO.getByOpenId(openId);
-            userDO.setSkvId(phoneUser.getId());
-            userDO.setPhone(phone);
-            userDAO.update(userDO);
+            if(weixinUser.getId() != phoneUser.getId()){
+                //skvUserDAO.delete(weixinUser.getId());
+                phoneUser.setUserName("");
+                phoneUser.setOpenId(openId);
+                skvUserDAO.update(phoneUser);
+                UserDO userDO = userDAO.getByOpenId(openId);
+                userDO.setSkvId(phoneUser.getId());
+                userDO.setPhone(phone);
+                userDAO.update(userDO);
+            }
         }
     }
     
