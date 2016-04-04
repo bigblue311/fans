@@ -6,7 +6,16 @@
 
 <sqlMapConfig>
 
-	<settings useStatementNamespaces ="true" /> 
+	<settings   
+        useStatementNamespaces="true"   
+        cacheModelsEnabled="true"  
+        enhancementEnabled="true"   
+        lazyLoadingEnabled="true"  
+        errorTracingEnabled="false"   
+        maxRequests="64"   
+        maxSessions="25"  
+        maxTransactions="15"   
+    />
 
 	<transactionManager type="JDBC" commitRequired="false">
 		<dataSource type="SIMPLE">

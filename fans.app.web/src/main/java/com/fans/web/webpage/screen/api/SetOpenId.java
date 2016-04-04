@@ -18,7 +18,6 @@ import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.QrcodeScanDO;
 import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
-import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
@@ -47,8 +46,8 @@ public class SetOpenId extends RequestSessionBase{
         if(StringTools.isNotEmpty(code)){
             WxUser wxUser = weixinManager.getUserInfo(domain,code);
             openId = wxUser.getOpenId();
-            UserDO userDO = userManager.getByOpenId(openId);
             
+            UserDO userDO = userManager.getByOpenId(openId);
             Long skvId = super.getSkvId(request);
             SkvUserDO skvUserDO = userManager.getSkvUserByOpenId(openId);
             if(skvUserDO!=null){
@@ -69,46 +68,9 @@ public class SetOpenId extends RequestSessionBase{
                 userDO.setSkvId(skvId);
                 userManager.create(userDO);
             }
-            if(openId == null){
-                openId = "";
-            }
-            
-            if(userDO!=null){
-                updateQrcodeScan(userDO);
-                if(userDO.getSkvId() == null && skvId != null){
-                    userDO.setSkvId(skvId);
-                    userManager.update(userDO);
-                }
-            }
-            if(StringTools.isNotEmpty(openId)){
-                if(skvUserDO != null){
-                    boolean toUpdate = false;
-                    if(StringTools.isEmpty(skvUserDO.getUserName())){
-                        skvUserDO.setUserName(userDO.getNickName());
-                        toUpdate = true;
-                    }
-                    if(StringTools.isEmpty(skvUserDO.getUserImage())){
-                        skvUserDO.setUserImage(userDO.getHeadImg());
-                        toUpdate = true;
-                    }
-                    if(StringTools.isEmpty(skvUserDO.getOpenId())){
-                        skvUserDO.setOpenId(openId);
-                        toUpdate = true;
-                    }
-                    if(toUpdate){
-                        userManager.updateSkvUser(skvUserDO);
-                    }
-                    //sendAddFriendMsg(userDO.getNickName(),openId);
-                }
-            }
             super.setOpenId(response, openId);
         }
-        String reUrl = getReUrl(request,openId);
-        if(reUrl.startsWith("http")){
-            response.sendRedirect(reUrl);
-        } else {
-            nav.redirectTo("app").withTarget(reUrl);
-        }
+        nav.redirectTo("app").withTarget("index.vm");
     }
     
     private Integer getSex(Integer wxSex){
@@ -122,42 +84,6 @@ public class SetOpenId extends RequestSessionBase{
             return 1;
         }
         return null;
-    }
-    
-    private String getUpId(String openId){
-        if(StringTools.isEmpty(openId)){
-            return "";
-        }
-        QrcodeScanDO qrcodeScanDO = weixinManager.getSkvScanByOpenId(openId);
-        if(qrcodeScanDO!=null){
-            QrcodeDO qrcodeDO = weixinManager.getQrcodeById(qrcodeScanDO.getQrcodeId());
-            if(qrcodeDO!=null && qrcodeDO.getSkvId() != null){
-                return qrcodeDO.getSkvId().toString();
-            }
-        }
-        return "";
-    }
-    
-    private String getReUrl(HttpServletRequest request, String openId){
-        String upId = getUpId(openId);
-        String reUrl = super.getCookie(request, CookieKey.RE_URL);
-        if(StringTools.isNotEmpty(reUrl)){
-            if(reUrl.contains("[upId]")){
-                reUrl = reUrl.replace("[upId]", upId);
-            }
-            if(reUrl.contains("[openId]")){
-                reUrl = reUrl.replace("[openId]", openId);
-            }
-            return reUrl;
-        } else {
-            return "index.vm";
-        }
-    }
-    
-    private void updateQrcodeScan(UserDO userDO){
-        if(userDO != null && userDO.getSkvId() != null && StringTools.isNotEmpty(userDO.getOpenId())){
-            weixinManager.updateSkvId(userDO.getOpenId(), userDO.getSkvId());
-        }
     }
     
     @SuppressWarnings("unused")
