@@ -82,7 +82,7 @@ $control.setTemplate("paging.vm")
 	</div>
   </form>
 </div>
-<script type="text/javascript" src="http://wetuan-prod.oss-cn-hangzhou.aliyuncs.com/source/js/Location/location.js"></script>
+<script type="text/javascript" src="/js/Location/location.js"></script>
 <script type="text/javascript">
 	jQuery(function(){
 		showLocation('q_province','q_city','q_town','$!query.province','$!query.city','$!query.town');
