@@ -31,7 +31,8 @@ public enum SystemConfigKeyEnum {
 	NEW_COINS("NEW_COINS","新注册用户送金币"),
 	NEW_VIP("NEW_VIP","新注册用户送VIP"),
 	SCAN_COINS("SCAN_COINS","扫码关注得金币"),
-	WETUAN_HOST("WETUAN_HOST","微团域名");
+	WETUAN_HOST("WETUAN_HOST","微团域名"),
+	GREEN_CHANNEL("GREEN_CHANNEL","绿色通道");
 	
 	private String code;
 	private String desc;

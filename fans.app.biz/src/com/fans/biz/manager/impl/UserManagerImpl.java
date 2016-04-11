@@ -284,7 +284,7 @@ public class UserManagerImpl implements UserManager{
     @Override
     public void createSkvUser(String openId, String upId) {
         SkvUserDO skvUserDO = skvUserDAO.getByOpenId(openId);
-        if(skvUserDO == null){ //防止重复创建
+        if(skvUserDO == null && StringTools.isNotEmpty(upId)){ //防止重复创建
             SkvUserDO forCreate = new SkvUserDO();
             forCreate.setOpenId(openId);
             forCreate.setUserPassword(MD5.getMD5("123456"));

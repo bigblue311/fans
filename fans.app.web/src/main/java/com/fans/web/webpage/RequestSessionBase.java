@@ -1,6 +1,7 @@
 package com.fans.web.webpage;
 
 import java.net.URL;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,13 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.citrus.turbine.Context;
 import com.fans.biz.manager.PriceManager;
 import com.fans.biz.manager.UserManager;
+import com.fans.dal.cache.SystemConfigCache;
 import com.fans.dal.enumerate.SearchTypeEnum;
 import com.fans.dal.enumerate.ShoppingLevelEnum;
+import com.fans.dal.enumerate.SystemConfigKeyEnum;
 import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
 import com.fans.dal.query.UserQueryCondition;
 import com.fans.web.constant.CookieKey;
+import com.google.common.collect.Lists;
 import com.google.common.net.InetAddresses;
+import com.victor.framework.common.shared.Split;
+import com.victor.framework.common.tools.CollectionTools;
 import com.victor.framework.common.tools.JsonTools;
 import com.victor.framework.common.tools.StringTools;
 
@@ -27,6 +33,9 @@ public abstract class RequestSessionBase extends CookieBase{
 	
 	@Autowired
     private UserManager userManager;
+	
+	@Autowired
+    private SystemConfigCache systemConfigCache;
 	
 	public void loadPriceSet(HttpServletRequest request, Context context){
 	    UserDO userDO = getUserDO(request);
@@ -74,7 +83,7 @@ public abstract class RequestSessionBase extends CookieBase{
         String openId = getOpenId(request);
         return userManager.getByOpenId(openId);
     }
-	
+    
 	public Long getSkvId(HttpServletRequest request) {
 	    UserDO userDO = getUserDO(request);
         if(userDO != null){
@@ -197,5 +206,32 @@ public abstract class RequestSessionBase extends CookieBase{
             userDO = new UserDO();
         }
         super.setCookie(response, CookieKey.QUERY, JsonTools.toJson(userDO));
+    }
+    
+    public boolean isAdmin(HttpServletRequest request){
+        String openId = super.getCookie(request, CookieKey.OPEN_ID);
+        List<String> list = getAdminList();
+        if(CollectionTools.isEmpty(list)){
+            return false;
+        }
+        return list.contains(openId);
+    }
+    
+    public boolean isOriAdmin(HttpServletRequest request){
+        String oriOpenId = super.getCookie(request, CookieKey.ORI_OPEN_ID);
+        List<String> list = getAdminList();
+        if(CollectionTools.isEmpty(list)){
+            return false;
+        }
+        return list.contains(oriOpenId);
+    }
+    
+    public List<String> getAdminList(){
+        String admins = systemConfigCache.getCacheString(SystemConfigKeyEnum.GREEN_CHANNEL.getCode(), "");
+        if(StringTools.isEmpty(admins)){
+            return Lists.newArrayList();
+        }
+        List<String> list = StringTools.split(admins, Split.逗号);
+        return list;
     }
 }

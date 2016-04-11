@@ -19,6 +19,32 @@
 <body>
 	<section class="order_box padd1" style="padding-top: 0; padding-bottom: 0;">
 		<div class="table_box table_box2">
+			#if($isAdmin)
+			<dl>
+				<dd class="dd1">绿色通道</dd>
+				<dd>
+					<input type="text" placeholder="对方ID" 
+			    	name="gcId" id="gcId"
+			    	size="25" 
+			    	class="dd2 form-control"
+			    	value=""/>
+				</dd>
+				<dd>
+				  <a href="#" style="color: blue;padding-right: 5px;" id="gcOk">确定</a>
+				</dd>
+			</dl>
+			#end
+			#if($isOriAdmin)
+			<dl>
+				<dd class="dd1">绿色通道</dd>
+				<dd>
+				  已绑定了用户 $!{user.id} 的账号
+				</dd>
+				<dd>
+				  <a href="#" style="color: blue;padding-right: 5px;" id="bcOk">退出</a>
+				</dd>
+			</dl>
+			#end
 			<dl>
 				<dd class="dd1">修改头像</dd>
 				<dd class="padded">
@@ -246,6 +272,35 @@
 					  dataType: "json"
 				});
 		    });
+			
+			$("#gcOk").click(function(){
+				var id = $("#gcId").val();
+				$.ajax({
+					  url:'api/greenChannel.json?id='+id,
+					  type: 'get',
+					  success: function(data){
+						  alert(data.message);
+						  if(data.success){
+							window.location.replace('${contextRoot}/index.htm');
+						  }
+					  },
+					  dataType: "json"
+				});
+			});
+			
+			$("#bcOk").click(function(){
+				$.ajax({
+					  url:'api/blueChannel.json',
+					  type: 'get',
+					  success: function(data){
+						  alert(data.message);
+						  if(data.success){
+							window.location.replace('${contextRoot}/index.htm');
+						  }
+					  },
+					  dataType: "json"
+				});
+			});
 		});
 	</script>
 	$control.setTemplate("home.vm")

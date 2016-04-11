@@ -19,5 +19,7 @@ public class My extends RequestSessionBase{
         UserDO userDO = super.getUserDO(request);
         context.put("user", userDO);
         context.put("success", success);
+        context.put("isAdmin", super.isAdmin(request));
+        context.put("isOriAdmin", super.isOriAdmin(request));
     }
 }
