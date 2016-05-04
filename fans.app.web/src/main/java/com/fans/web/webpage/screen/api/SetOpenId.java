@@ -18,6 +18,7 @@ import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.QrcodeScanDO;
 import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
+import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.DateTools;
 import com.victor.framework.common.tools.StringTools;
@@ -70,7 +71,14 @@ public class SetOpenId extends RequestSessionBase{
             }
             super.setOpenId(response, openId);
         }
-        nav.redirectTo("app").withTarget("index.vm");
+        String wetuanUrl = super.getCookie(request, CookieKey.WETUAN_REDIRECT);
+        if(StringTools.isNotEmpty(wetuanUrl)){
+            wetuanUrl.replace("[OPEN_ID]", openId);
+            super.removeCookie(response, CookieKey.WETUAN_REDIRECT);
+            response.sendRedirect(wetuanUrl);
+        } else {
+            nav.redirectTo("app").withTarget("index.vm");
+        }
     }
     
     private Integer getSex(Integer wxSex){

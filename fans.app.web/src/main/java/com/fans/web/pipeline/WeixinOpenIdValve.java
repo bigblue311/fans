@@ -16,6 +16,7 @@ import com.fans.dal.model.QrcodeDO;
 import com.fans.dal.model.QrcodeScanDO;
 import com.fans.dal.model.SkvUserDO;
 import com.fans.dal.model.UserDO;
+import com.fans.web.constant.CookieKey;
 import com.fans.web.webpage.RequestSessionBase;
 import com.victor.framework.common.tools.StringTools;
 
@@ -88,6 +89,17 @@ public class WeixinOpenIdValve extends RequestSessionBase implements Valve{
                 uri = "http://"+wetuanHost+"/user/toRegist.htm?upId="+upId+"&openId="+openId;
             } else {
                 uri = "http://"+wetuanHost+"/user/toRegist.htm";
+            }
+        }
+        if(_goWetuan.equals("4")){
+            if(StringTools.isNotEmpty(openId)){
+                //http://wetuan.com/wx_open/bound_weixin_page.htm?opId=232323232323
+                uri = "http://"+wetuanHost+"/wx_open/bound_weixin_page.htm?opId="+openId;
+            } else {
+                uri = "http://"+wetuanHost+"/wx_open/bound_weixin_page.htm?opId=[OPEN_ID]";
+                super.setCookie(response, CookieKey.WETUAN_REDIRECT, uri);
+                String domain = super.getDomain(request);
+                return weixinManager.getOauth2Url(domain);
             }
         }
         return uri;

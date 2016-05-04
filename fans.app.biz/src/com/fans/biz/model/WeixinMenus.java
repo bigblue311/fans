@@ -95,9 +95,15 @@ public class WeixinMenus {
         btn22.setType("view");
         btn22.setUrl("http://wt.wetuan.com/?_setOpenId=true&_goWetuan=3");
         
+        WeixinMenuVO btn23 = new WeixinMenuVO();
+        btn23.setName("用户绑定");
+        btn23.setType("view");
+        btn23.setUrl("http://wt.wetuan.com/?_setOpenId=true&_goWetuan=4");
+        
         List<WeixinMenuVO> btn2Sub = Lists.newArrayList();
         btn2Sub.add(btn21);
         btn2Sub.add(btn22);
+        btn2Sub.add(btn23);
         btn2.setSub_button(btn2Sub);
         
         WeixinMenuVO btn3 = new WeixinMenuVO();

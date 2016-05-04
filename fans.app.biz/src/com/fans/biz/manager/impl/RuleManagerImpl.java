@@ -94,20 +94,20 @@ public class RuleManagerImpl implements RuleManager{
             result.setSuccess(true);
             return result;
         } else {
-            Integer shareCount = userManager.getTodayShareCount(userDO.getId());
-            if(shareCount != null && shareCount == 0){
-                result.setLink("/myShare.htm?id="+userDO.getId());
-                result.setTitle("我要分享");
-                result.setMessage("您的爆粉激活到期了,每天第一次分享可激活24小时");
-                result.setSuccess(false);
-                return result;
-            } else {
+//            Integer shareCount = userManager.getTodayShareCount(userDO.getId());
+//            if(shareCount != null && shareCount == 0){
+//                result.setLink("/myShare.htm?id="+userDO.getId());
+//                result.setTitle("我要分享");
+//                result.setMessage("您的爆粉激活到期了,每天第一次分享可激活24小时");
+//                result.setSuccess(false);
+//                return result;
+//            } else {
                 result.setLink("/vip.htm?open=vipDetail#service1");
                 result.setTitle("激活我的爆粉");
                 result.setMessage("您的爆粉激活到期了");
                 result.setSuccess(false);
                 return result;
-            }
+//            }
         }
     }
     

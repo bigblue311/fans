@@ -38,7 +38,7 @@
 			当前状态 ：<span class="member">已激活</span>
 			#else
 			当前状态 ：<span class="member">未激活</span>
-				#if($!shareCount == 0)<a class="link_btn" href="${contextRoot}/myShare.htm?id=$!user.id">每天第一次分享可激活24小时</a>#end
+				 <span class="link_btn" for="vipDetail">爆粉激活</span>
 			#end
 		</p>
 		<div class="blank2"></div>
@@ -230,9 +230,7 @@
  		<div class="blank2"></div> 
  		<p>2.每天最多有分享$!shareMax次得奖励机会</p>
  		<div class="blank2"></div> 
- 		<p>3.第1次分享得24小时激活时间</p>
- 		<div class="blank2"></div> 
- 		<p>4.之后成功分享可获取$!shareCoins金币</p>
+ 		<p>3.之后成功分享可获取$!shareCoins金币</p>
  		<div class="blank2"></div> 
  		<p>今天任务 ：<span class="member">$!shareCount次 / $!shareMax次</span>
  			<span class="link_btn"><a class="link_btn" href="${contextRoot}/myShare.htm?id=$!user.id">我要分享</a></span></p>

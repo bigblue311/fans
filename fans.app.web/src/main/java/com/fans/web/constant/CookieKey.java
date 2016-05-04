@@ -7,4 +7,5 @@ public class CookieKey {
     public static final String QUERY = "QUERY";
     public static final String SEARCH_TYPE = "SEARCH_TYPE";
     public static final String RE_URL = "REURL";
+    public static final String WETUAN_REDIRECT = "WETUAN_REDIRECT";
 }
