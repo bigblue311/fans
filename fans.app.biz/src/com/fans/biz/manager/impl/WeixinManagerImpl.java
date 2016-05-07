@@ -43,7 +43,7 @@ import com.victor.framework.common.tools.MD5;
 import com.victor.framework.common.tools.SHA1;
 import com.victor.framework.common.tools.StringTools;
 import com.victor.framework.common.tools.UUIDTools;
-import com.victor.framework.dal.cache.GuavaCache;
+//import com.victor.framework.dal.cache.GuavaCache;
 import com.weixin.model.JsApiConfig;
 import com.weixin.model.WxConfig;
 import com.weixin.model.WxPayResponse;
@@ -52,7 +52,7 @@ import com.weixin.model.WxUser;
 
 public class WeixinManagerImpl implements WeixinManager{
 
-    private static GuavaCache cache = new GuavaCache(7000);  
+    //private static GuavaCache cache = new GuavaCache(7000);  
     
     @Autowired
     private WeixinConfigCache weixinConfigCache;
@@ -273,14 +273,14 @@ public class WeixinManagerImpl implements WeixinManager{
     }
     
     private String getJsApiAccessToken(String appId, String appSecret){
-        String accessToken = cache.get(appId+":getJsApiAccessToken");
-        if(StringTools.isEmpty(accessToken)){
+        //String accessToken = cache.get(appId+":getJsApiAccessToken");
+        //if(StringTools.isEmpty(accessToken)){
             String result = httpRequest(WxConfig.getJSAPIAccessToken(appId, appSecret), null);
             JSONObject json = JSON.parseObject(result);
             
-            accessToken = json.getString("access_token");
-            cache.put(appId+":getJsApiAccessToken", accessToken);
-        }
+            String accessToken = json.getString("access_token");
+            //cache.put(appId+":getJsApiAccessToken", accessToken);
+        //}
         return accessToken;
     }
     
@@ -290,21 +290,21 @@ public class WeixinManagerImpl implements WeixinManager{
         String appId = configDO.getAppId();
         String appSecret = configDO.getAppSecret();
         
-        String ticket = cache.get(appId+":getJsApiTicket");
-        if(StringTools.isEmpty(ticket)){
+        //String ticket = cache.get(appId+":getJsApiTicket");
+        //if(StringTools.isEmpty(ticket)){
             String accessToken = getJsApiAccessToken(appId, appSecret);
             String result = httpRequest(WxConfig.getJSAPITicket(accessToken), null);
             JSONObject json = JSON.parseObject(result);
             String errmsg = json.getString("errmsg");
             if("ok".equals(errmsg)){
-                ticket = json.getString("ticket");
-                cache.put(appId+":getJsApiTicket", ticket);
+                String ticket = json.getString("ticket");
+                return ticket;
+                //cache.put(appId+":getJsApiTicket", ticket);
             } else {
                 System.out.println("failed to get jsapi ticket =" + errmsg);
                 return null;
             }
-        }
-        return ticket;
+        //}
     }
     
     @Override
